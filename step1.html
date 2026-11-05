@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="it" class="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Finanze Personali – Enterprise Edition</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        glass: {
+                            base: 'rgba(18, 18, 24, 0.75)',
+                            border: 'rgba(255, 255, 255, 0.08)',
+                            card: 'rgba(255, 255, 255, 0.04)'
+                        },
+                        apple: {
+                            blue: '#0A84FF',
+                            green: '#30D158',
+                            red: '#FF453A',
+                            orange: '#FF9F0A',
+                            purple: '#BF5AF2',
+                            teal: '#64D2FF',
+                            indigo: '#5E5CE6'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #030305;
+            color: #F5F5F7;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .ambient-glow {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+            background: #030305;
+        }
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.35;
+            animation: pulseGlow 18s infinite alternate ease-in-out;
+        }
+        .orb-1 { width: 65vw; height: 65vw; top: -20%; left: -20%; background: radial-gradient(circle, rgba(10,132,255,0.4) 0%, transparent 70%); }
+        .orb-2 { width: 60vw; height: 60vw; bottom: -20%; right: -20%; background: radial-gradient(circle, rgba(191,90,242,0.3) 0%, transparent 70%); animation-delay: -6s; }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.1) translate(20px, 25px); }
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.035);
+            backdrop-filter: blur(32px);
+            -webkit-backdrop-filter: blur(32px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .glass-pill {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 10px; }
+
+        dialog { background: transparent; margin: auto; }
+        dialog::backdrop {
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .donut-segment {
+            transition: transform 0.2s ease, opacity 0.2s ease;
+            cursor: pointer;
+        }
+        .donut-segment:hover {
+            opacity: 0.9;
+            transform: scale(1.02);
+            transform-origin: center;
+        }
+    </style>
+</head>
+<body class="flex flex-col md:flex-row min-h-screen selection:bg-apple-blue selection:text-white pb-32 md:pb-8">
+
+    <!-- Sfondo luminoso dinamico -->
+    <div class="ambient-glow">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+    </div>
+
+    <!-- Barra laterale Enterprise (Desktop) -->
+    <aside class="hidden md:flex flex-col w-68 h-screen sticky top-0 glass-panel border-r border-white/5 z-20 p-6">
+        <div class="flex items-center gap-3.5 mb-8">
+            <div class="w-11 h-11 rounded-2xl glass-pill flex items-center justify-center text-apple-blue shadow-[0_0_25px_rgba(10,132,255,0.45)]">
+                <i class="ph ph-shield-check text-2xl"></i>
+            </div>
+            <div>
+                <h1 class="text-base font-extrabold tracking-tight">Finanze Enterprise</h1>
+                <p class="text-[11px] text-emerald-400 font-semibold flex items-center gap-1.5 mt-0.5">
+                    <span id="syncIndicator" class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span> Cloud Protetto
+                </p>
+            </div>
+        </div>
+
+        <nav class="space-y-1.5 flex-1">
+            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 px-3">Navigazione</p>
+            <a href="#dash" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-white bg-apple-blue/15 text-apple-blue transition-all">
+                <i class="ph ph-squares-four text-lg"></i> Dashboard
+            </a>
+            <a href="#ai" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
+                <i class="ph ph-cpu text-lg"></i> AI Insights & Notifiche
+            </a>
+            <a href="#analytics" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
+                <i class="ph ph-chart-donut text-lg"></i> Analisi & Grafici
+            </a>
+            <a href="#tx" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
+                <i class="ph ph-arrows-left-right text-lg"></i> Transazioni
+            </a>
+            <a href="#bud" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
+                <i class="ph ph-chart-pie-slice text-lg"></i> Budget Categorie
+            </a>
+            <a href="#goals" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
+                <i class="ph ph-target text-lg"></i> Obiettivi & Simulatori
+            </a>
+            <a href="#subs" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
+                <i class="ph ph-users text-lg"></i> Abbonamenti & Prestiti
+            </a>
+        </nav>
+
+        <div class="pt-4 border-t border-white/5 space-y-2">
+            <button onclick="openCustomizerModal()" class="w-full flex items-center justify-center gap-2 glass-pill hover:bg-white/10 text-white py-2.5 rounded-xl text-xs font-bold transition-all">
+                <i class="ph ph-sliders text-base text-apple-blue"></i> Personalizza Dashboard
+            </button>
+            <div class="flex justify-between items-center text-[11px] text-gray-500 pt-1">
+                <span>Versione 4.3 Pro</span>
+                <span class="text-apple-blue font-bold">SSL 256-bit</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Contenuto principale scorrevole -->
+    <main class="flex-1 max-w-3xl w-full mx-auto p-4 sm:p-6 space-y-6">
+        
+        <!-- Header principale -->
+        <header class="glass-panel p-5 sm:p-6 rounded-3xl flex justify-between items-center shadow-xl">
+            <div>
+                <h2 class="text-xl sm:text-2xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-400" id="welcomeText">Bentornato</h2>
+                <p class="text-xs text-gray-400 mt-0.5 capitalize font-medium" id="dateText"></p>
+            </div>
+            <div class="flex items-center gap-2">
+                <button onclick="openCustomizerModal()" class="md:hidden glass-pill w-11 h-11 rounded-2xl flex items-center justify-center text-apple-blue">
+                    <i class="ph ph-sliders text-lg"></i>
+                </button>
+                <button onclick="openNewTxModal()" class="flex items-center gap-2 bg-apple-blue hover:bg-blue-600 text-white px-5 py-3 rounded-2xl font-bold transition-all shadow-[0_6px_25px_rgba(10,132,255,0.45)] active:scale-95 text-xs sm:text-sm">
+                    <i class="ph ph-plus text-base font-extrabold"></i> <span class="hidden sm:inline">Nuova Transazione</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- CONTAINER DINAMICO ORDINABILE E FILTRABILE -->
+        <div id="dynamicDashboardContainer" class="space-y-6">
+            <!-- SEZIONE AI INSIGHTS & NOTIFICHE INTELLIGENTI -->
+            <section id="sec-ai" data-section-key="ai" class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4 scroll-mt-6 border border-apple-blue/20">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-xl bg-apple-blue/15 text-apple-blue flex items-center justify-center font-bold">
+                            <i class="ph ph-cpu text-lg animate-spin" style="animation-duration: 8s;"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-sm sm:text-base">Assistente Finanziario AI & Gemini</h3>
+                            <p class="text-[11px] text-gray-400">Analisi predittiva e chat intelligente integrata</p>
+                        </div>
+                    </div>
+                    <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-apple-blue/20 text-apple-blue uppercase tracking-wider">Online</span>
+                </div>
+                
+                <!-- Notifiche automatiche AI -->
+                <div class="space-y-2.5 pt-1" id="aiInsightsContainer"></div>
+
+                <!-- Chat interattiva con Gemini AI -->
+                <div class="mt-4 pt-4 border-t border-white/10 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-semibold text-gray-300 flex items-center gap-1.5"><i class="ph ph-chat-centered-text text-apple-blue"></i> Chiedi a Gemini sulle tue finanze</span>
+                        <span class="text-[10px] text-gray-500">Analisi in tempo reale</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="text" id="aiChatInput" placeholder="Es. Come posso tagliare le spese questo mese?" class="flex-1 glass-pill rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-apple-blue border border-white/10">
+                        <button onclick="askGeminiFinancialAdvice()" id="aiSendBtn" class="bg-apple-blue hover:bg-blue-600 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-all shadow shrink-0">Chiedi</button>
+                    </div>
+                    <div id="aiChatResponse" class="hidden p-3 rounded-xl bg-white/5 border border-white/10 text-xs text-gray-200 leading-relaxed"></div>
+                </div>
+            </section>
+
+            <!-- SEZIONE DASH: SALDO & BUDGET ODIERNO -->
+            <section id="sec-dash" data-section-key="dash" class="space-y-4 scroll-mt-6">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="glass-panel p-5 rounded-3xl space-y-1">
+                        <span class="text-xs text-gray-400 font-bold uppercase tracking-wider">Saldo Totale</span>
+                        <div class="text-xl sm:text-2xl font-black tracking-tight" id="statBalance">€ 0,00</div>
+                    </div>
+                    <div class="glass-panel p-5 rounded-3xl space-y-1">
+                        <span class="text-xs text-gray-400 font-bold uppercase tracking-wider">Entrate Mese</span>
+                        <div class="text-xl sm:text-2xl font-black tracking-tight text-apple-green" id="statIncome">€ 0,00</div>
+                    </div>
+                    <div class="glass-panel p-5 rounded-3xl space-y-1">
+                        <span class="text-xs text-gray-400 font-bold uppercase tracking-wider">Uscite Mese</span>
+                        <div class="text-xl sm:text-2xl font-black tracking-tight text-apple-red" id="statExpense">€ 0,00</div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-5 sm:p-6 rounded-3xl space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span class="text-xs text-gray-400 font-bold uppercase tracking-wider">Disponibile da spendere oggi</span>
+                        <span class="text-[10px] text-apple-teal font-medium" id="statDailyNote">Calcolo in corso...</span>
+                    </div>
+                    <div class="text-2xl sm:text-3xl font-black tracking-tight" id="statDailyBudget">€ 0,00</div>
+                </div>
+            </section>
+
+            <!-- SEZIONE ANALISI E GRAFICI (DONUT CHART & CONFRONTO MESE SU MESE) -->
+            <section id="sec-analytics" data-section-key="analytics" class="space-y-4 scroll-mt-6">
+                <!-- Grafico Andamento Saldo -->
+                <div class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                        <div>
+                            <h3 class="font-bold text-base">Andamento del Saldo</h3>
+                            <p class="text-xs text-gray-400" id="chartSubLabel">Ultimi 6 mesi</p>
+                        </div>
+                        <div class="flex glass-pill p-1 rounded-full w-full sm:w-auto">
+                            <button onclick="setChartInterval('1w')" id="btn1w" class="flex-1 sm:flex-initial px-3 py-1.5 text-xs font-semibold rounded-full text-gray-400 hover:text-white transition-all">1 Sett</button>
+                            <button onclick="setChartInterval('1m')" id="btn1m" class="flex-1 sm:flex-initial px-3 py-1.5 text-xs font-semibold rounded-full text-gray-400 hover:text-white transition-all">1 Mese</button>
+                            <button onclick="setChartInterval('6m')" id="btn6m" class="flex-1 sm:flex-initial px-3 py-1.5 text-xs font-semibold rounded-full bg-apple-blue text-white shadow transition-all">6 Mesi</button>
+                        </div>
+                    </div>
+                    <div class="pt-2">
+                        <svg id="balanceChartSvg" viewBox="0 0 600 150" class="w-full h-auto overflow-visible"></svg>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4">
+                    <div>
+                        <h3 class="font-bold text-base">Distribuzione Uscite per Categoria</h3>
+                        <p class="text-xs text-gray-400">Analisi percentuale del mese corrente</p>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+                        <div class="relative flex justify-center items-center py-2">
+                            <svg class="w-44 h-44" viewBox="0 0 100 100" id="donutChartSvg"></svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center">
+                                <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Totale Uscite</span>
+                                <span class="text-sm font-black text-white" id="donutTotalText">€ 0</span>
+                            </div>
+                        </div>
+                        <div class="space-y-2" id="donutLegendContainer"></div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold text-base">Confronto Mensile (Mese su Mese)</h3>
+                            <p class="text-xs text-gray-400">Spese mese corrente vs mese precedente per categoria</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3 pt-2" id="momComparisonContainer"></div>
+                </div>
+            </section>
+
+            <!-- TRANSAZIONI RECENTI -->
+            <section id="sec-tx" data-section-key="tx" class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4 scroll-mt-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                    <div>
+                        <h3 class="font-bold text-base">Transazioni</h3>
+                        <p class="text-xs text-gray-400">Categorizzazione automatica intelligente attiva</p>
+                    </div>
+                    <div class="flex glass-pill p-1 rounded-full w-full sm:w-auto">
+                        <button onclick="filterTransactions('all')" id="filterAll" class="flex-1 sm:flex-initial px-3.5 py-1.5 text-xs font-semibold rounded-full bg-apple-blue text-white shadow">Tutte</button>
+                        <button onclick="filterTransactions('in')" id="filterIn" class="flex-1 sm:flex-initial px-3.5 py-1.5 text-xs font-semibold rounded-full text-gray-400 hover:text-white">Entrate</button>
+                        <button onclick="filterTransactions('out')" id="filterOut" class="flex-1 sm:flex-initial px-3.5 py-1.5 text-xs font-semibold rounded-full text-gray-400 hover:text-white">Uscite</button>
+                    </div>
+                </div>
+                <div class="space-y-2.5 pt-1" id="transactionsListContainer"></div>
+            </section>
+
+            <!-- BUDGET CATEGORIE -->
+            <section id="sec-bud" data-section-key="bud" class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4 scroll-mt-6">
+                <div>
+                    <h3 class="font-bold text-base">Budget Categorie</h3>
+                    <p class="text-xs text-gray-400">Imposta i tetti di spesa mensili</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1" id="budgetListContainer"></div>
+            </section>
+
+            <!-- OBIETTIVI E SIMULATORE DI ACCANTONAMENTO -->
+            <section id="sec-goals" data-section-key="goals" class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4 scroll-mt-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="font-bold text-base">Obiettivi & Simulatore Interattivo</h3>
+                        <p class="text-xs text-gray-400">Modifica il cursore per calcolare i tempi di raggiungimento</p>
+                    </div>
+                    <button onclick="openPromptModal('Nuovo Obiettivo', 'Nome obiettivo', 'Importo da raggiungere', saveNewGoal)" class="glass-pill px-3.5 py-2 rounded-xl text-xs font-semibold text-white hover:bg-white/10 transition-all">
+                        + Nuovo
+                    </button>
+                </div>
+                <div class="space-y-4 pt-1" id="goalsListContainer"></div>
+            </section>
+
+            <!-- ABBONAMENTI E PRESTITI -->
+            <section id="sec-subs" data-section-key="subs" class="grid grid-cols-1 md:grid-cols-2 gap-4 scroll-mt-6">
+                <div class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold text-base">Abbonamenti</h3>
+                            <p class="text-xs text-gray-400" id="subsTotalText">€ 0,00 / mese</p>
+                        </div>
+                        <button onclick="openPromptModal('Nuovo Abbonamento', 'Nome servizio', 'Costo mensile', saveNewSub)" class="glass-pill px-3 py-1.5 rounded-xl text-xs font-semibold text-white hover:bg-white/10 transition-all">
+                            + Aggiungi
+                        </button>
+                    </div>
+                    <div class="space-y-2.5 pt-1" id="subsListContainer"></div>
+                </div>
+
+                <div class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h3 class="font-bold text-base">Prestiti & Amici</h3>
+                            <p class="text-xs text-gray-400" id="debtsTotalText">Siamo pari</p>
+                        </div>
+                        <button onclick="openDebtModal()" class="glass-pill px-3 py-1.5 rounded-xl text-xs font-semibold text-white hover:bg-white/10 transition-all">
+                            + Aggiungi
+                        </button>
+                    </div>
+                    <div class="space-y-2.5 pt-1" id="debtsListContainer"></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Barra di navigazione mobile inferiore (iOS style) -->
+    <nav class="md:hidden fixed bottom-3 left-4 right-4 glass-panel rounded-2xl z-50 px-5 py-2.5 flex justify-around items-center shadow-2xl bg-[#0a0a0e]/90 backdrop-blur-3xl border border-white/10">
+        <a href="#sec-dash" class="flex flex-col items-center text-apple-blue p-1">
+            <i class="ph-fill ph-squares-four text-xl"></i>
+        </a>
+        <a href="#sec-ai" class="flex flex-col items-center text-gray-400 hover:text-white p-1">
+            <i class="ph ph-cpu text-xl"></i>
+        </a>
+        <button onclick="openNewTxModal()" class="w-12 h-12 bg-apple-blue rounded-full flex items-center justify-center text-white shadow-[0_4px_20px_rgba(10,132,255,0.65)] active:scale-95 -mt-3">
+            <i class="ph ph-plus text-xl font-black"></i>
+        </button>
+        <a href="#sec-analytics" class="flex flex-col items-center text-gray-400 hover:text-white p-1">
+            <i class="ph ph-chart-donut text-xl"></i>
+        </a>
+        <a href="#sec-goals" class="flex flex-col items-center text-gray-400 hover:text-white p-1">
+            <i class="ph ph-target text-xl"></i>
+        </a>
+    </nav>
+
+    <!-- MODALE: Personalizzazione Dashboard (Ordine & Visibilità) -->
+    <dialog id="modalCustomizer" class="w-full max-w-md p-4">
+        <div class="glass-panel p-6 rounded-3xl relative shadow-2xl space-y-5">
+            <button onclick="closeModal('modalCustomizer')" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="ph ph-x text-lg"></i></button>
+            <div>
+                <h3 class="text-base font-bold">Personalizza Dashboard</h3>
+                <p class="text-xs text-gray-400">Attiva/disattiva le sezioni e trascina o sposta l'ordine di visualizzazione</p>
+            </div>
+            <div class="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1" id="customizerSectionsList"></div>
+            <button onclick="saveDashboardCustomization()" class="w-full bg-apple-blue hover:bg-blue-600 text-white font-bold py-3.5 rounded-xl transition-all shadow text-sm">Salva Configurazione</button>
+        </div>
+    </dialog>
+
+    <!-- MODALE: Nuova Transazione con Smart Tagging -->
+    <dialog id="modalNewTx" class="w-full max-w-sm p-4">
+        <div class="glass-panel p-6 rounded-3xl relative shadow-2xl space-y-4">
+            <button onclick="closeModal('modalNewTx')" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="ph ph-x text-lg"></i></button>
+            <h3 class="text-base font-bold">Nuova Transazione</h3>
+
+            <div class="flex glass-pill p-1 rounded-xl">
+                <button type="button" id="tabOut" class="flex-1 py-2 text-xs font-bold rounded-lg bg-apple-red text-white transition-all shadow" onclick="setTxModalType('out')">Uscita</button>
+                <button type="button" id="tabIn" class="flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition-all" onclick="setTxModalType('in')">Entrata</button>
+            </div>
+
+            <form id="formNewTx" class="space-y-3.5">
+                <div>
+                    <label class="block text-[11px] font-semibold text-gray-400 mb-1">Descrizione (Riconoscimento AI)</label>
+                    <input type="text" id="txDesc" required placeholder="Es. Supermercato Conad, Benzina Eni..." oninput="handleSmartCategoryPredict(this.value)" class="w-full glass-pill rounded-xl px-3.5 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-apple-blue border border-white/10">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-gray-400 mb-1">Importo (€)</label>
+                        <input type="number" id="txAmount" required min="0.01" step="0.01" placeholder="0.00" class="w-full glass-pill rounded-xl px-3.5 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-apple-blue border border-white/10">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-gray-400 mb-1">Data</label>
+                        <input type="date" id="txDate" required class="w-full glass-pill rounded-xl px-3.5 py-3 text-sm text-white focus:outline-none focus:border-apple-blue border border-white/10" style="color-scheme: dark;">
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between items-center mb-1">
+                        <label class="block text-[11px] font-semibold text-gray-400">Categoria</label>
+                        <span id="aiCategoryBadge" class="text-[10px] text-apple-teal font-bold hidden"><i class="ph ph-sparkle"></i> Rilevata da AI</span>
+                    </div>
+                    <select id="txCat" class="w-full glass-pill rounded-xl px-3.5 py-3 text-sm text-white focus:outline-none focus:border-apple-blue border border-white/10 appearance-none bg-[#0a0a0e]"></select>
+                </div>
+                <button type="submit" class="w-full mt-2 bg-apple-blue hover:bg-blue-600 text-white font-bold py-3.5 rounded-xl transition-all shadow-[0_4px_20px_rgba(10,132,255,0.45)] text-sm">Registra Movimento</button>
+            </form>
+        </div>
+    </dialog>
+
+    <!-- MODALE: Prompt generico -->
+    <dialog id="modalPrompt" class="w-full max-w-sm p-4">
+        <div class="glass-panel p-6 rounded-3xl relative shadow-2xl space-y-4">
+            <button onclick="closeModal('modalPrompt')" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="ph ph-x text-lg"></i></button>
+            <h3 class="text-base font-bold" id="promptTitle">Titolo</h3>
+            <form id="formPrompt" class="space-y-3.5">
+                <div>
+                    <label class="block text-[11px] font-semibold text-gray-400 mb-1" id="promptLabelName">Nome</label>
+                    <input type="text" id="promptName" required class="w-full glass-pill rounded-xl px-3.5 py-3 text-sm text-white focus:outline-none focus:border-apple-blue border border-white/10">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-semibold text-gray-400 mb-1" id="promptLabelAmount">Importo</label>
+                    <input type="number" id="promptAmount" required min="0.01" step="0.01" class="w-full glass-pill rounded-xl px-3.5 py-3 text-sm text-white focus:outline-none focus:border-apple-blue border border-white/10">
+                </div>
+                <button type="submit" class="w-full mt-2 glass-pill hover:bg-white/20 text-white font-bold py-3.5 rounded-xl transition-all text-sm">Conferma</button>
+            </form>
+        </div>
+    </dialog>
+
+    <!-- MODALE: Nuovo Prestito -->
+    <dialog id="modalDebt" class="w-full max-w-sm p-4">
+        <div class="glass-panel p-6 rounded-3xl relative shadow-2xl space-y-4">
+            <button onclick="closeModal('modalDebt')" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="ph ph-x text-lg"></i></button>
+            <h3 class="text-base font-bold">Nuovo Prestito / Amico</h3>
+            <form id="formDebt" class="space-y-3.5">
+                <div>
+                    <label class="block text-[11px] font-semibold text-gray-400 mb-1">Nome persona</label>
+                    <input type="text" id="debtName" required class="w-full glass-pill rounded-xl px-3.5 py-3 text-sm text-white focus:outline-none focus:border-apple-blue border border-white/10">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-semibold text-gray-400 mb-1">Importo (€)</label>
+                    <input type="number" id="debtAmount" required min="0.01" step="0.01" class="w-full glass-pill rounded-xl px-3.5 py-3 text-sm text-white focus:outline-none focus:border-apple-blue border border-white/10">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-semibold text-gray-400 mb-1">Tipo prestito</label>
+                    <select id="debtType" class="w-full glass-pill rounded-xl px-3.5 py-3 text-sm text-white focus:outline-none focus:border-apple-blue border border-white/10 bg-[#0a0a0e]">
+                        <option value="1">Ti deve dare</option>
+                        <option value="0">Devi dare tu</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full mt-2 glass-pill hover:bg-white/20 text-white font-bold py-3.5 rounded-xl transition-all text-sm">Salva Prestito</button>
+            </form>
+        </div>
+    </dialog>
+
+    <!-- Firebase SDKs & Enterprise App Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Configurazione robusta con fallback per GitHub Pages ehosting statico
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'finanze-enterprise-github';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "AIzaSyBXRuAqeTHsDWvJXkRwJE8OHm1-OKPKXMQ",
+            authDomain: "portfolio-2711.firebaseapp.com",
+            databaseURL: "https://portfolio-2711-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "portfolio-2711",
+            storageBucket: "portfolio-2711.firebasestorage.app",
+            messagingSenderId: "811337487301",
+            appId: "1:811337487301:web:42c442fb45b8a27fdd71ac"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const CATS = {
+            "Casa": { icon: "ph-house", color: "text-apple-blue", bg: "bg-apple-blue", hex: "#0A84FF" },
+            "Spesa": { icon: "ph-shopping-cart", color: "text-apple-green", bg: "bg-apple-green", hex: "#30D158" },
+            "Trasporti": { icon: "ph-car", color: "text-apple-orange", bg: "bg-apple-orange", hex: "#FF9F0A" },
+            "Svago": { icon: "ph-popcorn", color: "text-apple-purple", bg: "bg-apple-purple", hex: "#BF5AF2" },
+            "Salute": { icon: "ph-heartbeat", color: "text-apple-red", bg: "bg-apple-red", hex: "#FF453A" },
+            "Stipendio": { icon: "ph-money", color: "text-apple-teal", bg: "bg-apple-teal", hex: "#64D2FF" },
+            "Altro": { icon: "ph-sparkle", color: "text-gray-400", bg: "bg-gray-400", hex: "#8E8E93" }
+        };
+        const OUT_CATS = ["Casa", "Spesa", "Trasporti", "Svago", "Salute", "Altro"];
+        const IN_CATS = ["Stipendio", "Altro"];
+
+        const AI_KEYWORDS = {
+            "Spesa": ["conad", "esselunga", "coop", "lidl", "carrefour", "supermercato", "spesa", "pam", "md", "eurospin", "despar", "alimentari"],
+            "Trasporti": ["benzina", "eni", "q8", "shell", "autostrada", "telepass", "trenitalia", "italo", "metro", "bus", "parcheggio", "taxi", "uber"],
+            "Casa": ["affitto", "mutuo", "enel", "luce", "gas", "acqua", "condominio", "ikea", "leroy", "bolletta", "cedrata"],
+            "Svago": ["netflix", "spotify", "cinema", "ristorante", "pizzeria", "pub", "bar", "amazon", "apple", "playstation", "steam", "game"],
+            "Salute": ["farmacia", "medico", "visita", "ospedale", "ticket", "dentista", "parafarmacia"],
+            "Stipendio": ["stipendio", "bonifico", "storno", "rimborso", "stip", "accredito", "lavoro"]
+        };
+
+        const SECTION_NAMES = {
+            ai: "Assistente Finanziario AI",
+            dash: "Panoramica Saldo & Budget Odierno",
+            analytics: "Analisi, Donut Chart & Mese su Mese",
+            tx: "Transazioni Recenti",
+            bud: "Budget Categorie",
+            goals: "Obiettivi & Simulatori",
+            subs: "Abbonamenti & Prestiti"
+        };
+
+        let transactions = [];
+        let appState = {
+            budgets: { Casa: 700, Spesa: 350, Trasporti: 150, Svago: 180, Salute: 70, Altro: 50 },
+            subs: [{ id: "s1", n: "Spotify", a: 10.99 }, { id: "s2", n: "Netflix", a: 13.99 }, { id: "s3", n: "Palestra", a: 35.00 }],
+            goals: [{ id: "g1", n: "Vacanza Estiva", t: 2500, s: 1200, monthlySaving: 200 }, { id: "g2", n: "Nuovo Smartphone", t: 900, s: 450, monthlySaving: 150 }],
+            debts: [{ id: "d1", n: "Marco Rossi", a: 45, type: 1 }],
+            sectionOrder: ['ai', 'dash', 'analytics', 'tx', 'bud', 'goals', 'subs'],
+            sectionHidden: []
+        };
+
+        let currentTxType = 'out';
+        let currentFilter = 'all';
+        let currentChartInterval = '6m';
+        let activePromptCb = null;
+        let userId = null;
+
+        const uid = () => Math.random().toString(36).substring(2, 9);
+        const formatEur = n => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(n);
+        const isoDate = d => d.toISOString().split('T')[0];
+        const escapeHtml = str => String(str).replace(/[&<>'"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[m]);
+
+        async function initAuthAndData() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) {
+                console.error("Auth error:", err);
+                await signInAnonymously(auth);
+            }
+
+            userId = auth.currentUser?.uid || crypto.randomUUID();
+            document.getElementById('syncIndicator').className = "w-2 h-2 rounded-full bg-emerald-400 inline-block";
+
+            const h = new Date().getHours();
+            document.getElementById('welcomeText').textContent = h < 12 ? "Buongiorno" : h < 18 ? "Buon pomeriggio" : "Buonasera";
+            document.getElementById('dateText').textContent = new Date().toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' });
+            document.getElementById('txDate').value = isoDate(new Date());
+
+            document.getElementById('formNewTx').addEventListener('submit', handleTxSubmit);
+            document.getElementById('formPrompt').addEventListener('submit', handlePromptSubmit);
+            document.getElementById('formDebt').addEventListener('submit', handleDebtSubmit);
+
+            setupFirestoreListeners();
+        }
+
+        function setupFirestoreListeners() {
+            if (!userId) return;
+
+            const txCol = collection(db, 'artifacts', appId, 'users', userId, 'transactions');
+            onSnapshot(query(txCol), (snapshot) => {
+                transactions = [];
+                snapshot.forEach(docSnap => {
+                    transactions.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                transactions.sort((a,b) => b.date.localeCompare(a.date));
+                renderEverything();
+            }, (err) => console.error("Error fetching transactions:", err));
+
+            const stateDocRef = doc(db, 'artifacts', appId, 'users', userId, 'settings', 'appState');
+            onSnapshot(stateDocRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    appState = docSnap.data();
+                    if (!appState.sectionOrder) appState.sectionOrder = ['ai', 'dash', 'analytics', 'tx', 'bud', 'goals', 'subs'];
+                    if (!appState.sectionHidden) appState.sectionHidden = [];
+                } else {
+                    saveStateStore();
+                }
+                renderEverything();
+            }, (err) => console.error("Error fetching state:", err));
+        }
+
+        async function saveTxStore(t) {
+            if (!userId) return;
+            await setDoc(doc(db, 'artifacts', appId, 'users', userId, 'transactions', t.id), t);
+        }
+
+        async function deleteTxStore(id) {
+            if (!userId) return;
+            await deleteDoc(doc(db, 'artifacts', appId, 'users', userId, 'transactions', id));
+        }
+
+        async function saveStateStore() {
+            if (!userId) return;
+            await setDoc(doc(db, 'artifacts', appId, 'users', userId, 'settings', 'appState'), appState);
+        }
+
+        function renderEverything() {
+            applyDashboardLayout();
+            renderStats();
+            renderAiInsights();
+            renderChart();
+            renderDonutChart();
+            renderMomComparison();
+            renderTransactions();
+            renderBudgets();
+            renderGoals();
+            renderNetwork();
+        }
+
+        function applyDashboardLayout() {
+            const container = document.getElementById('dynamicDashboardContainer');
+            const order = appState.sectionOrder || ['ai', 'dash', 'analytics', 'tx', 'bud', 'goals', 'subs'];
+            const hidden = appState.sectionHidden || [];
+
+            order.forEach(key => {
+                const el = document.getElementById(`sec-${key}`);
+                if (el) {
+                    if (hidden.includes(key)) {
+                        el.classList.add('hidden');
+                    } else {
+                        el.classList.remove('hidden');
+                        container.appendChild(el);
+                    }
+                }
+            });
+        }
+
+        window.openCustomizerModal = function() {
+            const list = document.getElementById('customizerSectionsList');
+            const order = appState.sectionOrder || ['ai', 'dash', 'analytics', 'tx', 'bud', 'goals', 'subs'];
+            const hidden = appState.sectionHidden || [];
+
+            list.innerHTML = order.map((key, idx) => {
+                const name = SECTION_NAMES[key] || key;
+                const isHidden = hidden.includes(key);
+                return `
+                    <div class="flex items-center justify-between p-3.5 rounded-2xl bg-white/5 border border-white/5" data-sec-key="${key}">
+                        <div class="flex items-center gap-3">
+                            <div class="flex flex-col gap-0.5">
+                                <button type="button" onclick="moveSectionIndex('${key}', -1)" class="text-gray-400 hover:text-white p-0.5"><i class="ph ph-caret-up text-xs"></i></button>
+                                <button type="button" onclick="moveSectionIndex('${key}', 1)" class="text-gray-400 hover:text-white p-0.5"><i class="ph ph-caret-down text-xs"></i></button>
+                            </div>
+                            <span class="font-bold text-xs sm:text-sm text-white">${escapeHtml(name)}</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-[10px] text-gray-400 font-semibold">${isHidden ? 'Nascosta' : 'Visibile'}</span>
+                            <button type="button" onclick="toggleSectionHidden('${key}')" class="w-10 h-6 rounded-full transition-colors relative ${isHidden ? 'bg-gray-600' : 'bg-apple-green'}">
+                                <span class="absolute top-1 w-4 h-4 rounded-full bg-white transition-all ${isHidden ? 'left-1' : 'right-1'}"></span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('modalCustomizer').showModal();
+        }
+
+        window.moveSectionIndex = function(key, dir) {
+            let order = [...(appState.sectionOrder || ['ai', 'dash', 'analytics', 'tx', 'bud', 'goals', 'subs'])];
+            let idx = order.indexOf(key);
+            if (idx < 0) return;
+            let targetIdx = idx + dir;
+            if (targetIdx < 0 || targetIdx >= order.length) return;
+            
+            let temp = order[idx];
+            order[idx] = order[targetIdx];
+            order[targetIdx] = temp;
+
+            appState.sectionOrder = order;
+            openCustomizerModal();
+        }
+
+        window.toggleSectionHidden = function(key) {
+            let hidden = [...(appState.sectionHidden || [])];
+            if (hidden.includes(key)) {
+                hidden = hidden.filter(k => k !== key);
+            } else {
+                hidden.push(key);
+            }
+            appState.sectionHidden = hidden;
+            openCustomizerModal();
+        }
+
+        window.saveDashboardCustomization = async function() {
+            await saveStateStore();
+            closeModal('modalCustomizer');
+            renderEverything();
+        }
+
+        window.handleSmartCategoryPredict = function(val) {
+            const text = val.toLowerCase();
+            let matchedCat = null;
+
+            for (const [cat, keywords] of Object.entries(AI_KEYWORDS)) {
+                if (keywords.some(kw => text.includes(kw))) {
+                    matchedCat = cat;
+                    break;
+                }
+            }
+
+            const select = document.getElementById('txCat');
+            const badge = document.getElementById('aiCategoryBadge');
+
+            if (matchedCat && (currentTxType === 'out' ? OUT_CATS.includes(matchedCat) : IN_CATS.includes(matchedCat))) {
+                select.value = matchedCat;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function renderAiInsights() {
+            const container = document.getElementById('aiInsightsContainer');
+            if (!container) return;
+            const now = new Date();
+            const currentMonthStr = isoDate(now).substring(0, 7);
+            
+            const prevDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+            const prevMonthStr = isoDate(prevDate).substring(0, 7);
+
+            let currentSpendByCat = {};
+            let prevSpendByCat = {};
+
+            transactions.forEach(t => {
+                if (t.amount < 0) {
+                    const m = t.date.substring(0, 7);
+                    if (m === currentMonthStr) {
+                        currentSpendByCat[t.cat] = (currentSpendByCat[t.cat] || 0) + Math.abs(t.amount);
+                    } else if (m === prevMonthStr) {
+                        prevSpendByCat[t.cat] = (prevSpendByCat[t.cat] || 0) + Math.abs(t.amount);
+                    }
+                }
+            });
+
+            let insights = [];
+
+            for (const cat of OUT_CATS) {
+                const cur = currentSpendByCat[cat] || 0;
+                const prv = prevSpendByCat[cat] || 0;
+                if (prv > 0 && cur > prv) {
+                    const diffPct = Math.round(((cur - prv) / prv) * 100);
+                    if (diffPct >= 20) {
+                        insights.push({
+                            type: 'warning',
+                            title: `Attenzione spesa in ${cat}`,
+                            desc: `Hai speso il ${diffPct}% in più in ${cat} rispetto al mese scorso (${formatEur(cur)} contro ${formatEur(prv)}).`
+                        });
+                    }
+                }
+            }
+
+            for (const cat of OUT_CATS) {
+                const cur = currentSpendByCat[cat] || 0;
+                const limit = appState.budgets?.[cat] || 0;
+                if (limit > 0 && cur > limit) {
+                    insights.push({
+                        type: 'danger',
+                        title: `Budget Superato: ${cat}`,
+                        desc: `Hai superato il tetto massimo stabilito di ${formatEur(limit)}. Spesa attuale: ${formatEur(cur)}.`
+                    });
+                }
+            }
+
+            if (insights.length === 0) {
+                insights.push({
+                    type: 'success',
+                    title: 'Situazione Finanziaria Ottimale',
+                    desc: 'Tutte le categorie sono sotto controllo e in linea con la media degli ultimi mesi. Ottimo lavoro!'
+                });
+            }
+
+            container.innerHTML = insights.map(ins => {
+                let borderCol = ins.type === 'danger' ? 'border-apple-red/30 bg-apple-red/5 text-apple-red' : (ins.type === 'warning' ? 'border-apple-orange/30 bg-apple-orange/5 text-apple-orange' : 'border-emerald-500/30 bg-emerald-500/5 text-emerald-400');
+                let icon = ins.type === 'danger' ? 'ph-warning-octagon' : (ins.type === 'warning' ? 'ph-warning' : 'ph-check-circle');
+                return `
+                    <div class="p-3.5 rounded-2xl border ${borderCol} flex items-start gap-3">
+                        <i class="ph ${icon} text-xl mt-0.5 shrink-0"></i>
+                        <div>
+                            <h4 class="font-bold text-xs sm:text-sm text-white">${escapeHtml(ins.title)}</h4>
+                            <p class="text-xs text-gray-300 mt-0.5">${escapeHtml(ins.desc)}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderStats() {
+            let totalBal = 0, mIn = 0, mOut = 0;
+            const currentMonthStr = isoDate(new Date()).substring(0, 7);
+
+            transactions.forEach(t => {
+                totalBal += t.amount;
+                if (t.date.substring(0, 7) === currentMonthStr) {
+                    if (t.amount > 0) mIn += t.amount;
+                    else mOut -= t.amount;
+                }
+            });
+
+            const elBalance = document.getElementById('statBalance');
+            const elIncome = document.getElementById('statIncome');
+            const elExpense = document.getElementById('statExpense');
+            if (elBalance) elBalance.textContent = formatEur(totalBal);
+            if (elIncome) elIncome.textContent = formatEur(mIn);
+            if (elExpense) elExpense.textContent = formatEur(mOut);
+
+            const now = new Date();
+            const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+            const daysLeft = daysInMonth - now.getDate() + 1;
+            const totalBudget = OUT_CATS.reduce((acc, c) => acc + (appState.budgets?.[c] || 0), 0);
+            const remainingBudget = totalBudget - mOut;
+
+            const dailyEl = document.getElementById('statDailyBudget');
+            const dailyNote = document.getElementById('statDailyNote');
+
+            if (dailyEl && dailyNote) {
+                if (remainingBudget >= 0) {
+                    dailyEl.textContent = formatEur(remainingBudget / daysLeft);
+                    dailyEl.className = "text-2xl sm:text-3xl font-black tracking-tight text-white";
+                    dailyNote.textContent = `${formatEur(remainingBudget)} rimasti per ${daysLeft} giorni`;
+                } else {
+                    dailyEl.textContent = formatEur(0);
+                    dailyEl.className = "text-2xl sm:text-3xl font-black tracking-tight text-apple-red";
+                    dailyNote.textContent = `Sforato di ${formatEur(Math.abs(remainingBudget))}`;
+                }
+            }
+        }
+
+        window.setChartInterval = function(interval) {
+            currentChartInterval = interval;
+            ['1w', '1m', '6m'].forEach(i => {
+                const b = document.getElementById(`btn${i}`);
+                if (b) {
+                    if (i === interval) {
+                        b.className = "flex-1 sm:flex-initial px-3 py-1.5 text-xs font-semibold rounded-full bg-apple-blue text-white shadow transition-all";
+                    } else {
+                        b.className = "flex-1 sm:flex-initial px-3 py-1.5 text-xs font-semibold rounded-full text-gray-400 hover:text-white transition-all";
+                    }
+                }
+            });
+            renderChart();
+        }
+
+        function renderChart() {
+            const svg = document.getElementById('balanceChartSvg');
+            const sub = document.getElementById('chartSubLabel');
+            if (!svg) return;
+
+            let pts = [];
+            let now = new Date();
+
+            if (currentChartInterval === '1w') {
+                sub.textContent = "Ultimi 7 giorni";
+                for (let i = 6; i >= 0; i--) {
+                    let d = new Date(); d.setDate(now.getDate() - i);
+                    let dStr = isoDate(d);
+                    let bal = transactions.filter(t => t.date <= dStr).reduce((s, t) => s + t.amount, 0);
+                    pts.push({ label: d.toLocaleDateString('it-IT', { weekday: 'short' }), val: bal });
+                }
+            } else if (currentChartInterval === '1m') {
+                sub.textContent = "Ultime 4 settimane";
+                for (let i = 3; i >= 0; i--) {
+                    let d = new Date(); d.setDate(now.getDate() - (i * 7));
+                    let dStr = isoDate(d);
+                    let bal = transactions.filter(t => t.date <= dStr).reduce((s, t) => s + t.amount, 0);
+                    pts.push({ label: `Sett. ${4-i}`, val: bal });
+                }
+            } else {
+                sub.textContent = "Ultimi 6 mesi";
+                for (let i = 5; i >= 0; i--) {
+                    let d = new Date(now.getFullYear(), now.getMonth() - i + 1, 0);
+                    let mStr = isoDate(d).substring(0, 7);
+                    let bal = transactions.filter(t => t.date.substring(0, 7) <= mStr).reduce((s, t) => s + t.amount, 0);
+                    pts.push({ label: d.toLocaleDateString('it-IT', { month: 'short' }), val: bal });
+                }
+            }
+
+            const vals = pts.map(p => p.val);
+            const min = Math.min(...vals, 0);
+            let max = Math.max(...vals, 100);
+            if (max === min) max += 100;
+
+            const W = 600, H = 150;
+            const padX = 10, padY = 15;
+            const getX = idx => padX + idx * ((W - padX * 2) / Math.max(1, pts.length - 1));
+            const getY = val => H - padY - ((val - min) / (max - min)) * (H - padY * 2);
+
+            let pathD = `M ${getX(0)} ${getY(pts[0].val)}`;
+            for (let i = 1; i < pts.length; i++) {
+                let px = getX(i-1), py = getY(pts[i-1].val);
+                let cx = getX(i), cy = getY(pts[i].val);
+                let cpx = px + (cx - px) / 2;
+                pathD += ` C ${cpx} ${py}, ${cpx} ${cy}, ${cx} ${cy}`;
+            }
+            let fillD = `${pathD} L ${getX(pts.length - 1)} ${H} L ${padX} ${H} Z`;
+
+            let svgHTML = `
+                <defs>
+                    <linearGradient id="svgGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#0A84FF" stop-opacity="0.45"/>
+                        <stop offset="100%" stop-color="#0A84FF" stop-opacity="0.0"/>
+                    </linearGradient>
+                </defs>
+            `;
+
+            [0, 0.5, 1].forEach(p => {
+                let y = getY(min + (max - min) * p);
+                let vTxt = formatEur(min + (max - min) * p).replace(',00','');
+                svgHTML += `<line x1="${padX}" y1="${y}" x2="${W-padX}" y2="${y}" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                            <text x="${padX}" y="${y - 4}" fill="#6b7280" font-size="9" font-family="Inter">${vTxt}</text>`;
+            });
+
+            svgHTML += `<path d="${fillD}" fill="url(#svgGrad)"/><path d="${pathD}" fill="none" stroke="#0A84FF" stroke-width="2.5"/>`;
+            pts.forEach((pt, i) => {
+                let x = getX(i), y = getY(pt.val);
+                svgHTML += `<circle cx="${x}" cy="${y}" r="3.5" fill="#000" stroke="#0A84FF" stroke-width="2"/>
+                            <text x="${x}" y="${H + 12}" fill="#9ca3af" font-size="9" font-family="Inter" text-anchor="middle">${pt.label}</text>`;
+            });
+
+            svg.innerHTML = svgHTML;
+        }
+
+        function renderDonutChart() {
+            const svg = document.getElementById('donutChartSvg');
+            const legend = document.getElementById('donutLegendContainer');
+            const totalText = document.getElementById('donutTotalText');
+            if (!svg || !legend) return;
+
+            const currentMonthStr = isoDate(new Date()).substring(0, 7);
+            let spendMap = {};
+            let totalOut = 0;
+
+            transactions.forEach(t => {
+                if (t.amount < 0 && t.date.substring(0, 7) === currentMonthStr) {
+                    const c = t.cat;
+                    spendMap[c] = (spendMap[c] || 0) + Math.abs(t.amount);
+                    totalOut += Math.abs(t.amount);
+                }
+            });
+
+            totalText.textContent = formatEur(totalOut).replace(',00','');
+
+            if (totalOut === 0) {
+                svg.innerHTML = `<circle cx="50" cy="50" r="38" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="14"/>`;
+                legend.innerHTML = `<p class="text-xs text-gray-500 text-center py-4">Nessuna uscita registrata questo mese.</p>`;
+                return;
+            }
+
+            let cumulativePercent = 0;
+            let svgHTML = '';
+            let legendHTML = '';
+
+            for (const [cat, amount] of Object.entries(spendMap)) {
+                const pct = (amount / totalOut) * 100;
+                const strokeDasharray = `${pct} ${100 - pct}`;
+                const strokeDashoffset = -cumulativePercent;
+                const colorHex = CATS[cat]?.hex || '#8E8E93';
+
+                svgHTML += `
+                    <circle cx="50" cy="50" r="38" fill="none" stroke="${colorHex}" stroke-width="14"
+                        stroke-dasharray="${strokeDasharray}" stroke-dashoffset="${strokeDashoffset}"
+                        class="donut-segment" pathLength="100">
+                        <title>${cat}: ${formatEur(amount)} (${pct.toFixed(1)}%)</title>
+                    </circle>
+                `;
+
+                legendHTML += `
+                    <div class="flex items-center justify-between text-xs p-2 rounded-xl bg-white/5 border border-white/5">
+                        <div class="flex items-center gap-2 font-medium">
+                            <span class="w-2.5 h-2.5 rounded-full" style="background-color: ${colorHex}"></span>
+                            <span>${cat}</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="font-bold text-white">${formatEur(amount)}</span>
+                            <span class="text-gray-400 ml-1">(${pct.toFixed(1)}%)</span>
+                        </div>
+                    </div>
+                `;
+
+                cumulativePercent += pct;
+            }
+
+            svg.innerHTML = svgHTML;
+            legend.innerHTML = legendHTML;
+        }
+
+        function renderMomComparison() {
+            const container = document.getElementById('momComparisonContainer');
+            if (!container) return;
+
+            const now = new Date();
+            const currentMonthStr = isoDate(now).substring(0, 7);
+            const prevDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+            const prevMonthStr = isoDate(prevDate).substring(0, 7);
+
+            let curMap = {}, prvMap = {};
+            transactions.forEach(t => {
+                if (t.amount < 0) {
+                    const m = t.date.substring(0, 7);
+                    if (m === currentMonthStr) curMap[t.cat] = (curMap[t.cat] || 0) + Math.abs(t.amount);
+                    if (m === prevMonthStr) prvMap[t.cat] = (prvMap[t.cat] || 0) + Math.abs(t.amount);
+                }
+            });
+
+            container.innerHTML = OUT_CATS.map(cat => {
+                const cur = curMap[cat] || 0;
+                const prv = prvMap[cat] || 0;
+                const maxVal = Math.max(cur, prv, 1);
+                const curPct = Math.min(100, (cur / maxVal) * 100);
+                const prvPct = Math.min(100, (prv / maxVal) * 100);
+                const diff = cur - prv;
+                const diffColor = diff > 0 ? 'text-apple-red' : 'text-apple-green';
+
+                return `
+                    <div class="p-3.5 rounded-2xl bg-white/5 border border-white/5 space-y-2">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="font-bold text-white">${cat}</span>
+                            <span class="font-semibold ${diffColor}">${diff > 0 ? '+' : ''}${formatEur(diff)} vs scorso mese</span>
+                        </div>
+                        <div class="space-y-1">
+                            <div class="flex justify-between text-[10px] text-gray-400">
+                                <span>Mese Corrente: <strong class="text-white">${formatEur(cur)}</strong></span>
+                                <span>Mese Scorso: <strong class="text-white">${formatEur(prv)}</strong></span>
+                            </div>
+                            <div class="h-1.5 rounded-full bg-white/10 overflow-hidden flex gap-0.5">
+                                <div class="h-full bg-apple-blue rounded-full" style="width: ${curPct}%"></div>
+                            </div>
+                            <div class="h-1.5 rounded-full bg-white/5 overflow-hidden flex gap-0.5">
+                                <div class="h-full bg-gray-500 rounded-full" style="width: ${prvPct}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        window.filterTransactions = function(f) {
+            currentFilter = f;
+            ['all', 'in', 'out'].forEach(type => {
+                const btn = document.getElementById(`filter${type.charAt(0).toUpperCase() + type.slice(1)}`);
+                if (btn) {
+                    if (type === f) {
+                        btn.className = "flex-1 sm:flex-initial px-3.5 py-1.5 text-xs font-semibold rounded-full bg-apple-blue text-white shadow";
+                    } else {
+                        btn.className = "flex-1 sm:flex-initial px-3.5 py-1.5 text-xs font-semibold rounded-full text-gray-400 hover:text-white";
+                    }
+                }
+            });
+            renderTransactions();
+        }
+
+        function renderTransactions() {
+            const container = document.getElementById('transactionsListContainer');
+            if (!container) return;
+            let list = transactions;
+            if (currentFilter === 'in') list = transactions.filter(t => t.amount > 0);
+            if (currentFilter === 'out') list = transactions.filter(t => t.amount < 0);
+
+            if (list.length === 0) {
+                container.innerHTML = `<div class="text-center py-6 text-gray-500 text-xs font-medium">Nessuna transazione trovata.</div>`;
+                return;
+            }
+
+            container.innerHTML = list.slice(0, 12).map(t => {
+                const cInfo = CATS[t.cat] || CATS["Altro"];
+                const isPos = t.amount > 0;
+                return `
+                    <div class="flex items-center justify-between p-3.5 rounded-2xl bg-white/5 border border-white/5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-2xl glass-pill flex items-center justify-center ${cInfo.color}">
+                                <i class="ph ${cInfo.icon} text-lg"></i>
+                            </div>
+                            <div>
+                                <p class="font-bold text-xs sm:text-sm">${escapeHtml(t.desc)}</p>
+                                <p class="text-[10px] text-gray-400 font-medium">${t.cat} &bull; ${new Date(t.date).toLocaleDateString('it-IT', { day: '2-digit', month: 'short' })}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="font-extrabold text-xs sm:text-sm ${isPos ? 'text-apple-green' : 'text-white'} text-right">
+                                ${isPos ? '+' : ''}${formatEur(t.amount)}
+                            </div>
+                            <button onclick="deleteTx('${t.id}')" class="text-gray-500 hover:text-apple-red p-1.5"><i class="ph ph-trash text-base"></i></button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderBudgets() {
+            const container = document.getElementById('budgetListContainer');
+            if (!container) return;
+            const currentMonthStr = isoDate(new Date()).substring(0, 7);
+            let spendMap = {};
+
+            transactions.forEach(t => {
+                if (t.amount < 0 && t.date.substring(0, 7) === currentMonthStr) {
+                    spendMap[t.cat] = (spendMap[t.cat] || 0) + Math.abs(t.amount);
+                }
+            });
+
+            container.innerHTML = OUT_CATS.map(cat => {
+                const limit = appState.budgets?.[cat] || 0;
+                const spent = spendMap[cat] || 0;
+                const pct = limit > 0 ? Math.min(100, (spent / limit) * 100) : (spent > 0 ? 100 : 0);
+                const isOver = spent > limit && limit > 0;
+                const cInfo = CATS[cat];
+
+                return `
+                    <div class="p-4 rounded-2xl bg-white/5 border border-white/5">
+                        <div class="flex justify-between items-center mb-2">
+                            <div class="flex items-center gap-2 font-bold text-xs sm:text-sm">
+                                <i class="ph ${cInfo.icon} ${cInfo.color} text-base"></i> ${cat}
+                            </div>
+                            <div class="text-xs font-semibold ${isOver ? 'text-apple-red' : 'text-gray-300'}">
+                                ${formatEur(spent)} <span class="text-gray-500">/</span>
+                                <input type="number" min="0" value="${limit}" onchange="updateBudgetLimit('${cat}', this.value)" class="w-16 bg-transparent border-b border-white/20 text-right text-white focus:outline-none focus:border-apple-blue text-xs ml-1 font-bold">
+                            </div>
+                        </div>
+                        <div class="h-2 rounded-full bg-white/10 overflow-hidden">
+                            <div class="h-full rounded-full transition-all duration-500 ${isOver ? 'bg-apple-red' : cInfo.bg}" style="width: ${pct}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        window.updateBudgetLimit = function(cat, val) {
+            if (!appState.budgets) appState.budgets = {};
+            appState.budgets[cat] = Math.max(0, parseFloat(val) || 0);
+            saveStateStore();
+            renderStats();
+            renderBudgets();
+        }
+
+        function renderGoals() {
+            const container = document.getElementById('goalsListContainer');
+            if (!container) return;
+            if (!appState.goals || appState.goals.length === 0) {
+                container.innerHTML = `<div class="text-center py-4 text-gray-500 text-xs">Nessun obiettivo impostato.</div>`;
+                return;
+            }
+
+            container.innerHTML = appState.goals.map(g => {
+                let pct = Math.min(100, (g.s / g.t) * 100);
+                let remaining = Math.max(0, g.t - g.s);
+                let monthly = g.monthlySaving || 150;
+                let monthsLeft = monthly > 0 ? Math.ceil(remaining / monthly) : 999;
+
+                return `
+                    <div class="p-4 rounded-2xl bg-white/5 border border-white/5 space-y-3.5">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="font-bold text-xs sm:text-sm text-white">${escapeHtml(g.n)}</h4>
+                                <div class="flex items-center gap-1.5 mt-1 flex-wrap">
+                                    <span class="text-[11px] text-gray-400">Accantonato:</span>
+                                    <input type="number" min="0" max="${g.t}" value="${g.s}" onchange="updateGoalSaved('${g.id}', this.value)" class="w-24 bg-black/40 border border-white/20 rounded-lg px-2 py-1 text-xs text-white font-bold text-right focus:outline-none focus:border-apple-blue">
+                                    <span class="text-[11px] text-gray-400">su ${formatEur(g.t)} (${pct.toFixed(0)}%)</span>
+                                </div>
+                            </div>
+                            <button onclick="deleteGoal('${g.id}')" class="text-gray-500 hover:text-apple-red p-1"><i class="ph ph-trash text-base"></i></button>
+                        </div>
+                        <div>
+                            <div class="h-2 rounded-full bg-white/10 overflow-hidden mb-3">
+                                <div class="h-full rounded-full bg-apple-blue" style="width: ${pct}%"></div>
+                            </div>
+                            <div class="p-3 rounded-xl bg-black/40 border border-white/5 space-y-2">
+                                <div class="flex justify-between text-xs font-semibold">
+                                    <span class="text-gray-400">Risparmio mensile stimato: <strong class="text-white">${formatEur(monthly)}</strong></span>
+                                    <span class="text-apple-teal font-bold">~${monthsLeft} mesi al traguardo</span>
+                                </div>
+                                <input type="range" min="20" max="1000" step="10" value="${monthly}" oninput="updateGoalMonthly('${g.id}', this.value)" class="w-full accent-apple-blue cursor-pointer">
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        window.updateGoalSaved = async function(id, val) {
+            let g = appState.goals.find(x => x.id === id);
+            if (g) {
+                g.s = Math.max(0, parseFloat(val) || 0);
+                await saveStateStore();
+                renderGoals();
+            }
+        }
+
+        window.updateGoalMonthly = async function(id, val) {
+            let g = appState.goals.find(x => x.id === id);
+            if (g) {
+                g.monthlySaving = parseFloat(val) || 50;
+                await saveStateStore();
+                renderGoals();
+            }
+        }
+
+        window.askGeminiFinancialAdvice = async function() {
+            const inputEl = document.getElementById('aiChatInput');
+            const respEl = document.getElementById('aiChatResponse');
+            const btnEl = document.getElementById('aiSendBtn');
+            const query = inputEl.value.trim();
+
+            if (!query) return;
+
+            btnEl.disabled = true;
+            btnEl.textContent = 'Analisi...';
+            respEl.classList.remove('hidden');
+            respEl.textContent = 'Gemini sta esaminando i tuoi dati finanziari...';
+
+            let totalBal = transactions.reduce((s, t) => s + t.amount, 0);
+            let totalOut = transactions.filter(t => t.amount < 0).reduce((s, t) => s + Math.abs(t.amount), 0);
+            let totalIn = transactions.filter(t => t.amount > 0).reduce((s, t) => s + t.amount, 0);
+
+            const systemPrompt = "Sei un consulente finanziario personale di altissimo livello. Rispondi in italiano in modo chiaro, professionale, conciso e pratico basandoti sui dati dell'utente.";
+            const userContext = `Dati finanziari utente: Saldo totale ${totalBal}€, Entrate totali ${totalIn}€, Uscite totali ${totalOut}€. Domanda dell'utente: ${query}`;
+
+            try {
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+                
+                const payload = {
+                    contents: [{ parts: [{ text: userContext }] }],
+                    systemInstruction: { parts: [{ text: systemPrompt }] }
+                };
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                const candidate = result.candidates?.[0];
+
+                if (candidate && candidate.content?.parts?.[0]?.text) {
+                    respEl.textContent = candidate.content.parts[0].text;
+                } else {
+                    respEl.textContent = "Non è stato possibile elaborare la risposta in questo momento.";
+                }
+            } catch (err) {
+                console.error("Gemini API error:", err);
+                respEl.textContent = "Errore di connessione con il servizio Gemini AI.";
+            } finally {
+                btnEl.disabled = false;
+                btnEl.textContent = 'Chiedi';
+            }
+        }
+
+        function renderNetwork() {
+            const sContainer = document.getElementById('subsListContainer');
+            if (sContainer) {
+                let subTotal = 0;
+                const subs = appState.subs || [];
+                sContainer.innerHTML = subs.length === 0 ? `<p class="text-xs text-gray-500">Nessun abbonamento attivo.</p>` : subs.map(s => {
+                    subTotal += s.a;
+                    return `
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 text-xs">
+                            <span class="font-semibold">${escapeHtml(s.n)}</span>
+                            <div class="flex items-center gap-3">
+                                <span class="font-extrabold text-white">${formatEur(s.a)}</span>
+                                <button onclick="deleteSub('${s.id}')" class="text-gray-500 hover:text-apple-red"><i class="ph ph-trash"></i></button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                document.getElementById('subsTotalText').textContent = `${formatEur(subTotal)} / mese`;
+            }
+
+            const dContainer = document.getElementById('debtsListContainer');
+            if (dContainer) {
+                let netDebt = 0;
+                const debts = appState.debts || [];
+                dContainer.innerHTML = debts.length === 0 ? `<p class="text-xs text-gray-500">Nessun prestito aperto.</p>` : debts.map(d => {
+                    netDebt += (d.type === 1 ? d.a : -d.a);
+                    let isCredit = d.type === 1;
+                    return `
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 text-xs">
+                            <div>
+                                <p class="font-semibold">${escapeHtml(d.n)}</p>
+                                <p class="text-[10px] text-gray-400 font-medium">${isCredit ? 'Ti deve dare' : 'Devi dare tu'}</p>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="font-extrabold ${isCredit ? 'text-apple-green' : 'text-apple-red'}">${formatEur(d.a)}</span>
+                                <button onclick="resolveDebt('${d.id}')" class="glass-pill px-2.5 py-1.5 rounded-lg text-[10px] font-bold hover:bg-white/20">Saldato</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                document.getElementById('debtsTotalText').textContent = netDebt === 0 ? "Siamo pari" : (netDebt > 0 ? `Ti devono ${formatEur(netDebt)}` : `Devi ${formatEur(Math.abs(netDebt))}`);
+            }
+        }
+
+        window.openNewTxModal = function() {
+            setTxModalType('out');
+            document.getElementById('txDesc').value = '';
+            document.getElementById('txAmount').value = '';
+            document.getElementById('aiCategoryBadge').classList.add('hidden');
+            document.getElementById('modalNewTx').showModal();
+        }
+
+        window.setTxModalType = function(type) {
+            currentTxType = type;
+            const tabOut = document.getElementById('tabOut');
+            const tabIn = document.getElementById('tabIn');
+            const selectCat = document.getElementById('txCat');
+
+            if (type === 'out') {
+                tabOut.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-apple-red text-white transition-all shadow";
+                tabIn.className = "flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition-all";
+                selectCat.innerHTML = OUT_CATS.map(c => `<option value="${c}" style="background:#0a0a0e">${c}</option>`).join('');
+            } else {
+                tabIn.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-apple-green text-white transition-all shadow";
+                tabOut.className = "flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition-all";
+                selectCat.innerHTML = IN_CATS.map(c => `<option value="${c}" style="background:#0a0a0e">${c}</option>`).join('');
+            }
+        }
+
+        async function handleTxSubmit(e) {
+            e.preventDefault();
+            let desc = document.getElementById('txDesc').value.trim();
+            let amount = parseFloat(document.getElementById('txAmount').value);
+            let date = document.getElementById('txDate').value;
+            let cat = document.getElementById('txCat').value;
+
+            if (desc && amount > 0 && date) {
+                const newTx = { id: uid(), desc, amount: currentTxType === 'out' ? -amount : amount, cat, date };
+                await saveTxStore(newTx);
+                closeModal('modalNewTx');
+            }
+        }
+
+        window.deleteTx = async function(id) { await deleteTxStore(id); }
+        window.closeModal = function(id) { document.getElementById(id).close(); }
+
+        window.openPromptModal = function(title, lblName, lblAmount, cb) {
+            document.getElementById('promptTitle').textContent = title;
+            document.getElementById('promptLabelName').textContent = lblName;
+            document.getElementById('promptLabelAmount').textContent = lblAmount;
+            document.getElementById('promptName').value = '';
+            document.getElementById('promptAmount').value = '';
+            activePromptCb = cb;
+            document.getElementById('modalPrompt').showModal();
+        }
+
+        async function handlePromptSubmit(e) {
+            e.preventDefault();
+            let n = document.getElementById('promptName').value.trim();
+            let a = parseFloat(document.getElementById('promptAmount').value);
+            if (n && a > 0 && activePromptCb) {
+                activePromptCb(n, a);
+                closeModal('modalPrompt');
+                await saveStateStore();
+            }
+        }
+
+        window.saveNewGoal = function(n, a) {
+            if (!appState.goals) appState.goals = [];
+            appState.goals.push({ id: uid(), n, t: a, s: 0, monthlySaving: 150 });
+        }
+        window.deleteGoal = async function(id) {
+            appState.goals = appState.goals.filter(g => g.id !== id);
+            await saveStateStore();
+        }
+
+        window.saveNewSub = function(n, a) {
+            if (!appState.subs) appState.subs = [];
+            appState.subs.push({ id: uid(), n, a });
+        }
+        window.deleteSub = async function(id) {
+            appState.subs = appState.subs.filter(s => s.id !== id);
+            await saveStateStore();
+        }
+
+        window.openDebtModal = function() {
+            document.getElementById('debtName').value = '';
+            document.getElementById('debtAmount').value = '';
+            document.getElementById('modalDebt').showModal();
+        }
+
+        async function handleDebtSubmit(e) {
+            e.preventDefault();
+            let n = document.getElementById('debtName').value.trim();
+            let a = parseFloat(document.getElementById('debtAmount').value);
+            let type = parseInt(document.getElementById('debtType').value);
+            if (n && a > 0) {
+                if (!appState.debts) appState.debts = [];
+                appState.debts.push({ id: uid(), n, a, type });
+                closeModal('modalDebt');
+                await saveStateStore();
+            }
+        }
+
+        window.resolveDebt = async function(id) {
+            appState.debts = appState.debts.filter(d => d.id !== id);
+            await saveStateStore();
+        }
+
+        window.addEventListener('DOMContentLoaded', initAuthAndData);
+    </script>
+</body>
+</html>

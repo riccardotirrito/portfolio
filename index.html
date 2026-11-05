@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- ... --><!DOCTYPE html>
 <html lang="it" class="dark">
 <head>
     <meta charset="utf-8">
@@ -44,6 +44,7 @@
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
             font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
         }
 
         .ambient-glow {
@@ -133,25 +134,25 @@
 
         <nav class="space-y-1.5 flex-1">
             <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 px-3">Navigazione</p>
-            <a href="#dash" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-white bg-apple-blue/15 text-apple-blue transition-all">
+            <a href="#sec-dash" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-white bg-apple-blue/15 text-apple-blue transition-all">
                 <i class="ph ph-squares-four text-lg"></i> Dashboard
             </a>
-            <a href="#ai" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
+            <a href="#sec-ai" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
                 <i class="ph ph-cpu text-lg"></i> AI Insights & Notifiche
             </a>
-            <a href="#analytics" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
+            <a href="#sec-analytics" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
                 <i class="ph ph-chart-donut text-lg"></i> Analisi & Grafici
             </a>
-            <a href="#tx" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
+            <a href="#sec-tx" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
                 <i class="ph ph-arrows-left-right text-lg"></i> Transazioni
             </a>
-            <a href="#bud" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
+            <a href="#sec-bud" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
                 <i class="ph ph-chart-pie-slice text-lg"></i> Budget Categorie
             </a>
-            <a href="#goals" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
+            <a href="#sec-goals" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
                 <i class="ph ph-target text-lg"></i> Obiettivi & Simulatori
             </a>
-            <a href="#subs" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
+            <a href="#sec-subs" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
                 <i class="ph ph-users text-lg"></i> Abbonamenti & Prestiti
             </a>
         </nav>
@@ -190,7 +191,7 @@
         <div id="dynamicDashboardContainer" class="space-y-6">
             <!-- SEZIONE AI INSIGHTS & NOTIFICHE INTELLIGENTI -->
             <section id="sec-ai" data-section-key="ai" class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4 scroll-mt-6 border border-apple-blue/20">
-                <div class="flex items-center justify-between">
+<!-- ... --><div class="flex items-center justify-between">
                     <div class="flex items-center gap-2.5">
                         <div class="w-8 h-8 rounded-xl bg-apple-blue/15 text-apple-blue flex items-center justify-center font-bold">
                             <i class="ph ph-cpu text-lg animate-spin" style="animation-duration: 8s;"></i>
@@ -509,7 +510,7 @@
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Configurazione robusta con fallback per GitHub Pages ehosting statico
+        // Configurazione robusta con fallback per GitHub Pages e hosting statico
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'finanze-enterprise-github';
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
             apiKey: "AIzaSyBXRuAqeTHsDWvJXkRwJE8OHm1-OKPKXMQ",
@@ -613,11 +614,15 @@
             onSnapshot(query(txCol), (snapshot) => {
                 transactions = [];
                 snapshot.forEach(docSnap => {
-                    transactions.push({ id: docSnap.id, ...docSnap.data() });
+                    const data = docSnap.data();
+                    transactions.push({ id: docSnap.id, ...data });
                 });
                 transactions.sort((a,b) => b.date.localeCompare(a.date));
                 renderEverything();
-            }, (err) => console.error("Error fetching transactions:", err));
+            }, (err) => {
+                console.error("Error fetching transactions:", err);
+                renderEverything();
+            });
 
             const stateDocRef = doc(db, 'artifacts', appId, 'users', userId, 'settings', 'appState');
             onSnapshot(stateDocRef, (docSnap) => {
@@ -630,22 +635,47 @@
                     saveStateStore();
                 }
                 renderEverything();
-            }, (err) => console.error("Error fetching state:", err));
+            }, (err) => {
+                console.error("Error fetching state:", err);
+                renderEverything();
+            });
         }
 
         async function saveTxStore(t) {
             if (!userId) return;
-            await setDoc(doc(db, 'artifacts', appId, 'users', userId, 'transactions', t.id), t);
+            try {
+                await setDoc(doc(db, 'artifacts', appId, 'users', userId, 'transactions', t.id), t);
+            } catch (err) {
+                console.error("Save tx offline fallback:", err);
+            }
+            const existingIdx = transactions.findIndex(x => x.id === t.id);
+            if (existingIdx >= 0) {
+                transactions[existingIdx] = t;
+            } else {
+                transactions.unshift(t);
+            }
+            transactions.sort((a,b) => b.date.localeCompare(a.date));
+            renderEverything();
         }
 
         async function deleteTxStore(id) {
             if (!userId) return;
-            await deleteDoc(doc(db, 'artifacts', appId, 'users', userId, 'transactions', id));
+            try {
+                await deleteDoc(doc(db, 'artifacts', appId, 'users', userId, 'transactions', id));
+            } catch (err) {
+                console.error("Delete tx error:", err);
+            }
+            transactions = transactions.filter(t => t.id !== id);
+            renderEverything();
         }
 
         async function saveStateStore() {
             if (!userId) return;
-            await setDoc(doc(db, 'artifacts', appId, 'users', userId, 'settings', 'appState'), appState);
+            try {
+                await setDoc(doc(db, 'artifacts', appId, 'users', userId, 'settings', 'appState'), appState);
+            } catch (err) {
+                console.error("Save state error:", err);
+            }
         }
 
         function renderEverything() {
@@ -1092,6 +1122,21 @@
             }).join('');
         }
 
+        window.filterTransactions = function(filter) {
+            currentFilter = filter;
+            ['all', 'in', 'out'].forEach(f => {
+                const btn = document.getElementById(`filter${f.charAt(0).toUpperCase() + f.slice(1)}`);
+                if (btn) {
+                    if (f === filter) {
+                        btn.className = "flex-1 sm:flex-initial px-3.5 py-1.5 text-xs font-semibold rounded-full bg-apple-blue text-white shadow";
+                    } else {
+                        btn.className = "flex-1 sm:flex-initial px-3.5 py-1.5 text-xs font-semibold rounded-full text-gray-400 hover:text-white";
+                    }
+                }
+            });
+            renderTransactions();
+        }
+
         function renderTransactions() {
             const container = document.getElementById('transactionsListContainer');
             if (!container) return;
@@ -1375,6 +1420,7 @@
             setTxModalType('out');
             document.getElementById('txDesc').value = '';
             document.getElementById('txAmount').value = '';
+            document.getElementById('txDate').value = isoDate(new Date());
             document.getElementById('aiCategoryBadge').classList.add('hidden');
             document.getElementById('modalNewTx').showModal();
         }
@@ -1406,8 +1452,8 @@
 
             if (desc && amount > 0 && date) {
                 const newTx = { id: uid(), desc, amount: currentTxType === 'out' ? -amount : amount, cat, date };
-                await saveTxStore(newTx);
                 closeModal('modalNewTx');
+                await saveTxStore(newTx);
             }
         }
 
@@ -1440,7 +1486,7 @@
             appState.goals.push({ id: uid(), n, t: a, s: 0, monthlySaving: 150 });
         }
         window.deleteGoal = async function(id) {
-            appState.goals = appState.goals.filter(g => g.id !== id);
+            appState.goals = appState.goals.goals.filter(g => g.id !== id);
             await saveStateStore();
         }
 

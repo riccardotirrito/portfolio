@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Finanze | Gestione Personale</title>
+    <title>Finanze Personali</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Phosphor Icons -->
@@ -19,11 +19,18 @@
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
                         glass: {
-                            100: 'rgba(255, 255, 255, 0.1)',
-                            50: 'rgba(255, 255, 255, 0.03)',
-                            border: 'rgba(255, 255, 255, 0.08)'
+                            base: 'rgba(20, 20, 25, 0.65)',
+                            border: 'rgba(255, 255, 255, 0.08)',
+                            card: 'rgba(255, 255, 255, 0.04)'
                         },
-                        accent: { blue: '#0A84FF', green: '#30D158', red: '#FF453A', orange: '#FF9F0A', purple: '#BF5AF2' }
+                        apple: {
+                            blue: '#0A84FF',
+                            green: '#30D158',
+                            red: '#FF453A',
+                            orange: '#FF9F0A',
+                            purple: '#BF5AF2',
+                            teal: '#64D2FF'
+                        }
                     }
                 }
             }
@@ -31,720 +38,729 @@
     </script>
     <style>
         body {
-            background-color: #000000;
+            background-color: #050508;
             color: #F5F5F7;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
+            font-family: 'Inter', sans-serif;
         }
 
-        .ambient-bg {
+        .ambient-glow {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: -1;
             overflow: hidden;
-            background: #000;
+            pointer-events: none;
+            background: #050508;
         }
-        .orb {
+        .glow-orb {
             position: absolute;
             border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.5;
-            animation: float 20s infinite ease-in-out alternate;
+            filter: blur(90px);
+            opacity: 0.45;
+            animation: pulseGlow 15s infinite alternate ease-in-out;
         }
-        .orb-1 { width: 50vw; height: 50vw; top: -10%; left: -10%; background: radial-gradient(circle, rgba(10,132,255,0.4) 0%, rgba(0,0,0,0) 70%); }
-        .orb-2 { width: 45vw; height: 45vw; bottom: -10%; right: -10%; background: radial-gradient(circle, rgba(191,90,242,0.3) 0%, rgba(0,0,0,0) 70%); animation-delay: -5s; }
+        .orb-1 { width: 60vw; height: 60vw; top: -15%; left: -15%; background: radial-gradient(circle, rgba(10,132,255,0.45) 0%, transparent 70%); }
+        .orb-2 { width: 55vw; height: 55vw; bottom: -15%; right: -15%; background: radial-gradient(circle, rgba(191,90,242,0.35) 0%, transparent 70%); animation-delay: -5s; }
 
-        @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(20px, 30px) scale(1.05); }
+        @keyframes pulseGlow {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.08) translate(15px, 20px); }
         }
 
         .glass-panel {
-            background: var(--tw-colors-glass-50);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
+            background: var(--tw-colors-glass-card);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
             border: 1px solid var(--tw-colors-glass-border);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-        }
-        
-        .glass-icon {
-            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.05) 100%);
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
         }
 
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
-
-        dialog {
-            background: transparent;
-            margin: auto;
-        }
-        dialog::backdrop {
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+        .glass-pill {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-        
-        .nav-item.active {
-            background: rgba(10, 132, 255, 0.15);
-            color: #0A84FF;
+
+        ::-webkit-scrollbar { width: 4px; height: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 10px; }
+
+        dialog { background: transparent; margin: auto; }
+        dialog::backdrop {
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
     </style>
 </head>
-<body class="flex flex-col md:flex-row h-screen w-screen overflow-hidden selection:bg-accent-blue selection:text-white">
+<body class="flex flex-col md:flex-row min-h-screen selection:bg-apple-blue selection:text-white pb-28 md:pb-6">
 
-    <!-- Ambient Background -->
-    <div class="ambient-bg">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
+    <!-- Sfondo luminoso dinamico -->
+    <div class="ambient-glow">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
     </div>
 
-    <!-- Sidebar (Desktop only) -->
-    <aside class="hidden md:flex flex-col w-64 h-full glass-panel border-r-0 border-white/5 z-20">
-        <div class="p-6 flex items-center gap-3">
-            <div class="w-10 h-10 rounded-2xl glass-icon flex items-center justify-center text-accent-blue shadow-[0_0_15px_rgba(10,132,255,0.3)]">
+    <!-- Barra laterale (Desktop) -->
+    <aside class="hidden md:flex flex-col w-64 h-screen sticky top-0 glass-panel border-r border-white/5 z-20 p-6">
+        <div class="flex items-center gap-3 mb-8">
+            <div class="w-10 h-10 rounded-2xl glass-pill flex items-center justify-center text-apple-blue shadow-[0_0_20px_rgba(10,132,255,0.4)]">
                 <i class="ph ph-wallet text-2xl"></i>
             </div>
             <div>
-                <h1 class="text-lg font-bold tracking-tight">Finanze</h1>
-                <p class="text-xs text-gray-400 font-medium">Gestione Personale</p>
+                <h1 class="text-base font-bold tracking-tight">Finanze</h1>
+                <p class="text-[11px] text-gray-400 font-medium flex items-center gap-1">
+                    <span id="syncIndicator" class="w-2 h-2 rounded-full bg-amber-500 inline-block"></span> Cloud Sync
+                </p>
             </div>
         </div>
 
-        <nav class="flex-1 px-4 py-2 space-y-1">
-            <h2 class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Navigazione Rapida</h2>
-            <a href="#section-dashboard" class="nav-item flex items-center gap-3 px-3 py-3 rounded-xl transition-all hover:bg-white/5 text-gray-300 hover:text-white text-sm font-medium">
-                <i class="ph ph-squares-four text-lg"></i> Panoramica
+        <nav class="space-y-1 flex-1">
+            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-2 px-3">Menu Principale</p>
+            <a href="#dash" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-white bg-apple-blue/15 text-apple-blue transition-all">
+                <i class="ph ph-squares-four text-lg"></i> Dashboard
             </a>
-            <a href="#section-transactions" class="nav-item flex items-center gap-3 px-3 py-3 rounded-xl transition-all hover:bg-white/5 text-gray-300 hover:text-white text-sm font-medium">
+            <a href="#tx" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-all">
                 <i class="ph ph-arrows-left-right text-lg"></i> Transazioni
             </a>
-            <a href="#section-budget" class="nav-item flex items-center gap-3 px-3 py-3 rounded-xl transition-all hover:bg-white/5 text-gray-300 hover:text-white text-sm font-medium">
+            <a href="#bud" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-all">
                 <i class="ph ph-chart-pie-slice text-lg"></i> Budget Categorie
             </a>
-            <a href="#section-goals" class="nav-item flex items-center gap-3 px-3 py-3 rounded-xl transition-all hover:bg-white/5 text-gray-300 hover:text-white text-sm font-medium">
-                <i class="ph ph-target text-lg"></i> Obiettivi Risparmio
+            <a href="#goals" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-all">
+                <i class="ph ph-target text-lg"></i> Obiettivi
             </a>
-            <a href="#section-network" class="nav-item flex items-center gap-3 px-3 py-3 rounded-xl transition-all hover:bg-white/5 text-gray-300 hover:text-white text-sm font-medium">
+            <a href="#subs" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 transition-all">
                 <i class="ph ph-users text-lg"></i> Abbonamenti & Prestiti
             </a>
         </nav>
     </aside>
 
-    <!-- Main Content Area -->
-    <main class="flex-1 h-full overflow-y-auto relative z-10 pb-32 md:pb-12 scroll-smooth">
-        <div class="max-w-4xl mx-auto p-4 sm:p-6 md:p-10 space-y-6">
-            
-            <!-- Header -->
-            <header class="flex justify-between items-center glass-panel p-5 rounded-3xl mb-2">
-                <div>
-                    <h2 class="text-xl sm:text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-300" id="greeting">Buongiorno</h2>
-                    <p class="text-xs text-gray-400 mt-0.5" id="currentDate"></p>
-                </div>
-                <button onclick="openTransactionModal()" class="flex items-center gap-2 bg-accent-blue hover:bg-blue-600 text-white px-4 py-2.5 rounded-full font-semibold transition-all shadow-[0_4px_20px_rgba(10,132,255,0.4)] active:scale-95 text-sm">
-                    <i class="ph ph-plus text-lg"></i> <span class="hidden sm:inline">Nuova</span>
-                </button>
-            </header>
+    <!-- Contenuto principale scorrevole verticalmente -->
+    <main class="flex-1 max-w-2xl w-full mx-auto p-4 sm:p-6 space-y-6">
+        
+        <!-- Header principale -->
+        <header class="glass-panel p-5 rounded-3xl flex justify-between items-center shadow-lg">
+            <div>
+                <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-400" id="welcomeText">Bentornato</h2>
+                <p class="text-xs text-gray-400 mt-0.5 capitalize" id="dateText"></p>
+            </div>
+            <button onclick="openNewTxModal()" class="flex items-center gap-2 bg-apple-blue hover:bg-blue-600 text-white px-4 py-2.5 rounded-full font-semibold transition-all shadow-[0_4px_20px_rgba(10,132,255,0.4)] active:scale-95 text-xs sm:text-sm">
+                <i class="ph ph-plus text-base font-bold"></i> <span class="hidden sm:inline">Nuova Transazione</span>
+            </button>
+        </header>
 
-            <!-- SECTION: Dashboard Overview Cards -->
-            <section id="section-dashboard" class="space-y-4">
-                <div class="grid grid-cols-2 gap-3 sm:gap-4">
-                    <div class="glass-panel rounded-3xl p-4 sm:p-5 flex flex-col justify-between">
-                        <span class="text-xs sm:text-sm text-gray-400 font-medium flex items-center gap-1.5"><i class="ph ph-wallet"></i> Saldo Totale</span>
-                        <div class="text-2xl sm:text-3xl font-bold mt-2 tracking-tight text-white" id="statBalance">€ 0,00</div>
-                    </div>
-                    <div class="glass-panel rounded-3xl p-4 sm:p-5 flex flex-col justify-between">
-                        <span class="text-xs sm:text-sm text-gray-400 font-medium flex items-center gap-1.5"><i class="ph ph-calendar-check text-accent-orange"></i> Budget Giornaliero</span>
-                        <div class="text-xl sm:text-2xl font-bold mt-2 text-accent-orange tracking-tight" id="statDaily">€ 0,00</div>
-                        <p class="text-[10px] sm:text-xs text-gray-400 mt-1 truncate" id="statDailyNote"></p>
-                    </div>
+        <!-- DASHBOARD & PANORAMICA SALDO -->
+        <section id="dash" class="space-y-4 scroll-mt-6">
+            <div class="grid grid-cols-2 gap-3">
+                <div class="glass-panel p-4 sm:p-5 rounded-3xl flex flex-col justify-between">
+                    <span class="text-xs text-gray-400 font-medium flex items-center gap-1.5"><i class="ph ph-wallet text-apple-blue"></i> Saldo Totale</span>
+                    <div class="text-xl sm:text-2xl font-black tracking-tight mt-2 text-white" id="statBalance">€ 0,00</div>
                 </div>
+                <div class="glass-panel p-4 sm:p-5 rounded-3xl flex flex-col justify-between">
+                    <span class="text-xs text-gray-400 font-medium flex items-center gap-1.5"><i class="ph ph-calendar-check text-apple-orange"></i> Budget Odierno</span>
+                    <div class="text-lg sm:text-xl font-black tracking-tight mt-2 text-apple-orange" id="statDailyBudget">€ 0,00</div>
+                    <p class="text-[10px] text-gray-400 mt-0.5 truncate" id="statDailyNote">Sincronizzazione...</p>
+                </div>
+            </div>
 
-                <div class="grid grid-cols-2 gap-3 sm:gap-4">
-                    <div class="glass-panel rounded-3xl p-4 flex items-center justify-between">
-                        <div>
-                            <span class="text-xs text-gray-400 font-medium block">Entrate Mese</span>
-                            <div class="text-lg sm:text-xl font-bold text-accent-green mt-1" id="statIncome">€ 0,00</div>
-                        </div>
-                        <div class="w-10 h-10 rounded-xl bg-accent-green/10 text-accent-green flex items-center justify-center">
-                            <i class="ph ph-trend-up text-xl"></i>
-                        </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div class="glass-panel p-4 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <span class="text-[11px] text-gray-400 block font-medium">Entrate Mese</span>
+                        <div class="text-base sm:text-lg font-bold text-apple-green mt-0.5" id="statIncome">€ 0,00</div>
                     </div>
-                    <div class="glass-panel rounded-3xl p-4 flex items-center justify-between">
-                        <div>
-                            <span class="text-xs text-gray-400 font-medium block">Uscite Mese</span>
-                            <div class="text-lg sm:text-xl font-bold text-accent-red mt-1" id="statExpense">€ 0,00</div>
-                        </div>
-                        <div class="w-10 h-10 rounded-xl bg-accent-red/10 text-accent-red flex items-center justify-center">
-                            <i class="ph ph-trend-down text-xl"></i>
-                        </div>
+                    <div class="w-9 h-9 rounded-xl bg-apple-green/10 text-apple-green flex items-center justify-center">
+                        <i class="ph ph-trend-up text-lg"></i>
                     </div>
                 </div>
-
-                <!-- Chart Box with Range Selector -->
-                <div class="glass-panel rounded-3xl p-5 sm:p-6">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
-                        <div>
-                            <h3 class="font-bold text-base sm:text-lg">Andamento Saldo</h3>
-                            <p class="text-xs text-gray-400" id="chartSubtitle">Ultimi 6 mesi</p>
-                        </div>
-                        <div class="flex bg-white/5 p-1 rounded-full border border-white/10 self-stretch sm:self-auto justify-center">
-                            <button onclick="setChartRange('1w')" id="btnRange1w" class="flex-1 sm:flex-initial px-3 py-1 text-xs font-medium rounded-full text-gray-400 hover:text-white transition-all">1S</button>
-                            <button onclick="setChartRange('1m')" id="btnRange1m" class="flex-1 sm:flex-initial px-3 py-1 text-xs font-medium rounded-full text-gray-400 hover:text-white transition-all">1M</button>
-                            <button onclick="setChartRange('6m')" id="btnRange6m" class="flex-1 sm:flex-initial px-3 py-1 text-xs font-medium rounded-full bg-accent-blue text-white shadow-md transition-all">6M</button>
-                        </div>
+                <div class="glass-panel p-4 rounded-2xl flex items-center justify-between">
+                    <div>
+                        <span class="text-[11px] text-gray-400 block font-medium">Uscite Mese</span>
+                        <div class="text-base sm:text-lg font-bold text-apple-red mt-0.5" id="statExpense">€ 0,00</div>
                     </div>
-                    <div class="w-full h-44 sm:h-52 relative">
-                        <svg class="w-full h-full overflow-visible" id="balanceChart" viewBox="0 0 600 200" preserveAspectRatio="none"></svg>
+                    <div class="w-9 h-9 rounded-xl bg-apple-red/10 text-apple-red flex items-center justify-center">
+                        <i class="ph ph-trend-down text-lg"></i>
                     </div>
                 </div>
-            </section>
+            </div>
 
-            <!-- SECTION: Transactions -->
-            <section id="section-transactions" class="glass-panel rounded-3xl p-5 sm:p-6 space-y-4 pt-8">
+            <!-- GRAFICO ANDAMENTO SALDO CON FILTRI TEMPORALI -->
+            <div class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <div>
-                        <h3 class="font-bold text-lg">Transazioni</h3>
-                        <p class="text-xs text-gray-400">Ultimi movimenti registrati</p>
+                        <h3 class="font-bold text-base">Andamento Saldo</h3>
+                        <p class="text-xs text-gray-400" id="chartSubLabel">Ultimi 6 mesi</p>
                     </div>
-                    <div class="flex bg-white/5 p-1 rounded-full border border-white/10 w-full sm:w-auto">
-                        <button class="filter-btn active flex-1 sm:flex-initial px-3 py-1 text-xs font-medium rounded-full bg-accent-blue text-white shadow-md" data-filter="all">Tutte</button>
-                        <button class="filter-btn flex-1 sm:flex-initial px-3 py-1 text-xs font-medium rounded-full text-gray-400 hover:text-white" data-filter="in">Entrate</button>
-                        <button class="filter-btn flex-1 sm:flex-initial px-3 py-1 text-xs font-medium rounded-full text-gray-400 hover:text-white" data-filter="out">Uscite</button>
+                    <div class="flex glass-pill p-1 rounded-full w-full sm:w-auto">
+                        <button onclick="setChartInterval('1w')" id="btn1w" class="flex-1 sm:flex-initial px-3 py-1 text-xs font-medium rounded-full text-gray-400 hover:text-white transition-all">1 Settimana</button>
+                        <button onclick="setChartInterval('1m')" id="btn1m" class="flex-1 sm:flex-initial px-3 py-1 text-xs font-medium rounded-full text-gray-400 hover:text-white transition-all">1 Mese</button>
+                        <button onclick="setChartInterval('6m')" id="btn6m" class="flex-1 sm:flex-initial px-3 py-1 text-xs font-medium rounded-full bg-apple-blue text-white shadow transition-all">6 Mesi</button>
                     </div>
                 </div>
-                <div class="space-y-3 pt-2" id="fullTransactionsList">
-                    <!-- Filled by JS -->
+                <div class="w-full h-44 relative">
+                    <svg class="w-full h-full overflow-visible" id="balanceChartSvg" viewBox="0 0 600 180" preserveAspectRatio="none"></svg>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- SECTION: Budget Categorie -->
-            <section id="section-budget" class="glass-panel rounded-3xl p-5 sm:p-6 space-y-4 pt-8">
+        <!-- TRANSAZIONI RECENTI -->
+        <section id="tx" class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4 scroll-mt-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                 <div>
-                    <h3 class="font-bold text-lg">Budget Categorie</h3>
-                    <p class="text-xs text-gray-400">Tieni sotto controllo i limiti di spesa mensili</p>
+                    <h3 class="font-bold text-base">Transazioni</h3>
+                    <p class="text-xs text-gray-400">Ultime entrate e uscite registrate</p>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2" id="budgetList">
-                    <!-- Filled by JS -->
+                <div class="flex glass-pill p-1 rounded-full w-full sm:w-auto">
+                    <button onclick="filterTransactions('all')" id="filterAll" class="flex-1 sm:flex-initial px-3 py-1 text-xs font-medium rounded-full bg-apple-blue text-white shadow">Tutte</button>
+                    <button onclick="filterTransactions('in')" id="filterIn" class="flex-1 sm:flex-initial px-3 py-1 text-xs font-medium rounded-full text-gray-400 hover:text-white">Entrate</button>
+                    <button onclick="filterTransactions('out')" id="filterOut" class="flex-1 sm:flex-initial px-3 py-1 text-xs font-medium rounded-full text-gray-400 hover:text-white">Uscite</button>
                 </div>
-            </section>
+            </div>
+            <div class="space-y-2.5 pt-1" id="transactionsListContainer"></div>
+        </section>
 
-            <!-- SECTION: Goals -->
-            <section id="section-goals" class="glass-panel rounded-3xl p-5 sm:p-6 space-y-4 pt-8">
+        <!-- BUDGET CATEGORIE -->
+        <section id="bud" class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4 scroll-mt-6">
+            <div>
+                <h3 class="font-bold text-base">Budget Categorie</h3>
+                <p class="text-xs text-gray-400">Personalizza i tetti di spesa mensili modificando i valori</p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1" id="budgetListContainer"></div>
+        </section>
+
+        <!-- OBIETTIVI DI RISPARMIO -->
+        <section id="goals" class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4 scroll-mt-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h3 class="font-bold text-base">Obiettivi di Risparmio</h3>
+                    <p class="text-xs text-gray-400">Accantona fondi per i tuoi scopi futuri</p>
+                </div>
+                <button onclick="openPromptModal('Nuovo Obiettivo', 'Nome obiettivo', 'Importo da raggiungere', saveNewGoal)" class="glass-pill px-3 py-1.5 rounded-full text-xs font-medium text-white hover:bg-white/10 transition-all">
+                    + Nuovo
+                </button>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1" id="goalsListContainer"></div>
+        </section>
+
+        <!-- ABBONAMENTI E PRESTITI TRA AMICI -->
+        <section id="subs" class="grid grid-cols-1 md:grid-cols-2 gap-4 scroll-mt-6">
+            <!-- Abbonamenti -->
+            <div class="glass-panel p-5 rounded-3xl space-y-4">
                 <div class="flex justify-between items-center">
                     <div>
-                        <h3 class="font-bold text-lg">Obiettivi di Risparmio</h3>
-                        <p class="text-xs text-gray-400">Accantona denaro per i tuoi scopi</p>
+                        <h3 class="font-bold text-base">Abbonamenti</h3>
+                        <p class="text-xs text-gray-400" id="subsTotalText">€ 0,00 / mese</p>
                     </div>
-                    <button onclick="openPromptModal('Nuovo Obiettivo', 'Nome obiettivo', 'Importo (Da raggiungere)', addGoal)" class="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-full text-xs font-medium transition-all">
-                        + Nuovo
+                    <button onclick="openPromptModal('Nuovo Abbonamento', 'Nome servizio', 'Costo mensile', saveNewSub)" class="glass-pill px-3 py-1.5 rounded-full text-xs font-medium text-white hover:bg-white/10 transition-all">
+                        + Aggiungi
                     </button>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2" id="goalsList">
-                    <!-- Filled by JS -->
-                </div>
-            </section>
+                <div class="space-y-2.5 pt-1" id="subsListContainer"></div>
+            </div>
 
-            <!-- SECTION: Network (Subs & Debts) -->
-            <section id="section-network" class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
-                <!-- Subscriptions -->
-                <div class="glass-panel rounded-3xl p-5 sm:p-6 space-y-4">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <h3 class="font-bold text-lg">Abbonamenti</h3>
-                            <p class="text-xs text-gray-400" id="subTotalText">€ 0,00 / mese</p>
-                        </div>
-                        <button onclick="openPromptModal('Nuovo Abbonamento', 'Nome servizio', 'Costo mensile', addSub)" class="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-full text-xs font-medium transition-all">
-                            + Aggiungi
-                        </button>
+            <!-- Prestiti -->
+            <div class="glass-panel p-5 rounded-3xl space-y-4">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="font-bold text-base">Prestiti & Amici</h3>
+                        <p class="text-xs text-gray-400" id="debtsTotalText">Siamo pari</p>
                     </div>
-                    <div class="space-y-3 pt-2" id="subsList">
-                        <!-- Filled by JS -->
-                    </div>
+                    <button onclick="openDebtModal()" class="glass-pill px-3 py-1.5 rounded-full text-xs font-medium text-white hover:bg-white/10 transition-all">
+                        + Aggiungi
+                    </button>
                 </div>
-
-                <!-- Debts -->
-                <div class="glass-panel rounded-3xl p-5 sm:p-6 space-y-4">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <h3 class="font-bold text-lg">Prestiti & Amici</h3>
-                            <p class="text-xs text-gray-400" id="debtTotalText">Siamo pari</p>
-                        </div>
-                        <button onclick="openDebtModal()" class="bg-white/10 hover:bg-white/20 text-white px-3 py-1.5 rounded-full text-xs font-medium transition-all">
-                            + Aggiungi
-                        </button>
-                    </div>
-                    <div class="space-y-3 pt-2" id="debtsList">
-                        <!-- Filled by JS -->
-                    </div>
-                </div>
-            </section>
-
-        </div>
+                <div class="space-y-2.5 pt-1" id="debtsListContainer"></div>
+            </div>
+        </section>
     </main>
 
-    <!-- Mobile Bottom Floating Navigation Bar -->
-    <nav class="md:hidden fixed bottom-4 left-4 right-4 glass-panel border border-white/15 rounded-3xl z-50 px-4 py-3 flex justify-around items-center shadow-[0_10px_30px_rgba(0,0,0,0.8)] bg-black/60 backdrop-blur-2xl">
-        <a href="#section-dashboard" class="flex flex-col items-center text-accent-blue p-1">
-            <i class="ph-fill ph-squares-four text-2xl"></i>
+    <!-- Barra di navigazione mobile inferiore (iOS style) -->
+    <nav class="md:hidden fixed bottom-3 left-4 right-4 glass-panel rounded-2xl z-50 px-5 py-2.5 flex justify-around items-center shadow-2xl bg-[#121216]/80 backdrop-blur-3xl border border-white/10">
+        <a href="#dash" class="flex flex-col items-center text-apple-blue p-1">
+            <i class="ph-fill ph-squares-four text-xl"></i>
         </a>
-        <a href="#section-transactions" class="flex flex-col items-center text-gray-400 hover:text-white p-1">
-            <i class="ph ph-arrows-left-right text-2xl"></i>
+        <a href="#tx" class="flex flex-col items-center text-gray-400 hover:text-white p-1">
+            <i class="ph ph-arrows-left-right text-xl"></i>
         </a>
-        <button onclick="openTransactionModal()" class="w-12 h-12 bg-accent-blue rounded-full flex items-center justify-center text-white shadow-[0_4px_15px_rgba(10,132,255,0.6)] active:scale-95">
-            <i class="ph ph-plus text-xl font-bold"></i>
+        <button onclick="openNewTxModal()" class="w-11 h-11 bg-apple-blue rounded-full flex items-center justify-center text-white shadow-[0_4px_15px_rgba(10,132,255,0.6)] active:scale-95 -mt-2">
+            <i class="ph ph-plus text-lg font-bold"></i>
         </button>
-        <a href="#section-budget" class="flex flex-col items-center text-gray-400 hover:text-white p-1">
-            <i class="ph ph-chart-pie-slice text-2xl"></i>
+        <a href="#bud" class="flex flex-col items-center text-gray-400 hover:text-white p-1">
+            <i class="ph ph-chart-pie-slice text-xl"></i>
         </a>
-        <a href="#section-goals" class="flex flex-col items-center text-gray-400 hover:text-white p-1">
-            <i class="ph ph-target text-2xl"></i>
+        <a href="#goals" class="flex flex-col items-center text-gray-400 hover:text-white p-1">
+            <i class="ph ph-target text-xl"></i>
         </a>
     </nav>
 
-    <!-- Modal: New Transaction -->
-    <dialog id="modalTransaction" class="w-full max-w-sm bg-transparent p-4">
-        <div class="glass-panel rounded-3xl p-5 relative shadow-2xl">
-            <button onclick="closeModal('modalTransaction')" class="absolute top-4 right-4 text-gray-400 hover:text-white p-1">
-                <i class="ph ph-x text-xl"></i>
-            </button>
-            <h3 class="text-lg font-bold mb-4">Nuova Transazione</h3>
-            
-            <div class="flex p-1 bg-white/5 rounded-xl border border-white/10 mb-4">
-                <button type="button" id="typeOutBtn" class="flex-1 py-2 text-xs font-semibold rounded-lg bg-accent-red text-white shadow-md transition-all" onclick="setTransactionType('out')">Uscita</button>
-                <button type="button" id="typeInBtn" class="flex-1 py-2 text-xs font-semibold rounded-lg text-gray-400 hover:text-white transition-all" onclick="setTransactionType('in')">Entrata</button>
+    <!-- MODALE: Nuova Transazione -->
+    <dialog id="modalNewTx" class="w-full max-w-sm p-4">
+        <div class="glass-panel p-5 rounded-3xl relative shadow-2xl space-y-4">
+            <button onclick="closeModal('modalNewTx')" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="ph ph-x text-lg"></i></button>
+            <h3 class="text-base font-bold">Nuova Transazione</h3>
+
+            <div class="flex glass-pill p-1 rounded-xl">
+                <button type="button" id="tabOut" class="flex-1 py-2 text-xs font-bold rounded-lg bg-apple-red text-white transition-all shadow" onclick="setTxModalType('out')">Uscita</button>
+                <button type="button" id="tabIn" class="flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition-all" onclick="setTxModalType('in')">Entrata</button>
             </div>
 
-            <form id="formTransaction" class="space-y-3">
+            <form id="formNewTx" class="space-y-3">
                 <div>
                     <label class="block text-[11px] font-medium text-gray-400 mb-1">Descrizione</label>
-                    <input type="text" id="tDesc" required placeholder="Es. Spesa al supermercato" class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accent-blue">
+                    <input type="text" id="txDesc" required placeholder="Es. Spesa supermercato" class="w-full glass-pill rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-apple-blue border border-white/10">
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <div>
                         <label class="block text-[11px] font-medium text-gray-400 mb-1">Importo (€)</label>
-                        <input type="number" id="tAmount" required min="0.01" step="0.01" placeholder="0.00" class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accent-blue">
+                        <input type="number" id="txAmount" required min="0.01" step="0.01" placeholder="0.00" class="w-full glass-pill rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-apple-blue border border-white/10">
                     </div>
                     <div>
                         <label class="block text-[11px] font-medium text-gray-400 mb-1">Data</label>
-                        <input type="date" id="tDate" required class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-accent-blue" style="color-scheme: dark;">
+                        <input type="date" id="txDate" required class="w-full glass-pill rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-apple-blue border border-white/10" style="color-scheme: dark;">
                     </div>
                 </div>
                 <div>
                     <label class="block text-[11px] font-medium text-gray-400 mb-1">Categoria</label>
-                    <select id="tCat" class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white appearance-none focus:outline-none focus:border-accent-blue">
-                        <!-- Options -->
-                    </select>
+                    <select id="txCat" class="w-full glass-pill rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-apple-blue border border-white/10 appearance-none bg-black/40"></select>
                 </div>
-                
-                <button type="submit" class="w-full mt-4 bg-accent-blue hover:bg-blue-600 text-white font-semibold py-3 rounded-xl transition-all shadow-[0_4px_15px_rgba(10,132,255,0.4)] text-sm">
-                    Salva Transazione
-                </button>
+                <button type="submit" class="w-full mt-2 bg-apple-blue hover:bg-blue-600 text-white font-semibold py-3 rounded-xl transition-all shadow-[0_4px_15px_rgba(10,132,255,0.4)] text-sm">Salva</button>
             </form>
         </div>
     </dialog>
 
-    <!-- Modal: Generic Prompt -->
-    <dialog id="modalPrompt" class="w-full max-w-sm bg-transparent p-4">
-        <div class="glass-panel rounded-3xl p-5 relative shadow-2xl">
-            <button onclick="closeModal('modalPrompt')" class="absolute top-4 right-4 text-gray-400 hover:text-white">
-                <i class="ph ph-x text-xl"></i>
-            </button>
-            <h3 class="text-lg font-bold mb-4" id="pTitle">Titolo</h3>
-            
+    <!-- MODALE: Prompt generico (Obiettivi / Abbonamenti) -->
+    <dialog id="modalPrompt" class="w-full max-w-sm p-4">
+        <div class="glass-panel p-5 rounded-3xl relative shadow-2xl space-y-4">
+            <button onclick="closeModal('modalPrompt')" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="ph ph-x text-lg"></i></button>
+            <h3 class="text-base font-bold" id="promptTitle">Titolo</h3>
             <form id="formPrompt" class="space-y-3">
                 <div>
-                    <label class="block text-[11px] font-medium text-gray-400 mb-1" id="pLabelName">Nome</label>
-                    <input type="text" id="pName" required class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-accent-blue">
+                    <label class="block text-[11px] font-medium text-gray-400 mb-1" id="promptLabelName">Nome</label>
+                    <input type="text" id="promptName" required class="w-full glass-pill rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-apple-blue border border-white/10">
                 </div>
                 <div>
-                    <label class="block text-[11px] font-medium text-gray-400 mb-1" id="pLabelAmount">Importo</label>
-                    <input type="number" id="pAmount" required min="0.01" step="0.01" class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-accent-blue">
+                    <label class="block text-[11px] font-medium text-gray-400 mb-1" id="promptLabelAmount">Importo</label>
+                    <input type="number" id="promptAmount" required min="0.01" step="0.01" class="w-full glass-pill rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-apple-blue border border-white/10">
                 </div>
-                <button type="submit" class="w-full mt-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-3 rounded-xl transition-all text-sm">
-                    Conferma
-                </button>
+                <button type="submit" class="w-full mt-2 glass-pill hover:bg-white/20 text-white font-semibold py-3 rounded-xl transition-all text-sm">Conferma</button>
             </form>
         </div>
     </dialog>
 
-    <!-- Modal: Debts -->
-    <dialog id="modalDebt" class="w-full max-w-sm bg-transparent p-4">
-        <div class="glass-panel rounded-3xl p-5 relative shadow-2xl">
-            <button onclick="closeModal('modalDebt')" class="absolute top-4 right-4 text-gray-400 hover:text-white">
-                <i class="ph ph-x text-xl"></i>
-            </button>
-            <h3 class="text-lg font-bold mb-4">Nuovo Prestito</h3>
-            
+    <!-- MODALE: Nuovo Prestito -->
+    <dialog id="modalDebt" class="w-full max-w-sm p-4">
+        <div class="glass-panel p-5 rounded-3xl relative shadow-2xl space-y-4">
+            <button onclick="closeModal('modalDebt')" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="ph ph-x text-lg"></i></button>
+            <h3 class="text-base font-bold">Nuovo Prestito / Amico</h3>
             <form id="formDebt" class="space-y-3">
                 <div>
                     <label class="block text-[11px] font-medium text-gray-400 mb-1">Nome persona</label>
-                    <input type="text" id="dName" required class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-accent-blue">
+                    <input type="text" id="debtName" required class="w-full glass-pill rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-apple-blue border border-white/10">
                 </div>
                 <div>
                     <label class="block text-[11px] font-medium text-gray-400 mb-1">Importo (€)</label>
-                    <input type="number" id="dAmount" required min="0.01" step="0.01" class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-accent-blue">
+                    <input type="number" id="debtAmount" required min="0.01" step="0.01" class="w-full glass-pill rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-apple-blue border border-white/10">
                 </div>
                 <div>
-                    <label class="block text-[11px] font-medium text-gray-400 mb-1">Tipo di prestito</label>
-                    <select id="dType" class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-white appearance-none focus:outline-none focus:border-accent-blue">
-                        <option value="1" style="background:#111">Mi devono dare</option>
-                        <option value="0" style="background:#111">Devo dare io</option>
+                    <label class="block text-[11px] font-medium text-gray-400 mb-1">Tipo prestito</label>
+                    <select id="debtType" class="w-full glass-pill rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-apple-blue border border-white/10 bg-black/40">
+                        <option value="1">Ti deve dare</option>
+                        <option value="0">Devi dare tu</option>
                     </select>
                 </div>
-                <button type="submit" class="w-full mt-2 bg-white/10 hover:bg-white/20 text-white font-semibold py-3 rounded-xl transition-all text-sm">
-                    Aggiungi
-                </button>
+                <button type="submit" class="w-full mt-2 glass-pill hover:bg-white/20 text-white font-semibold py-3 rounded-xl transition-all text-sm">Aggiungi</button>
             </form>
         </div>
     </dialog>
 
-    <script>
-        const CATEGORIES = {
-            "Casa": { icon: "ph-house", color: "text-accent-blue", bg: "bg-accent-blue" },
-            "Spesa": { icon: "ph-shopping-cart", color: "text-accent-green", bg: "bg-accent-green" },
-            "Trasporti": { icon: "ph-car", color: "text-accent-orange", bg: "bg-accent-orange" },
-            "Svago": { icon: "ph-popcorn", color: "text-accent-purple", bg: "bg-accent-purple" },
-            "Salute": { icon: "ph-heartbeat", color: "text-accent-red", bg: "bg-accent-red" },
-            "Stipendio": { icon: "ph-money", color: "text-accent-green", bg: "bg-accent-green" },
+    <!-- Firebase SDKs & App Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'finanze-personali-default';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "AIzaSyBXRuAqeTHsDWvJXkRwJE8OHm1-OKPKXMQ",
+            authDomain: "portfolio-2711.firebaseapp.com",
+            databaseURL: "https://portfolio-2711-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "portfolio-2711",
+            storageBucket: "portfolio-2711.firebasestorage.app",
+            messagingSenderId: "811337487301",
+            appId: "1:811337487301:web:42c442fb45b8a27fdd71ac"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const CATS = {
+            "Casa": { icon: "ph-house", color: "text-apple-blue", bg: "bg-apple-blue" },
+            "Spesa": { icon: "ph-shopping-cart", color: "text-apple-green", bg: "bg-apple-green" },
+            "Trasporti": { icon: "ph-car", color: "text-apple-orange", bg: "bg-apple-orange" },
+            "Svago": { icon: "ph-popcorn", color: "text-apple-purple", bg: "bg-apple-purple" },
+            "Salute": { icon: "ph-heartbeat", color: "text-apple-red", bg: "bg-apple-red" },
+            "Stipendio": { icon: "ph-money", color: "text-apple-green", bg: "bg-apple-green" },
             "Altro": { icon: "ph-sparkle", color: "text-gray-400", bg: "bg-gray-400" }
         };
         const OUT_CATS = ["Casa", "Spesa", "Trasporti", "Svago", "Salute", "Altro"];
         const IN_CATS = ["Stipendio", "Altro"];
-        const KEY_TX = "finanze-tx-v3";
-        const KEY_DATA = "finanze-data-v3";
 
         let transactions = [];
-        let state = {
-            budgets: { Casa: 700, Spesa: 300, Trasporti: 100, Svago: 150, Salute: 50, Altro: 50 },
-            subs: [{ id: "s1", n: "Spotify", a: 10.99 }, { id: "s2", n: "Netflix", a: 13.99 }],
-            goals: [{ id: "g1", n: "Fondo Emergenza", t: 5000, s: 1200 }, { id: "g2", n: "Viaggio", t: 3000, s: 450 }],
-            debts: [{ id: "d1", n: "Marco", a: 25, type: 1 }]
+        let appState = {
+            budgets: { Casa: 700, Spesa: 300, Trasporti: 120, Svago: 150, Salute: 60, Altro: 50 },
+            subs: [],
+            goals: [],
+            debts: []
         };
 
-        let currentType = 'out';
-        let txFilter = 'all';
-        let currentChartRange = '6m';
-        let promptCallback = null;
+        let currentTxType = 'out';
+        let currentFilter = 'all';
+        let currentChartInterval = '6m';
+        let activePromptCb = null;
+        let userId = null;
 
         const uid = () => Math.random().toString(36).substring(2, 9);
-        const formatEur = (n) => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(n);
-        const isoDate = (d) => d.toISOString().split('T')[0];
-        const escapeHtml = (str) => String(str).replace(/[&<>'"]/g, match => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[match]);
+        const formatEur = n => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(n);
+        const isoDate = d => d.toISOString().split('T')[0];
+        const escapeHtml = str => String(str).replace(/[&<>'"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[m]);
 
-        function generateMockData() {
-            let res = [];
-            let now = new Date();
-            for (let i = 30; i >= 0; i--) {
-                let d = new Date();
-                d.setDate(now.getDate() - i);
-                if (i % 7 === 0) res.push({ id: uid(), desc: "Stipendio", amount: 1800, cat: "Stipendio", date: isoDate(d) });
-                if (i % 5 === 0) res.push({ id: uid(), desc: "Supermercato", amount: -65, cat: "Spesa", date: isoDate(d) });
-                if (i === 2) res.push({ id: uid(), desc: "Affitto", amount: -600, cat: "Casa", date: isoDate(d) });
-                if (i === 12) res.push({ id: uid(), desc: "Ristorante", amount: -45, cat: "Svago", date: isoDate(d) });
-            }
-            return res.sort((a,b) => b.date.localeCompare(a.date));
-        }
-
-        function init() {
+        async function initAuthAndData() {
             try {
-                const txData = localStorage.getItem(KEY_TX);
-                transactions = txData ? JSON.parse(txData) : generateMockData();
-                const extraData = localStorage.getItem(KEY_DATA);
-                if (extraData) state = JSON.parse(extraData);
-            } catch (e) { transactions = generateMockData(); }
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+            } catch (err) {
+                console.error("Auth error:", err);
+                await signInAnonymously(auth);
+            }
 
-            const hr = new Date().getHours();
-            document.getElementById('greeting').textContent = hr < 12 ? "Buongiorno" : hr < 18 ? "Buon pomeriggio" : "Buonasera";
-            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' });
-            document.getElementById('tDate').value = isoDate(new Date());
+            userId = auth.currentUser?.uid || crypto.randomUUID();
+            document.getElementById('syncIndicator').className = "w-2 h-2 rounded-full bg-apple-green inline-block";
 
-            setupEventListeners();
-            renderApp();
-        }
+            const h = new Date().getHours();
+            document.getElementById('welcomeText').textContent = h < 12 ? "Buongiorno" : h < 18 ? "Buon pomeriggio" : "Buonasera";
+            document.getElementById('dateText').textContent = new Date().toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' });
+            document.getElementById('txDate').value = isoDate(new Date());
 
-        function saveTx() { localStorage.setItem(KEY_TX, JSON.stringify(transactions)); }
-        function saveState() { localStorage.setItem(KEY_DATA, JSON.stringify(state)); }
-
-        function setupEventListeners() {
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    document.querySelectorAll('.filter-btn').forEach(b => {
-                        b.classList.remove('active', 'bg-accent-blue', 'text-white');
-                        b.classList.add('text-gray-400');
-                    });
-                    e.target.classList.add('active', 'bg-accent-blue', 'text-white');
-                    e.target.classList.remove('text-gray-400');
-                    txFilter = e.target.dataset.filter;
-                    renderTransactionsList();
-                });
-            });
-
-            document.getElementById('formTransaction').addEventListener('submit', handleTransactionSubmit);
+            document.getElementById('formNewTx').addEventListener('submit', handleTxSubmit);
             document.getElementById('formPrompt').addEventListener('submit', handlePromptSubmit);
             document.getElementById('formDebt').addEventListener('submit', handleDebtSubmit);
+
+            setupFirestoreListeners();
         }
 
-        function setChartRange(range) {
-            currentChartRange = range;
-            ['1w', '1m', '6m'].forEach(r => {
-                const btn = document.getElementById(`btnRange${r}`);
-                if (r === range) {
-                    btn.className = "flex-1 sm:flex-initial px-3 py-1 text-xs font-medium rounded-full bg-accent-blue text-white shadow-md transition-all";
+        function setupFirestoreListeners() {
+            if (!userId) return;
+
+            // Transazioni
+            const txCol = collection(db, 'artifacts', appId, 'users', userId, 'transactions');
+            onSnapshot(query(txCol), (snapshot) => {
+                transactions = [];
+                snapshot.forEach(docSnap => {
+                    transactions.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                transactions.sort((a,b) => b.date.localeCompare(a.date));
+                renderEverything();
+            }, (err) => console.error("Error fetching transactions:", err));
+
+            // Stato (Budget, Abbonamenti, Obiettivi, Prestiti)
+            const stateDocRef = doc(db, 'artifacts', appId, 'users', userId, 'settings', 'appState');
+            onSnapshot(stateDocRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    appState = docSnap.data();
                 } else {
-                    btn.className = "flex-1 sm:flex-initial px-3 py-1 text-xs font-medium rounded-full text-gray-400 hover:text-white transition-all";
+                    // Seed iniziale se vuoto
+                    appState = {
+                        budgets: { Casa: 700, Spesa: 300, Trasporti: 120, Svago: 150, Salute: 60, Altro: 50 },
+                        subs: [{ id: "s1", n: "Spotify", a: 10.99 }, { id: "s2", n: "Netflix", a: 13.99 }],
+                        goals: [{ id: "g1", n: "Fondo Emergenza", t: 3000, s: 900 }],
+                        debts: [{ id: "d1", n: "Marco", a: 30, type: 1 }]
+                    };
+                    saveStateStore();
                 }
-            });
-            renderChart();
+                renderEverything();
+            }, (err) => console.error("Error fetching state:", err));
         }
 
-        function renderApp() {
-            renderDashboardStats();
+        async function saveTxStore(t) {
+            if (!userId) return;
+            await setDoc(doc(db, 'artifacts', appId, 'users', userId, 'transactions', t.id), t);
+        }
+
+        async function deleteTxStore(id) {
+            if (!userId) return;
+            await deleteDoc(doc(db, 'artifacts', appId, 'users', userId, 'transactions', id));
+        }
+
+        async function saveStateStore() {
+            if (!userId) return;
+            await setDoc(doc(db, 'artifacts', appId, 'users', userId, 'settings', 'appState'), appState);
+        }
+
+        function renderEverything() {
+            renderStats();
             renderChart();
-            renderTransactionsList();
-            renderBudget();
+            renderTransactions();
+            renderBudgets();
             renderGoals();
             renderNetwork();
         }
 
-        function renderDashboardStats() {
-            const now = new Date();
-            const currentMonthStr = isoDate(now).substring(0, 7);
-            
-            let totalBal = 0, monthIn = 0, monthOut = 0;
-            transactions.forEach(tx => {
-                totalBal += tx.amount;
-                if (tx.date.substring(0,7) === currentMonthStr) {
-                    if (tx.amount > 0) monthIn += tx.amount;
-                    else monthOut -= tx.amount;
+        function renderStats() {
+            let totalBal = 0, mIn = 0, mOut = 0;
+            const currentMonthStr = isoDate(new Date()).substring(0, 7);
+
+            transactions.forEach(t => {
+                totalBal += t.amount;
+                if (t.date.substring(0, 7) === currentMonthStr) {
+                    if (t.amount > 0) mIn += t.amount;
+                    else mOut -= t.amount;
                 }
             });
 
             document.getElementById('statBalance').textContent = formatEur(totalBal);
-            document.getElementById('statIncome').textContent = formatEur(monthIn);
-            document.getElementById('statExpense').textContent = formatEur(monthOut);
+            document.getElementById('statIncome').textContent = formatEur(mIn);
+            document.getElementById('statExpense').textContent = formatEur(mOut);
 
+            const now = new Date();
             const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
             const daysLeft = daysInMonth - now.getDate() + 1;
-            const totalBudget = OUT_CATS.reduce((acc, cat) => acc + (state.budgets[cat] || 0), 0);
-            const remainingBudget = totalBudget - monthOut;
+            const totalBudget = OUT_CATS.reduce((acc, c) => acc + (appState.budgets?.[c] || 0), 0);
+            const remainingBudget = totalBudget - mOut;
 
-            const dailyElem = document.getElementById('statDaily');
+            const dailyEl = document.getElementById('statDailyBudget');
             const dailyNote = document.getElementById('statDailyNote');
-            
+
             if (remainingBudget >= 0) {
-                dailyElem.textContent = formatEur(remainingBudget / daysLeft);
-                dailyElem.className = "text-xl sm:text-2xl font-bold mt-2 text-white tracking-tight";
+                dailyEl.textContent = formatEur(remainingBudget / daysLeft);
+                dailyEl.className = "text-lg sm:text-xl font-black tracking-tight mt-2 text-white";
                 dailyNote.textContent = `${formatEur(remainingBudget)} rimasti per ${daysLeft} giorni`;
             } else {
-                dailyElem.textContent = formatEur(0);
-                dailyElem.className = "text-xl sm:text-2xl font-bold mt-2 text-accent-red tracking-tight";
-                dailyNote.textContent = `Budget sforato di ${formatEur(Math.abs(remainingBudget))}`;
+                dailyEl.textContent = formatEur(0);
+                dailyEl.className = "text-lg sm:text-xl font-black tracking-tight mt-2 text-apple-red";
+                dailyNote.textContent = `Sforato di ${formatEur(Math.abs(remainingBudget))}`;
             }
         }
 
-        function renderChart() {
-            const chart = document.getElementById('balanceChart');
-            const sub = document.getElementById('chartSubtitle');
-            if (!chart) return;
+        function setChartInterval(interval) {
+            currentChartInterval = interval;
+            ['1w', '1m', '6m'].forEach(i => {
+                const b = document.getElementById(`btn${i}`);
+                if (i === interval) {
+                    b.className = "flex-1 sm:flex-initial px-3 py-1 text-xs font-medium rounded-full bg-apple-blue text-white shadow transition-all";
+                } else {
+                    b.className = "flex-1 sm:flex-initial px-3 py-1 text-xs font-medium rounded-full text-gray-400 hover:text-white transition-all";
+                }
+            });
+            renderChart();
+        }
 
-            let points = [];
+        function renderChart() {
+            const svg = document.getElementById('balanceChartSvg');
+            const sub = document.getElementById('chartSubLabel');
+            if (!svg) return;
+
+            let pts = [];
             let now = new Date();
 
-            if (currentChartRange === '1w') {
+            if (currentChartInterval === '1w') {
                 sub.textContent = "Ultimi 7 giorni";
                 for (let i = 6; i >= 0; i--) {
-                    let d = new Date();
-                    d.setDate(now.getDate() - i);
+                    let d = new Date(); d.setDate(now.getDate() - i);
                     let dStr = isoDate(d);
-                    let bal = 0;
-                    transactions.forEach(tx => {
-                        if (tx.date <= dStr) bal += tx.amount;
-                    });
-                    points.push({ label: d.toLocaleDateString('it-IT', { weekday: 'short' }), val: bal });
+                    let bal = transactions.filter(t => t.date <= dStr).reduce((s, t) => s + t.amount, 0);
+                    pts.push({ label: d.toLocaleDateString('it-IT', { weekday: 'short' }), val: bal });
                 }
-            } else if (currentChartRange === '1m') {
+            } else if (currentChartInterval === '1m') {
                 sub.textContent = "Ultime 4 settimane";
                 for (let i = 3; i >= 0; i--) {
-                    let d = new Date();
-                    d.setDate(now.getDate() - (i * 7));
+                    let d = new Date(); d.setDate(now.getDate() - (i * 7));
                     let dStr = isoDate(d);
-                    let bal = 0;
-                    transactions.forEach(tx => {
-                        if (tx.date <= dStr) bal += tx.amount;
-                    });
-                    points.push({ label: `Settimana ${4-i}`, val: bal });
+                    let bal = transactions.filter(t => t.date <= dStr).reduce((s, t) => s + t.amount, 0);
+                    pts.push({ label: `Sett. ${4-i}`, val: bal });
                 }
             } else {
                 sub.textContent = "Ultimi 6 mesi";
                 for (let i = 5; i >= 0; i--) {
                     let d = new Date(now.getFullYear(), now.getMonth() - i + 1, 0);
-                    let monthStr = isoDate(d).substring(0,7);
-                    let bal = 0;
-                    transactions.forEach(tx => {
-                        if (tx.date.substring(0,7) <= monthStr) bal += tx.amount;
-                    });
-                    points.push({ label: d.toLocaleDateString('it-IT', { month: 'short' }), val: bal });
+                    let mStr = isoDate(d).substring(0, 7);
+                    let bal = transactions.filter(t => t.date.substring(0, 7) <= mStr).reduce((s, t) => s + t.amount, 0);
+                    pts.push({ label: d.toLocaleDateString('it-IT', { month: 'short' }), val: bal });
                 }
             }
 
-            const values = points.map(p => p.val);
-            const min = Math.min(...values, 0);
-            let max = Math.max(...values, 100);
-            if(max === min) max += 100;
+            const vals = pts.map(p => p.val);
+            const min = Math.min(...vals, 0);
+            let max = Math.max(...vals, 100);
+            if (max === min) max += 100;
 
-            const W = 600, H = 160;
-            const padX = 15, padY = 20;
-            
-            const getX = (index) => padX + index * ((W - padX * 2) / Math.max(1, points.length - 1));
-            const getY = (val) => H - padY - ((val - min) / (max - min)) * (H - padY * 2);
+            const W = 600, H = 150;
+            const padX = 10, padY = 15;
+            const getX = idx => padX + idx * ((W - padX * 2) / Math.max(1, pts.length - 1));
+            const getY = val => H - padY - ((val - min) / (max - min)) * (H - padY * 2);
 
-            let pathD = `M ${getX(0)} ${getY(points[0].val)}`;
-            for (let i = 1; i < points.length; i++) {
-                let prevX = getX(i - 1), prevY = getY(points[i - 1].val);
-                let currX = getX(i), currY = getY(points[i].val);
-                let cpX = prevX + (currX - prevX) / 2;
-                pathD += ` C ${cpX} ${prevY}, ${cpX} ${currY}, ${currX} ${currY}`;
+            let pathD = `M ${getX(0)} ${getY(pts[0].val)}`;
+            for (let i = 1; i < pts.length; i++) {
+                let px = getX(i-1), py = getY(pts[i-1].val);
+                let cx = getX(i), cy = getY(pts[i].val);
+                let cpx = px + (cx - px) / 2;
+                pathD += ` C ${cpx} ${py}, ${cpx} ${cy}, ${cx} ${cy}`;
             }
-
-            const fillD = `${pathD} L ${getX(points.length - 1)} ${H} L ${padX} ${H} Z`;
+            let fillD = `${pathD} L ${getX(pts.length - 1)} ${H} L ${padX} ${H} Z`;
 
             let svgHTML = `
                 <defs>
-                    <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#0A84FF" stop-opacity="0.4"/>
+                    <linearGradient id="svgGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#0A84FF" stop-opacity="0.45"/>
                         <stop offset="100%" stop-color="#0A84FF" stop-opacity="0.0"/>
                     </linearGradient>
                 </defs>
             `;
 
-            [0, 0.5, 1].forEach(pct => {
-                let y = getY(min + (max - min) * pct);
-                let valLabel = formatEur(min + (max - min) * pct).replace(',00','');
-                svgHTML += `
-                    <line x1="${padX}" y1="${y}" x2="${W-padX}" y2="${y}" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
-                    <text x="${padX}" y="${y - 4}" fill="#6b7280" font-size="9" font-family="Inter">${valLabel}</text>
-                `;
+            [0, 0.5, 1].forEach(p => {
+                let y = getY(min + (max - min) * p);
+                let vTxt = formatEur(min + (max - min) * p).replace(',00','');
+                svgHTML += `<line x1="${padX}" y1="${y}" x2="${W-padX}" y2="${y}" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+                            <text x="${padX}" y="${y - 4}" fill="#6b7280" font-size="9" font-family="Inter">${vTxt}</text>`;
             });
 
-            svgHTML += `<path d="${fillD}" fill="url(#chartGrad)" />`;
-            svgHTML += `<path d="${pathD}" fill="none" stroke="#0A84FF" stroke-width="2.5"/>`;
-
-            points.forEach((p, i) => {
-                let x = getX(i), y = getY(p.val);
-                svgHTML += `
-                    <circle cx="${x}" cy="${y}" r="3.5" fill="#000" stroke="#0A84FF" stroke-width="2"/>
-                    <text x="${x}" y="${H + 14}" fill="#9ca3af" font-size="10" font-family="Inter" text-anchor="middle">${p.label}</text>
-                `;
+            svgHTML += `<path d="${fillD}" fill="url(#svgGrad)"/><path d="${pathD}" fill="none" stroke="#0A84FF" stroke-width="2.5"/>`;
+            pts.forEach((pt, i) => {
+                let x = getX(i), y = getY(pt.val);
+                svgHTML += `<circle cx="${x}" cy="${y}" r="3.5" fill="#000" stroke="#0A84FF" stroke-width="2"/>
+                            <text x="${x}" y="${H + 12}" fill="#9ca3af" font-size="9" font-family="Inter" text-anchor="middle">${pt.label}</text>`;
             });
 
-            chart.innerHTML = svgHTML;
+            svg.innerHTML = svgHTML;
         }
 
-        function renderTransactionsList() {
-            const list = document.getElementById('fullTransactionsList');
-            let filtered = transactions;
-            if (txFilter === 'in') filtered = transactions.filter(t => t.amount > 0);
-            if (txFilter === 'out') filtered = transactions.filter(t => t.amount < 0);
+        window.filterTransactions = function(f) {
+            currentFilter = f;
+            ['all', 'in', 'out'].forEach(type => {
+                const btn = document.getElementById(`filter${type.charAt(0).toUpperCase() + type.slice(1)}`);
+                if (type === f) {
+                    btn.className = "flex-1 sm:flex-initial px-3 py-1 text-xs font-medium rounded-full bg-apple-blue text-white shadow";
+                } else {
+                    btn.className = "flex-1 sm:flex-initial px-3 py-1 text-xs font-medium rounded-full text-gray-400 hover:text-white";
+                }
+            });
+            renderTransactions();
+        }
 
-            if (filtered.length === 0) {
-                list.innerHTML = `<div class="text-center py-6 text-gray-500 text-sm">Nessuna transazione trovata.</div>`;
+        function renderTransactions() {
+            const container = document.getElementById('transactionsListContainer');
+            let list = transactions;
+            if (currentFilter === 'in') list = transactions.filter(t => t.amount > 0);
+            if (currentFilter === 'out') list = transactions.filter(t => t.amount < 0);
+
+            if (list.length === 0) {
+                container.innerHTML = `<div class="text-center py-6 text-gray-500 text-xs">Nessuna transazione trovata.</div>`;
                 return;
             }
 
-            list.innerHTML = filtered.slice(0, 10).map(tx => {
-                let catData = CATEGORIES[tx.cat] || CATEGORIES["Altro"];
-                let isPos = tx.amount > 0;
+            container.innerHTML = list.slice(0, 10).map(t => {
+                const cInfo = CATS[t.cat] || CATS["Altro"];
+                const isPos = t.amount > 0;
                 return `
-                    <div class="flex items-center justify-between p-3.5 rounded-2xl bg-white/5 border border-white/5">
+                    <div class="flex items-center justify-between p-3 rounded-2xl bg-white/5 border border-white/5">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-xl glass-icon flex items-center justify-center ${catData.color}">
-                                <i class="ph ${catData.icon} text-xl"></i>
+                            <div class="w-9 h-9 rounded-xl glass-pill flex items-center justify-center ${cInfo.color}">
+                                <i class="ph ${cInfo.icon} text-lg"></i>
                             </div>
                             <div>
-                                <p class="font-semibold text-sm">${escapeHtml(tx.desc)}</p>
-                                <p class="text-xs text-gray-400">${tx.cat} &bull; ${new Date(tx.date).toLocaleDateString('it-IT', { day: '2-digit', month: 'short' })}</p>
+                                <p class="font-semibold text-xs sm:text-sm">${escapeHtml(t.desc)}</p>
+                                <p class="text-[10px] text-gray-400">${t.cat} &bull; ${new Date(t.date).toLocaleDateString('it-IT', { day: '2-digit', month: 'short' })}</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-3">
-                            <div class="font-bold text-sm ${isPos ? 'text-accent-green' : 'text-white'} text-right">
-                                ${isPos ? '+' : ''}${formatEur(tx.amount)}
+                            <div class="font-bold text-xs sm:text-sm ${isPos ? 'text-apple-green' : 'text-white'} text-right">
+                                ${isPos ? '+' : ''}${formatEur(t.amount)}
                             </div>
-                            <button onclick="deleteTx('${tx.id}')" class="text-gray-500 hover:text-accent-red p-1"><i class="ph ph-trash"></i></button>
+                            <button onclick="deleteTx('${t.id}')" class="text-gray-500 hover:text-apple-red p-1"><i class="ph ph-trash"></i></button>
                         </div>
                     </div>
                 `;
             }).join('');
         }
 
-        function renderBudget() {
-            const list = document.getElementById('budgetList');
-            let now = new Date();
-            let currentMonthStr = isoDate(now).substring(0, 7);
-            let catSpend = {};
-            
-            transactions.forEach(tx => {
-                if (tx.amount < 0 && tx.date.substring(0,7) === currentMonthStr) {
-                    catSpend[tx.cat] = (catSpend[tx.cat] || 0) + Math.abs(tx.amount);
+        function renderBudgets() {
+            const container = document.getElementById('budgetListContainer');
+            const currentMonthStr = isoDate(new Date()).substring(0, 7);
+            let spendMap = {};
+
+            transactions.forEach(t => {
+                if (t.amount < 0 && t.date.substring(0, 7) === currentMonthStr) {
+                    spendMap[t.cat] = (spendMap[t.cat] || 0) + Math.abs(t.amount);
                 }
             });
 
-            list.innerHTML = OUT_CATS.map(cat => {
-                let limit = state.budgets[cat] || 0;
-                let spent = catSpend[cat] || 0;
-                let pct = limit > 0 ? Math.min(100, (spent / limit) * 100) : (spent > 0 ? 100 : 0);
-                let isOver = spent > limit && limit > 0;
-                let catData = CATEGORIES[cat];
+            container.innerHTML = OUT_CATS.map(cat => {
+                const limit = appState.budgets?.[cat] || 0;
+                const spent = spendMap[cat] || 0;
+                const pct = limit > 0 ? Math.min(100, (spent / limit) * 100) : (spent > 0 ? 100 : 0);
+                const isOver = spent > limit && limit > 0;
+                const cInfo = CATS[cat];
 
                 return `
-                    <div class="p-4 rounded-2xl bg-white/5 border border-white/5">
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center gap-2 font-semibold text-sm">
-                                <i class="ph ${catData.icon} ${catData.color} text-base"></i> ${cat}
+                    <div class="p-3.5 rounded-2xl bg-white/5 border border-white/5">
+                        <div class="flex justify-between items-center mb-1.5">
+                            <div class="flex items-center gap-2 font-semibold text-xs sm:text-sm">
+                                <i class="ph ${cInfo.icon} ${cInfo.color} text-base"></i> ${cat}
                             </div>
-                            <div class="text-xs font-medium ${isOver ? 'text-accent-red' : 'text-gray-300'}">
-                                ${formatEur(spent)} <span class="text-gray-500">/</span> 
-                                <input type="number" min="0" value="${limit}" onchange="updateBudget('${cat}', this.value)" class="w-14 bg-transparent border-b border-white/20 text-right focus:outline-none focus:border-accent-blue text-white ml-0.5 text-xs">
+                            <div class="text-xs font-medium ${isOver ? 'text-apple-red' : 'text-gray-300'}">
+                                ${formatEur(spent)} <span class="text-gray-500">/</span>
+                                <input type="number" min="0" value="${limit}" onchange="updateBudgetLimit('${cat}', this.value)" class="w-14 bg-transparent border-b border-white/20 text-right text-white focus:outline-none focus:border-apple-blue text-xs ml-0.5">
                             </div>
                         </div>
                         <div class="h-1.5 rounded-full bg-white/10 overflow-hidden">
-                            <div class="h-full rounded-full transition-all duration-500 ${isOver ? 'bg-accent-red' : catData.bg}" style="width: ${pct}%"></div>
+                            <div class="h-full rounded-full transition-all duration-500 ${isOver ? 'bg-apple-red' : cInfo.bg}" style="width: ${pct}%"></div>
                         </div>
                     </div>
                 `;
             }).join('');
         }
 
+        window.updateBudgetLimit = function(cat, val) {
+            if (!appState.budgets) appState.budgets = {};
+            appState.budgets[cat] = Math.max(0, parseFloat(val) || 0);
+            saveStateStore();
+            renderStats();
+            renderBudgets();
+        }
+
         function renderGoals() {
-            const list = document.getElementById('goalsList');
-            if (state.goals.length === 0) {
-                list.innerHTML = `<div class="col-span-full text-center py-4 text-gray-500 text-xs">Nessun obiettivo.</div>`;
+            const container = document.getElementById('goalsListContainer');
+            if (!appState.goals || appState.goals.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-4 text-gray-500 text-xs">Nessun obiettivo impostato.</div>`;
                 return;
             }
 
-            list.innerHTML = state.goals.map(g => {
+            container.innerHTML = appState.goals.map(g => {
                 let pct = Math.min(100, (g.s / g.t) * 100);
                 return `
-                    <div class="p-4 rounded-2xl bg-white/5 border border-white/5 flex flex-col justify-between space-y-3">
+                    <div class="p-3.5 rounded-2xl bg-white/5 border border-white/5 space-y-3">
                         <div class="flex justify-between items-start">
                             <div>
-                                <h4 class="font-bold text-sm text-white">${escapeHtml(g.n)}</h4>
+                                <h4 class="font-bold text-xs sm:text-sm text-white">${escapeHtml(g.n)}</h4>
                                 <p class="text-[11px] text-gray-400">${formatEur(g.s)} / ${formatEur(g.t)}</p>
                             </div>
-                            <button onclick="deleteGoal('${g.id}')" class="text-gray-500 hover:text-accent-red"><i class="ph ph-trash"></i></button>
+                            <button onclick="deleteGoal('${g.id}')" class="text-gray-500 hover:text-apple-red"><i class="ph ph-trash"></i></button>
                         </div>
                         <div>
                             <div class="h-1.5 rounded-full bg-white/10 overflow-hidden mb-2">
-                                <div class="h-full rounded-full bg-accent-blue" style="width: ${pct}%"></div>
+                                <div class="h-full rounded-full bg-apple-blue" style="width: ${pct}%"></div>
                             </div>
                             <div class="flex gap-2">
-                                <button onclick="fundGoal('${g.id}', 10)" class="flex-1 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[10px] font-medium">+ €10</button>
-                                <button onclick="fundGoal('${g.id}', 50)" class="flex-1 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-[10px] font-medium">+ €50</button>
+                                <button onclick="fundGoal('${g.id}', 10)" class="flex-1 py-1 rounded-lg glass-pill hover:bg-white/20 text-[10px] font-medium">+ €10</button>
+                                <button onclick="fundGoal('${g.id}', 50)" class="flex-1 py-1 rounded-lg glass-pill hover:bg-white/20 text-[10px] font-medium">+ €50</button>
                             </div>
                         </div>
                     </div>
@@ -753,158 +769,157 @@
         }
 
         function renderNetwork() {
-            const sList = document.getElementById('subsList');
-            let sTotal = 0;
-            sList.innerHTML = state.subs.length === 0 ? `<p class="text-xs text-gray-500">Nessun abbonamento.</p>` : state.subs.map(s => {
-                sTotal += s.a;
+            const sContainer = document.getElementById('subsListContainer');
+            let subTotal = 0;
+            const subs = appState.subs || [];
+            sContainer.innerHTML = subs.length === 0 ? `<p class="text-xs text-gray-500">Nessun abbonamento attivo.</p>` : subs.map(s => {
+                subTotal += s.a;
                 return `
-                    <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 text-sm">
+                    <div class="flex items-center justify-between p-2.5 rounded-xl bg-white/5 border border-white/5 text-xs">
                         <span class="font-medium">${escapeHtml(s.n)}</span>
                         <div class="flex items-center gap-2">
                             <span class="font-bold text-white">${formatEur(s.a)}</span>
-                            <button onclick="deleteSub('${s.id}')" class="text-gray-500 hover:text-accent-red"><i class="ph ph-trash"></i></button>
+                            <button onclick="deleteSub('${s.id}')" class="text-gray-500 hover:text-apple-red"><i class="ph ph-trash"></i></button>
                         </div>
                     </div>
                 `;
             }).join('');
-            document.getElementById('subTotalText').textContent = `${formatEur(sTotal)} / mese`;
+            document.getElementById('subsTotalText').textContent = `${formatEur(subTotal)} / mese`;
 
-            const dList = document.getElementById('debtsList');
-            let dNet = 0;
-            dList.innerHTML = state.debts.length === 0 ? `<p class="text-xs text-gray-500">Nessun prestito.</p>` : state.debts.map(d => {
-                dNet += (d.type === 1 ? d.a : -d.a);
+            const dContainer = document.getElementById('debtsListContainer');
+            let netDebt = 0;
+            const debts = appState.debts || [];
+            dContainer.innerHTML = debts.length === 0 ? `<p class="text-xs text-gray-500">Nessun prestito aperto.</p>` : debts.map(d => {
+                netDebt += (d.type === 1 ? d.a : -d.a);
                 let isCredit = d.type === 1;
                 return `
-                    <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 text-sm">
+                    <div class="flex items-center justify-between p-2.5 rounded-xl bg-white/5 border border-white/5 text-xs">
                         <div>
-                            <p class="font-medium text-xs">${escapeHtml(d.n)}</p>
-                            <p class="text-[10px] text-gray-400">${isCredit ? 'Ti deve' : 'Devi'}</p>
+                            <p class="font-medium">${escapeHtml(d.n)}</p>
+                            <p class="text-[10px] text-gray-400">${isCredit ? 'Ti deve' : 'Devi tu'}</p>
                         </div>
                         <div class="flex items-center gap-2">
-                            <span class="font-bold text-xs ${isCredit ? 'text-accent-green' : 'text-accent-red'}">${formatEur(d.a)}</span>
-                            <button onclick="resolveDebt('${d.id}')" class="bg-white/10 hover:bg-white/20 text-[10px] px-2 py-1 rounded">Saldato</button>
+                            <span class="font-bold ${isCredit ? 'text-apple-green' : 'text-apple-red'}">${formatEur(d.a)}</span>
+                            <button onclick="resolveDebt('${d.id}')" class="glass-pill px-2 py-1 rounded text-[10px] hover:bg-white/20">Saldato</button>
                         </div>
                     </div>
                 `;
             }).join('');
-
-            const netTxt = document.getElementById('debtTotalText');
-            netTxt.textContent = dNet === 0 ? "Siamo pari" : (dNet > 0 ? `+${formatEur(dNet)}` : `-${formatEur(Math.abs(dNet))}`);
+            document.getElementById('debtsTotalText').textContent = netDebt === 0 ? "Siamo pari" : (netDebt > 0 ? `Ti devono ${formatEur(netDebt)}` : `Devi ${formatEur(Math.abs(netDebt))}`);
         }
 
-        function openTransactionModal() {
-            setTransactionType('out');
-            document.getElementById('tDesc').value = '';
-            document.getElementById('tAmount').value = '';
-            document.getElementById('modalTransaction').showModal();
+        window.openNewTxModal = function() {
+            setTxModalType('out');
+            document.getElementById('txDesc').value = '';
+            document.getElementById('txAmount').value = '';
+            document.getElementById('modalNewTx').showModal();
         }
 
-        function setTransactionType(type) {
-            currentType = type;
-            const btnOut = document.getElementById('typeOutBtn');
-            const btnIn = document.getElementById('typeInBtn');
-            const catSelect = document.getElementById('tCat');
+        window.setTxModalType = function(type) {
+            currentTxType = type;
+            const tabOut = document.getElementById('tabOut');
+            const tabIn = document.getElementById('tabIn');
+            const selectCat = document.getElementById('txCat');
 
             if (type === 'out') {
-                btnOut.className = "flex-1 py-2 text-xs font-semibold rounded-lg bg-accent-red text-white shadow-md transition-all";
-                btnIn.className = "flex-1 py-2 text-xs font-semibold rounded-lg text-gray-400 hover:text-white transition-all";
-                catSelect.innerHTML = OUT_CATS.map(c => `<option value="${c}" style="background:#111">${c}</option>`).join('');
+                tabOut.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-apple-red text-white transition-all shadow";
+                tabIn.className = "flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition-all";
+                selectCat.innerHTML = OUT_CATS.map(c => `<option value="${c}" style="background:#141419">${c}</option>`).join('');
             } else {
-                btnIn.className = "flex-1 py-2 text-xs font-semibold rounded-lg bg-accent-green text-white shadow-md transition-all";
-                btnOut.className = "flex-1 py-2 text-xs font-semibold rounded-lg text-gray-400 hover:text-white transition-all";
-                catSelect.innerHTML = IN_CATS.map(c => `<option value="${c}" style="background:#111">${c}</option>`).join('');
+                tabIn.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-apple-green text-white transition-all shadow";
+                tabOut.className = "flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition-all";
+                selectCat.innerHTML = IN_CATS.map(c => `<option value="${c}" style="background:#141419">${c}</option>`).join('');
             }
         }
 
-        function handleTransactionSubmit(e) {
+        async function handleTxSubmit(e) {
             e.preventDefault();
-            let desc = document.getElementById('tDesc').value.trim();
-            let amount = parseFloat(document.getElementById('tAmount').value);
-            let date = document.getElementById('tDate').value;
-            let cat = document.getElementById('tCat').value;
+            let desc = document.getElementById('txDesc').value.trim();
+            let amount = parseFloat(document.getElementById('txAmount').value);
+            let date = document.getElementById('txDate').value;
+            let cat = document.getElementById('txCat').value;
 
             if (desc && amount > 0 && date) {
-                transactions.push({ id: uid(), desc, amount: currentType === 'out' ? -amount : amount, cat, date });
-                transactions.sort((a,b) => b.date.localeCompare(a.date));
-                saveTx();
-                renderApp();
-                closeModal('modalTransaction');
+                const newTx = { id: uid(), desc, amount: currentTxType === 'out' ? -amount : amount, cat, date };
+                await saveTxStore(newTx);
+                closeModal('modalNewTx');
             }
         }
 
-        function deleteTx(id) {
-            transactions = transactions.filter(t => t.id !== id);
-            saveTx();
-            renderApp();
+        window.deleteTx = async function(id) {
+            await deleteTxStore(id);
         }
 
-        function updateBudget(cat, val) {
-            state.budgets[cat] = Math.max(0, parseFloat(val) || 0);
-            saveState();
-            renderDashboardStats();
-            renderBudget();
-        }
+        window.closeModal = function(id) { document.getElementById(id).close(); }
 
-        function closeModal(id) { document.getElementById(id).close(); }
-
-        function openPromptModal(title, lblName, lblAmount, callback) {
-            document.getElementById('pTitle').textContent = title;
-            document.getElementById('pLabelName').textContent = lblName;
-            document.getElementById('pLabelAmount').textContent = lblAmount;
-            document.getElementById('pName').value = '';
-            document.getElementById('pAmount').value = '';
-            promptCallback = callback;
+        window.openPromptModal = function(title, lblName, lblAmount, cb) {
+            document.getElementById('promptTitle').textContent = title;
+            document.getElementById('promptLabelName').textContent = lblName;
+            document.getElementById('promptLabelAmount').textContent = lblAmount;
+            document.getElementById('promptName').value = '';
+            document.getElementById('promptAmount').value = '';
+            activePromptCb = cb;
             document.getElementById('modalPrompt').showModal();
         }
 
-        function handlePromptSubmit(e) {
+        async function handlePromptSubmit(e) {
             e.preventDefault();
-            let n = document.getElementById('pName').value.trim();
-            let a = parseFloat(document.getElementById('pAmount').value);
-            if (n && a > 0 && promptCallback) {
-                promptCallback(n, a);
+            let n = document.getElementById('promptName').value.trim();
+            let a = parseFloat(document.getElementById('promptAmount').value);
+            if (n && a > 0 && activePromptCb) {
+                activePromptCb(n, a);
                 closeModal('modalPrompt');
-                saveState();
-                renderApp();
+                await saveStateStore();
             }
         }
 
-        function addGoal(n, a) { state.goals.push({ id: uid(), n, t: a, s: 0 }); }
-        function deleteGoal(id) { state.goals = state.goals.filter(g => g.id !== id); saveState(); renderGoals(); }
-        function fundGoal(id, amt) {
-            let g = state.goals.find(x => x.id === id);
-            if (g) { g.s = Math.min(g.t, g.s + amt); saveState(); renderGoals(); }
+        window.saveNewGoal = function(n, a) {
+            if (!appState.goals) appState.goals = [];
+            appState.goals.push({ id: uid(), n, t: a, s: 0 });
+        }
+        window.deleteGoal = async function(id) {
+            appState.goals = appState.goals.filter(g => g.id !== id);
+            await saveStateStore();
+        }
+        window.fundGoal = async function(id, amt) {
+            let g = appState.goals.find(x => x.id === id);
+            if (g) { g.s = Math.min(g.t, g.s + amt); await saveStateStore(); }
         }
 
-        function addSub(n, a) { state.subs.push({ id: uid(), n, a }); }
-        function deleteSub(id) { state.subs = state.subs.filter(s => s.id !== id); saveState(); renderNetwork(); }
+        window.saveNewSub = function(n, a) {
+            if (!appState.subs) appState.subs = [];
+            appState.subs.push({ id: uid(), n, a });
+        }
+        window.deleteSub = async function(id) {
+            appState.subs = appState.subs.filter(s => s.id !== id);
+            await saveStateStore();
+        }
 
-        function openDebtModal() {
-            document.getElementById('dName').value = '';
-            document.getElementById('dAmount').value = '';
+        window.openDebtModal = function() {
+            document.getElementById('debtName').value = '';
+            document.getElementById('debtAmount').value = '';
             document.getElementById('modalDebt').showModal();
         }
 
-        function handleDebtSubmit(e) {
+        async function handleDebtSubmit(e) {
             e.preventDefault();
-            let n = document.getElementById('dName').value.trim();
-            let a = parseFloat(document.getElementById('dAmount').value);
-            let type = parseInt(document.getElementById('dType').value);
+            let n = document.getElementById('debtName').value.trim();
+            let a = parseFloat(document.getElementById('debtAmount').value);
+            let type = parseInt(document.getElementById('debtType').value);
             if (n && a > 0) {
-                state.debts.push({ id: uid(), n, a, type });
+                if (!appState.debts) appState.debts = [];
+                appState.debts.push({ id: uid(), n, a, type });
                 closeModal('modalDebt');
-                saveState();
-                renderNetwork();
+                await saveStateStore();
             }
         }
 
-        function resolveDebt(id) {
-            state.debts = state.debts.filter(d => d.id !== id);
-            saveState();
-            renderNetwork();
+        window.resolveDebt = async function(id) {
+            appState.debts = appState.debts.filter(d => d.id !== id);
+            await saveStateStore();
         }
 
-        window.addEventListener('DOMContentLoaded', init);
+        window.addEventListener('DOMContentLoaded', initAuthAndData);
     </script>
 </body>
 </html>

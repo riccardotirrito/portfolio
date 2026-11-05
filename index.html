@@ -6,7 +6,7 @@
     <title>Finanze | Gestione Personale</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Phosphor Icons (Stile iOS, moderne e pulite) -->
+    <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
     <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -30,7 +30,6 @@
         }
     </script>
     <style>
-        /* Custom Styles & Glassmorphism */
         body {
             background-color: #000000;
             color: #F5F5F7;
@@ -38,7 +37,6 @@
             overflow-x: hidden;
         }
 
-        /* Animated Ambient Background (Futuristic iOS style) */
         .ambient-bg {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -62,7 +60,6 @@
             100% { transform: translate(30px, 50px) scale(1.1); }
         }
 
-        /* Glass Cards */
         .glass-panel {
             background: var(--tw-colors-glass-50);
             backdrop-filter: blur(24px);
@@ -77,12 +74,10 @@
             backdrop-filter: blur(10px);
         }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
 
-        /* Dialog/Modal Styling */
         dialog {
             background: transparent;
             margin: auto;
@@ -93,7 +88,6 @@
             -webkit-backdrop-filter: blur(8px);
         }
 
-        /* Input overrides */
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
         
@@ -102,6 +96,10 @@
             color: #0A84FF;
             border-right: 3px solid #0A84FF;
         }
+
+        /* View display rules */
+        .view-section { display: none; }
+        .view-section.active { display: block; }
     </style>
 </head>
 <body class="flex h-screen w-screen overflow-hidden selection:bg-accent-blue selection:text-white">
@@ -146,7 +144,7 @@
     </aside>
 
     <!-- Main Content -->
-    <main class="flex-1 h-full overflow-y-auto relative z-10 pb-20 md:pb-0 scroll-smooth">
+    <main class="flex-1 h-full overflow-y-auto relative z-10 pb-28 md:pb-0 scroll-smooth">
         <div class="max-w-6xl mx-auto p-6 md:p-10">
             
             <!-- Header -->
@@ -161,7 +159,7 @@
             </header>
 
             <!-- Dashboard Section -->
-            <section id="view-dashboard" class="space-y-6 view-section block">
+            <section id="view-dashboard" class="space-y-6 view-section active">
                 <!-- Stats Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div class="glass-panel rounded-3xl p-5 flex flex-col justify-between hover:border-accent-blue/50 transition-colors">
@@ -215,7 +213,7 @@
             </section>
 
             <!-- Transactions Section -->
-            <section id="view-transactions" class="space-y-6 view-section hidden">
+            <section id="view-transactions" class="space-y-6 view-section">
                 <div class="glass-panel rounded-3xl p-6">
                     <div class="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4">
                         <h3 class="font-bold text-xl">Tutte le Transazioni</h3>
@@ -232,7 +230,7 @@
             </section>
 
             <!-- Budget Section -->
-            <section id="view-budget" class="space-y-6 view-section hidden">
+            <section id="view-budget" class="space-y-6 view-section">
                 <div class="glass-panel rounded-3xl p-6">
                     <h3 class="font-bold text-xl mb-1">Budget Mensile</h3>
                     <p class="text-sm text-gray-400 mb-6">Gestisci i limiti di spesa per categoria.</p>
@@ -243,7 +241,7 @@
             </section>
 
             <!-- Goals Section -->
-            <section id="view-goals" class="space-y-6 view-section hidden">
+            <section id="view-goals" class="space-y-6 view-section">
                 <div class="glass-panel rounded-3xl p-6">
                     <div class="flex justify-between items-center mb-6">
                         <div>
@@ -261,7 +259,7 @@
             </section>
 
             <!-- Network (Subs & Debts) Section -->
-            <section id="view-network" class="space-y-6 view-section hidden">
+            <section id="view-network" class="space-y-6 view-section">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <!-- Subscriptions -->
                     <div class="glass-panel rounded-3xl p-6">
@@ -301,23 +299,23 @@
     </main>
 
     <!-- Mobile Bottom Navigation -->
-    <nav class="md:hidden fixed bottom-0 w-full glass-panel border-t border-white/10 rounded-t-3xl z-50 px-6 py-3 flex justify-between items-center pb-safe">
-        <button class="nav-item-mobile flex flex-col items-center text-gray-400 active:text-accent-blue transition-colors" data-target="dashboard">
+    <nav class="md:hidden fixed bottom-0 left-0 w-full glass-panel border-t border-white/10 rounded-t-3xl z-50 px-6 py-3 flex justify-between items-center pb-safe">
+        <button class="nav-item-mobile flex flex-col items-center text-accent-blue transition-colors p-2" data-target="dashboard">
             <i class="ph-fill ph-squares-four text-2xl"></i>
         </button>
-        <button class="nav-item-mobile flex flex-col items-center text-gray-400 active:text-accent-blue transition-colors" data-target="transactions">
-            <i class="ph-fill ph-arrows-left-right text-2xl"></i>
+        <button class="nav-item-mobile flex flex-col items-center text-gray-400 hover:text-white transition-colors p-2" data-target="transactions">
+            <i class="ph ph-arrows-left-right text-2xl"></i>
         </button>
         <div class="-mt-8">
             <button onclick="openTransactionModal()" class="w-14 h-14 bg-accent-blue rounded-full flex items-center justify-center text-white shadow-[0_4px_15px_rgba(10,132,255,0.5)] border-4 border-black">
                 <i class="ph ph-plus text-2xl font-bold"></i>
             </button>
         </div>
-        <button class="nav-item-mobile flex flex-col items-center text-gray-400 active:text-accent-blue transition-colors" data-target="budget">
-            <i class="ph-fill ph-chart-pie-slice text-2xl"></i>
+        <button class="nav-item-mobile flex flex-col items-center text-gray-400 hover:text-white transition-colors p-2" data-target="budget">
+            <i class="ph ph-chart-pie-slice text-2xl"></i>
         </button>
-        <button class="nav-item-mobile flex flex-col items-center text-gray-400 active:text-accent-blue transition-colors" data-target="goals">
-            <i class="ph-fill ph-target text-2xl"></i>
+        <button class="nav-item-mobile flex flex-col items-center text-gray-400 hover:text-white transition-colors p-2" data-target="goals">
+            <i class="ph ph-target text-2xl"></i>
         </button>
     </nav>
 
@@ -426,7 +424,6 @@
 
 
     <script>
-        // Data Schema & Configuration
         const CATEGORIES = {
             "Casa": { icon: "ph-house", color: "text-accent-blue", bg: "bg-accent-blue" },
             "Spesa": { icon: "ph-shopping-cart", color: "text-accent-green", bg: "bg-accent-green" },
@@ -446,21 +443,18 @@
             budgets: { Casa: 700, Spesa: 300, Trasporti: 100, Svago: 150, Salute: 50, Altro: 50 },
             subs: [{ id: "s1", n: "Spotify", a: 10.99 }, { id: "s2", n: "Netflix", a: 13.99 }],
             goals: [{ id: "g1", n: "Fondo Emergenza", t: 5000, s: 1200 }, { id: "g2", n: "Viaggio Giappone", t: 3000, s: 450 }],
-            debts: [{ id: "d1", n: "Marco", a: 25, type: 1 }] // type 1 = I get paid, 0 = I owe
+            debts: [{ id: "d1", n: "Marco", a: 25, type: 1 }]
         };
 
-        // State UI Variables
         let currentType = 'out';
         let txFilter = 'all';
         let promptCallback = null;
 
-        // Utility Functions
         const uid = () => Math.random().toString(36).substring(2, 9);
         const formatEur = (n) => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(n);
         const isoDate = (d) => d.toISOString().split('T')[0];
         const escapeHtml = (str) => String(str).replace(/[&<>'"]/g, match => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[match]);
 
-        // Mock Data Generation
         function generateMockData() {
             let res = [];
             let now = new Date();
@@ -480,7 +474,6 @@
             return res.filter(x => x.date <= isoDate(now)).sort((a,b) => b.date.localeCompare(a.date));
         }
 
-        // Init and Storage
         function init() {
             try {
                 const txData = localStorage.getItem(KEY_TX);
@@ -490,7 +483,6 @@
                 if (extraData) state = JSON.parse(extraData);
             } catch (e) { console.error("Storage error", e); transactions = generateMockData(); }
 
-            // Set Date/Time info
             const hr = new Date().getHours();
             document.getElementById('greeting').textContent = hr < 12 ? "Buongiorno" : hr < 18 ? "Buon pomeriggio" : "Buonasera";
             document.getElementById('currentDate').textContent = new Date().toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long', year:'numeric' });
@@ -504,26 +496,25 @@
         function saveTx() { localStorage.setItem(KEY_TX, JSON.stringify(transactions)); }
         function saveState() { localStorage.setItem(KEY_DATA, JSON.stringify(state)); }
 
-        // Navigation
         function switchTab(tabId) {
             document.querySelectorAll('.view-section').forEach(el => {
-                el.classList.add('hidden');
-                el.classList.remove('block');
+                el.classList.remove('active');
             });
-            document.getElementById(`view-${tabId}`).classList.remove('hidden');
-            document.getElementById(`view-${tabId}`).classList.add('block');
+            
+            const targetEl = document.getElementById(`view-${tabId}`);
+            if (targetEl) {
+                targetEl.classList.add('active');
+            }
 
-            // Update desktop nav
             document.querySelectorAll('.nav-item').forEach(btn => {
                 btn.classList.remove('active', 'bg-white/5', 'text-accent-blue');
                 btn.classList.add('text-gray-400');
                 if (btn.dataset.target === tabId) {
-                    btn.classList.add('active');
+                    btn.classList.add('active', 'text-accent-blue');
                     btn.classList.remove('text-gray-400');
                 }
             });
 
-            // Update mobile nav
             document.querySelectorAll('.nav-item-mobile').forEach(btn => {
                 btn.classList.remove('text-accent-blue');
                 btn.classList.add('text-gray-400');
@@ -532,14 +523,18 @@
                     btn.classList.remove('text-gray-400');
                 }
             });
+            
+            document.querySelector('main').scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function setupEventListeners() {
             document.querySelectorAll('.nav-item, .nav-item-mobile').forEach(btn => {
-                btn.addEventListener('click', () => switchTab(btn.dataset.target));
+                btn.addEventListener('click', (e) => {
+                    const target = btn.dataset.target;
+                    if (target) switchTab(target);
+                });
             });
 
-            // Transactions Filter
             document.querySelectorAll('.filter-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     document.querySelectorAll('.filter-btn').forEach(b => {
@@ -553,13 +548,11 @@
                 });
             });
 
-            // Form Submissions
             document.getElementById('formTransaction').addEventListener('submit', handleTransactionSubmit);
             document.getElementById('formPrompt').addEventListener('submit', handlePromptSubmit);
             document.getElementById('formDebt').addEventListener('submit', handleDebtSubmit);
         }
 
-        // UI Renderers
         function renderApp() {
             renderDashboard();
             renderTransactionsList();
@@ -586,12 +579,10 @@
                 }
             });
 
-            // Update Stats
             document.getElementById('statBalance').textContent = formatEur(totalBal);
             document.getElementById('statIncome').textContent = formatEur(monthIn);
             document.getElementById('statExpense').textContent = formatEur(monthOut);
 
-            // Daily Budget Calc
             const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
             const daysLeft = daysInMonth - now.getDate() + 1;
             const totalBudget = OUT_CATS.reduce((acc, cat) => acc + (state.budgets[cat] || 0), 0);
@@ -610,7 +601,6 @@
                 dailyNote.textContent = `Budget mensile superato di ${formatEur(Math.abs(remainingBudget))}`;
             }
 
-            // Mini Transactions
             const miniList = document.getElementById('miniTransactions');
             const recentTx = transactions.slice(0, 4);
             
@@ -644,13 +634,13 @@
 
         function renderChart() {
             const chart = document.getElementById('balanceChart');
+            if (!chart) return;
             const now = new Date();
             let points = [];
             const MONTHS_TO_SHOW = 6;
 
-            // Calculate historical balances
             for (let i = MONTHS_TO_SHOW - 1; i >= 0; i--) {
-                const d = new Date(now.getFullYear(), now.getMonth() - i + 1, 0); // End of month
+                const d = new Date(now.getFullYear(), now.getMonth() - i + 1, 0);
                 const monthStr = isoDate(d).substring(0,7);
                 let bal = 0;
                 transactions.forEach(tx => {
@@ -670,19 +660,14 @@
             const getX = (index) => padX + index * ((W - padX * 2) / (points.length - 1));
             const getY = (val) => H - padY - ((val - min) / (max - min)) * (H - padY * 2);
 
-            // Generate Path D
             let pathD = `M ${getX(0)} ${getY(points[0].val)}`;
             for (let i = 1; i < points.length; i++) {
-                // Simple smooth curve logic
-                const prevX = getX(i - 1);
-                const prevY = getY(points[i - 1].val);
-                const currX = getX(i);
-                const currY = getY(points[i].val);
+                const prevX = getX(i - 1), prevY = getY(points[i - 1].val);
+                const currX = getX(i), currY = getY(points[i].val);
                 const cpX = prevX + (currX - prevX) / 2;
                 pathD += ` C ${cpX} ${prevY}, ${cpX} ${currY}, ${currX} ${currY}`;
             }
 
-            // Fill Path
             const fillD = `${pathD} L ${getX(points.length - 1)} ${H} L ${padX} ${H} Z`;
 
             let svgHTML = `
@@ -698,7 +683,6 @@
                 </defs>
             `;
 
-            // Grid lines
             [0, 0.5, 1].forEach(pct => {
                 const y = getY(min + (max - min) * pct);
                 const valLabel = formatEur(min + (max - min) * pct).replace(',00','');
@@ -708,11 +692,9 @@
                 `;
             });
 
-            // Paths
             svgHTML += `<path d="${fillD}" fill="url(#chartGrad)" />`;
             svgHTML += `<path d="${pathD}" fill="none" stroke="#0A84FF" stroke-width="3" filter="url(#glow)"/>`;
 
-            // Data Points & Labels
             points.forEach((p, i) => {
                 const x = getX(i), y = getY(p.val);
                 svgHTML += `
@@ -760,7 +742,6 @@
                             <button onclick="deleteTx('${tx.id}')" class="w-8 h-8 rounded-full bg-white/5 text-gray-400 hover:text-accent-red hover:bg-red-500/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all md:block hidden">
                                 <i class="ph ph-trash"></i>
                             </button>
-                            <!-- Mobile delete (always visible on small screens) -->
                              <button onclick="deleteTx('${tx.id}')" class="p-2 text-gray-500 hover:text-accent-red md:hidden">
                                 <i class="ph ph-trash text-lg"></i>
                             </button>
@@ -851,7 +832,6 @@
         }
 
         function renderNetwork() {
-            // Subscriptions
             const sList = document.getElementById('subsList');
             let sTotal = 0;
             if(state.subs.length === 0) {
@@ -877,10 +857,172 @@
             }
             document.getElementById('subTotalText').textContent = `${formatEur(sTotal)} / mese`;
 
-            // Debts
             const dList = document.getElementById('debtsList');
             let dNet = 0;
             if(state.debts.length === 0) {
                 dList.innerHTML = `<p class="text-sm text-gray-500">Nessun prestito in corso.</p>`;
             } else {
-                dList.innerHTML = state.debts.map(d
+                dList.innerHTML = state.debts.map(d => {
+                    dNet += (d.type === 1 ? d.a : -d.a);
+                    const isCredit = d.type === 1;
+                    return `
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full ${isCredit ? 'bg-accent-green/20 text-accent-green' : 'bg-accent-red/20 text-accent-red'} flex items-center justify-center">
+                                    <i class="ph-fill ph-user text-xl"></i>
+                                </div>
+                                <div>
+                                    <p class="font-medium text-sm">${escapeHtml(d.n)}</p>
+                                    <p class="text-xs text-gray-400">${isCredit ? 'Mi deve dare' : 'Devo dare'}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="font-bold ${isCredit ? 'text-accent-green' : 'text-accent-red'}">${formatEur(d.a)}</span>
+                                <button onclick="resolveDebt('${d.id}')" class="bg-white/10 hover:bg-white/20 text-xs px-2 py-1 rounded transition-colors" title="Segna come saldato">Saldato</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            const netTxt = document.getElementById('debtTotalText');
+            if(dNet === 0) {
+                netTxt.textContent = "Siamo pari";
+                netTxt.className = "text-sm text-gray-400";
+            } else if (dNet > 0) {
+                netTxt.textContent = `In positivo di ${formatEur(dNet)}`;
+                netTxt.className = "text-sm font-semibold text-accent-green";
+            } else {
+                netTxt.textContent = `In debito di ${formatEur(Math.abs(dNet))}`;
+                netTxt.className = "text-sm font-semibold text-accent-red";
+            }
+        }
+
+        function openTransactionModal() {
+            setTransactionType('out');
+            document.getElementById('tDesc').value = '';
+            document.getElementById('tAmount').value = '';
+            document.getElementById('modalTransaction').showModal();
+        }
+
+        function setTransactionType(type) {
+            currentType = type;
+            const btnOut = document.getElementById('typeOutBtn');
+            const btnIn = document.getElementById('typeInBtn');
+            const catSelect = document.getElementById('tCat');
+
+            if (type === 'out') {
+                btnOut.className = "flex-1 py-2 text-sm font-semibold rounded-lg bg-accent-red text-white shadow-md transition-all";
+                btnIn.className = "flex-1 py-2 text-sm font-semibold rounded-lg text-gray-400 hover:text-white transition-all";
+                catSelect.innerHTML = OUT_CATS.map(c => `<option value="${c}" style="background:#111">${c}</option>`).join('');
+            } else {
+                btnIn.className = "flex-1 py-2 text-sm font-semibold rounded-lg bg-accent-green text-white shadow-md transition-all";
+                btnOut.className = "flex-1 py-2 text-sm font-semibold rounded-lg text-gray-400 hover:text-white transition-all";
+                catSelect.innerHTML = IN_CATS.map(c => `<option value="${c}" style="background:#111">${c}</option>`).join('');
+            }
+        }
+
+        function handleTransactionSubmit(e) {
+            e.preventDefault();
+            const desc = document.getElementById('tDesc').value.trim();
+            const amount = parseFloat(document.getElementById('tAmount').value);
+            const date = document.getElementById('tDate').value;
+            const cat = document.getElementById('tCat').value;
+
+            if (desc && amount > 0 && date) {
+                transactions.push({
+                    id: uid(),
+                    desc,
+                    amount: currentType === 'out' ? -amount : amount,
+                    cat,
+                    date
+                });
+                transactions.sort((a,b) => b.date.localeCompare(a.date));
+                saveTx();
+                renderApp();
+                closeModal('modalTransaction');
+            }
+        }
+
+        function deleteTx(id) {
+            transactions = transactions.filter(t => t.id !== id);
+            saveTx();
+            renderApp();
+        }
+
+        function updateBudget(cat, val) {
+            state.budgets[cat] = Math.max(0, parseFloat(val) || 0);
+            saveState();
+            renderDashboard();
+            renderBudget();
+        }
+
+        function closeModal(id) { document.getElementById(id).close(); }
+
+        function openPromptModal(title, lblName, lblAmount, callback) {
+            document.getElementById('pTitle').textContent = title;
+            document.getElementById('pLabelName').textContent = lblName;
+            document.getElementById('pLabelAmount').textContent = lblAmount;
+            document.getElementById('pName').value = '';
+            document.getElementById('pAmount').value = '';
+            promptCallback = callback;
+            document.getElementById('modalPrompt').showModal();
+        }
+
+        function handlePromptSubmit(e) {
+            e.preventDefault();
+            const n = document.getElementById('pName').value.trim();
+            const a = parseFloat(document.getElementById('pAmount').value);
+            if (n && a > 0 && promptCallback) {
+                promptCallback(n, a);
+                closeModal('modalPrompt');
+                saveState();
+                renderApp();
+            }
+        }
+
+        function addGoal(n, a) { state.goals.push({ id: uid(), n, t: a, s: 0 }); }
+        function deleteGoal(id) { state.goals = state.goals.filter(g => g.id !== id); saveState(); renderGoals(); }
+        function fundGoal(id, amt) {
+            const g = state.goals.find(x => x.id === id);
+            if (g) {
+                g.s = Math.min(g.t, g.s + amt);
+                saveState();
+                renderGoals();
+            }
+        }
+
+        function addSub(n, a) { state.subs.push({ id: uid(), n, a }); }
+        function deleteSub(id) { state.subs = state.subs.filter(s => s.id !== id); saveState(); renderNetwork(); }
+
+        function openDebtModal() {
+            document.getElementById('dName').value = '';
+            document.getElementById('dAmount').value = '';
+            document.getElementById('modalDebt').showModal();
+        }
+
+        function handleDebtSubmit(e) {
+            e.preventDefault();
+            const n = document.getElementById('dName').value.trim();
+            const a = parseFloat(document.getElementById('dAmount').value);
+            const type = parseInt(document.getElementById('dType').value);
+            
+            if (n && a > 0) {
+                state.debts.push({ id: uid(), n, a, type });
+                closeModal('modalDebt');
+                saveState();
+                renderNetwork();
+            }
+        }
+
+        function resolveDebt(id) {
+            state.debts = state.debts.filter(d => d.id !== id);
+            saveState();
+            renderNetwork();
+        }
+
+        window.addEventListener('DOMContentLoaded', init);
+
+    </script>
+</body>
+</html>

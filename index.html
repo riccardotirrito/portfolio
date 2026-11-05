@@ -781,9 +781,12 @@
                 }
             });
 
-            document.getElementById('statBalance').textContent = formatEur(totalBal);
-            document.getElementById('statIncome').textContent = formatEur(mIn);
-            document.getElementById('statExpense').textContent = formatEur(mOut);
+            const elBalance = document.getElementById('statBalance');
+            const elIncome = document.getElementById('statIncome');
+            const elExpense = document.getElementById('statExpense');
+            if (elBalance) elBalance.textContent = formatEur(totalBal);
+            if (elIncome) elIncome.textContent = formatEur(mIn);
+            if (elExpense) elExpense.textContent = formatEur(mOut);
 
             const now = new Date();
             const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
@@ -794,14 +797,16 @@
             const dailyEl = document.getElementById('statDailyBudget');
             const dailyNote = document.getElementById('statDailyNote');
 
-            if (remainingBudget >= 0) {
-                dailyEl.textContent = formatEur(remainingBudget / daysLeft);
-                dailyEl.className = "text-lg sm:text-xl font-black tracking-tight mt-3 text-white";
-                dailyNote.textContent = `${formatEur(remainingBudget)} rimasti per ${daysLeft} giorni`;
-            } else {
-                dailyEl.textContent = formatEur(0);
-                dailyEl.className = "text-lg sm:text-xl font-black tracking-tight mt-3 text-apple-red";
-                dailyNote.textContent = `Sforato di ${formatEur(Math.abs(remainingBudget))}`;
+            if (dailyEl && dailyNote) {
+                if (remainingBudget >= 0) {
+                    dailyEl.textContent = formatEur(remainingBudget / daysLeft);
+                    dailyEl.className = "text-lg sm:text-xl font-black tracking-tight mt-3 text-white";
+                    dailyNote.textContent = `${formatEur(remainingBudget)} rimasti per ${daysLeft} giorni`;
+                } else {
+                    dailyEl.textContent = formatEur(0);
+                    dailyEl.className = "text-lg sm:text-xl font-black tracking-tight mt-3 text-apple-red";
+                    dailyNote.textContent = `Sforato di ${formatEur(Math.abs(remainingBudget))}`;
+                }
             }
         }
 

@@ -312,9 +312,14 @@
 
             <!-- BUDGET CATEGORIE -->
             <section id="sec-bud" data-section-key="bud" class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4 scroll-mt-6">
-                <div>
-                    <h3 class="font-bold text-base">Budget Categorie</h3>
-                    <p class="text-xs text-gray-400">Imposta i tetti di spesa mensili</p>
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="font-bold text-base">Budget Categorie</h3>
+                        <p class="text-xs text-gray-400">Personalizza i nomi e imposta i tetti di spesa mensili</p>
+                    </div>
+                    <button onclick="openCategoryRenameModal()" class="glass-pill px-3 py-1.5 rounded-xl text-xs font-semibold text-white hover:bg-white/10 transition-all">
+                        + Rinomina / Aggiungi
+                    </button>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1" id="budgetListContainer"></div>
             </section>
@@ -479,6 +484,25 @@
         </div>
     </dialog>
 
+    <!-- MODALE: Rinomina Categoria Budget -->
+    <dialog id="modalCategoryRename" class="w-full max-w-sm p-4">
+        <div class="glass-panel p-6 rounded-3xl relative shadow-2xl space-y-4">
+            <button onclick="closeModal('modalCategoryRename')" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="ph ph-x text-lg"></i></button>
+            <h3 class="text-base font-bold">Modifica / Rinomina Categoria</h3>
+            <form id="formCategoryRename" class="space-y-3.5">
+                <div>
+                    <label class="block text-[11px] font-semibold text-gray-400 mb-1">Categoria esistente da modificare</label>
+                    <select id="renameOldCat" class="w-full glass-pill rounded-xl px-3.5 py-3 text-sm text-white focus:outline-none focus:border-apple-blue border border-white/10 bg-[#0a0a0e]"></select>
+                </div>
+                <div>
+                    <label class="block text-[11px] font-semibold text-gray-400 mb-1">Nuovo nome categoria</label>
+                    <input type="text" id="renameNewCat" required placeholder="Es. Mutuo, Hobby, Viaggi..." class="w-full glass-pill rounded-xl px-3.5 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-apple-blue border border-white/10">
+                </div>
+                <button type="submit" class="w-full mt-2 bg-apple-blue hover:bg-blue-600 text-white font-bold py-3.5 rounded-xl transition-all text-sm">Aggiorna Categoria</button>
+            </form>
+        </div>
+    </dialog>
+
     <!-- Firebase SDKs & Enterprise App Logic -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
@@ -538,6 +562,7 @@
             subs: [{ id: "s1", n: "Spotify", a: 10.99 }, { id: "s2", n: "Netflix", a: 13.99 }, { id: "s3", n: "Palestra", a: 35.00 }],
             goals: [{ id: "g1", n: "Vacanza Estiva", t: 2500, s: 1200, monthlySaving: 200 }, { id: "g2", n: "Nuovo Smartphone", t: 900, s: 450, monthlySaving: 150 }],
             debts: [{ id: "d1", n: "Marco Rossi", a: 45, type: 1 }],
+            customOutCats: ["Casa", "Spesa", "Trasporti", "Svago", "Salute", "Altro"],
             sectionOrder: ['ai', 'dash', 'analytics', 'tx', 'bud', 'goals', 'subs'],
             sectionHidden: []
         };
@@ -576,6 +601,7 @@
             document.getElementById('formNewTx').addEventListener('submit', handleTxSubmit);
             document.getElementById('formPrompt').addEventListener('submit', handlePromptSubmit);
             document.getElementById('formDebt').addEventListener('submit', handleDebtSubmit);
+            document.getElementById('formCategoryRename').addEventListener('submit', handleCategoryRenameSubmit);
 
             setupFirestoreListeners();
         }
@@ -599,6 +625,7 @@
                     appState = docSnap.data();
                     if (!appState.sectionOrder) appState.sectionOrder = ['ai', 'dash', 'analytics', 'tx', 'bud', 'goals', 'subs'];
                     if (!appState.sectionHidden) appState.sectionHidden = [];
+                    if (!appState.customOutCats) appState.customOutCats = ["Casa", "Spesa", "Trasporti", "Svago", "Salute", "Altro"];
                 } else {
                     saveStateStore();
                 }
@@ -980,7 +1007,10 @@
                 const pct = (amount / totalOut) * 100;
                 const strokeDasharray = `${pct} ${100 - pct}`;
                 const strokeDashoffset = -cumulativePercent;
-                const colorHex = CATS[cat]?.hex || '#8E8E93';
+                const activeCats = appState.customOutCats || OUT_CATS;
+                const colorIndex = activeCats.indexOf(cat) % 6;
+                const fallbackColors = ["#0A84FF", "#30D158", "#FF9F0A", "#BF5AF2", "#FF453A", "#64D2FF"];
+                const colorHex = CATS[cat]?.hex || fallbackColors[colorIndex >= 0 ? colorIndex : 0];
 
                 svgHTML += `
                     <circle cx="50" cy="50" r="38" fill="none" stroke="${colorHex}" stroke-width="14"
@@ -1028,7 +1058,9 @@
                 }
             });
 
-            container.innerHTML = OUT_CATS.map(cat => {
+            const activeOutCats = appState.customOutCats || OUT_CATS;
+
+            container.innerHTML = activeOutCats.map(cat => {
                 const cur = curMap[cat] || 0;
                 const prv = prvMap[cat] || 0;
                 const maxVal = Math.max(cur, prv, 1);
@@ -1058,21 +1090,6 @@
                     </div>
                 `;
             }).join('');
-        }
-
-        window.filterTransactions = function(f) {
-            currentFilter = f;
-            ['all', 'in', 'out'].forEach(type => {
-                const btn = document.getElementById(`filter${type.charAt(0).toUpperCase() + type.slice(1)}`);
-                if (btn) {
-                    if (type === f) {
-                        btn.className = "flex-1 sm:flex-initial px-3.5 py-1.5 text-xs font-semibold rounded-full bg-apple-blue text-white shadow";
-                    } else {
-                        btn.className = "flex-1 sm:flex-initial px-3.5 py-1.5 text-xs font-semibold rounded-full text-gray-400 hover:text-white";
-                    }
-                }
-            });
-            renderTransactions();
         }
 
         function renderTransactions() {
@@ -1124,18 +1141,20 @@
                 }
             });
 
-            container.innerHTML = OUT_CATS.map(cat => {
+            const activeOutCats = appState.customOutCats || OUT_CATS;
+
+            container.innerHTML = activeOutCats.map(cat => {
                 const limit = appState.budgets?.[cat] || 0;
                 const spent = spendMap[cat] || 0;
                 const pct = limit > 0 ? Math.min(100, (spent / limit) * 100) : (spent > 0 ? 100 : 0);
                 const isOver = spent > limit && limit > 0;
-                const cInfo = CATS[cat];
+                const cInfo = CATS[cat] || { icon: "ph-tag", color: "text-apple-blue", bg: "bg-apple-blue" };
 
                 return `
                     <div class="p-4 rounded-2xl bg-white/5 border border-white/5">
                         <div class="flex justify-between items-center mb-2">
                             <div class="flex items-center gap-2 font-bold text-xs sm:text-sm">
-                                <i class="ph ${cInfo.icon} ${cInfo.color} text-base"></i> ${cat}
+                                <i class="ph ${cInfo.icon} ${cInfo.color} text-base"></i> ${escapeHtml(cat)}
                             </div>
                             <div class="text-xs font-semibold ${isOver ? 'text-apple-red' : 'text-gray-300'}">
                                 ${formatEur(spent)} <span class="text-gray-500">/</span>
@@ -1156,6 +1175,42 @@
             saveStateStore();
             renderStats();
             renderBudgets();
+        }
+
+        window.openCategoryRenameModal = function() {
+            const select = document.getElementById('renameOldCat');
+            const activeOutCats = appState.customOutCats || OUT_CATS;
+            select.innerHTML = activeOutCats.map(c => `<option value="${c}" style="background:#0a0a0e">${c}</option>`).join('');
+            document.getElementById('renameNewCat').value = '';
+            document.getElementById('modalCategoryRename').showModal();
+        }
+
+        async function handleCategoryRenameSubmit(e) {
+            e.preventDefault();
+            const oldCat = document.getElementById('renameOldCat').value;
+            let newCat = document.getElementById('renameNewCat').value.trim();
+            if (!oldCat || !newCat) return;
+
+            if (!appState.customOutCats) appState.customOutCats = [...OUT_CATS];
+            const idx = appState.customOutCats.indexOf(oldCat);
+            if (idx >= 0) {
+                appState.customOutCats[idx] = newCat;
+            }
+
+            if (appState.budgets[oldCat] !== undefined) {
+                appState.budgets[newCat] = appState.budgets[oldCat];
+                delete appState.budgets[oldCat];
+            }
+
+            transactions.forEach(t => {
+                if (t.cat === oldCat) {
+                    t.cat = newCat;
+                }
+            });
+
+            closeModal('modalCategoryRename');
+            await saveStateStore();
+            renderEverything();
         }
 
         function renderGoals() {
@@ -1329,11 +1384,12 @@
             const tabOut = document.getElementById('tabOut');
             const tabIn = document.getElementById('tabIn');
             const selectCat = document.getElementById('txCat');
+            const activeOutCats = appState.customOutCats || OUT_CATS;
 
             if (type === 'out') {
                 tabOut.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-apple-red text-white transition-all shadow";
                 tabIn.className = "flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition-all";
-                selectCat.innerHTML = OUT_CATS.map(c => `<option value="${c}" style="background:#0a0a0e">${c}</option>`).join('');
+                selectCat.innerHTML = activeOutCats.map(c => `<option value="${c}" style="background:#0a0a0e">${c}</option>`).join('');
             } else {
                 tabIn.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-apple-green text-white transition-all shadow";
                 tabOut.className = "flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition-all";

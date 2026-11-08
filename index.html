@@ -188,18 +188,26 @@
             
             <!-- SEZIONE DASH: SALDO -->
             <section id="sec-dash" class="space-y-4 scroll-mt-6">
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="glass-panel p-6 space-y-1">
-                        <span class="text-xs text-ios-gray font-semibold">💰 Saldo Totale</span>
-                        <div class="text-3xl font-bold tracking-tight text-white" id="statBalance">€ 0,00</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div class="glass-panel p-5 space-y-1">
+                        <span class="text-xs text-ios-gray font-semibold">💶 Contanti</span>
+                        <div class="text-2xl font-bold tracking-tight text-white" id="statCashBalance">€ 0,00</div>
                     </div>
-                    <div class="glass-panel p-6 space-y-1">
-                        <span class="text-xs text-ios-gray font-semibold">📥 Entrate Mese</span>
+                    <div class="glass-panel p-5 space-y-1">
+                        <span class="text-xs text-ios-gray font-semibold">💳 Revolut</span>
+                        <div class="text-2xl font-bold tracking-tight text-white" id="statRevolutBalance">€ 0,00</div>
+                    </div>
+                    <div class="glass-panel p-5 space-y-1">
+                        <span class="text-xs text-ios-gray font-semibold">💰 Saldo Totale</span>
+                        <div class="text-2xl font-bold tracking-tight text-ios-blue" id="statBalance">€ 0,00</div>
+                    </div>
+                    <div class="glass-panel p-5 space-y-1">
+                        <span class="text-xs text-ios-gray font-semibold">📈 Entrate Mese</span>
                         <div class="text-2xl font-bold tracking-tight text-ios-green" id="statIncome">€ 0,00</div>
                     </div>
-                    <div class="glass-panel p-6 space-y-1">
-                        <span class="text-xs text-ios-gray font-semibold">📤 Uscite Mese</span>
-                        <div class="text-2xl font-bold tracking-tight text-white" id="statExpense">€ 0,00</div>
+                    <div class="glass-panel p-5 space-y-1">
+                        <span class="text-xs text-ios-gray font-semibold">📉 Uscite Mese</span>
+                        <div class="text-2xl font-bold tracking-tight text-ios-red" id="statExpense">€ 0,00</div>
                     </div>
                 </div>
             </section>
@@ -338,6 +346,13 @@
                             <span class="text-ios-gray mr-1">€</span>
                             <input type="number" id="txAmount" required min="0.01" step="0.01" placeholder="0.00" class="bg-transparent text-right text-white placeholder-ios-gray focus:outline-none text-base w-full">
                         </div>
+                    </div>
+                    <div class="flex items-center px-4 py-3.5 border-b border-white/5">
+                        <span class="w-1/3 text-sm text-white font-medium">Fonte</span>
+                        <select id="txAccount" class="w-2/3 bg-transparent text-right text-ios-blue focus:outline-none text-base appearance-none pr-2">
+                            <option value="Revolut" style="background:#000">💳 Revolut</option>
+                            <option value="Contanti" style="background:#000">💶 Contanti</option>
+                        </select>
                     </div>
                     <div class="flex items-center px-4 py-3.5 border-b border-white/5">
                         <span class="w-1/3 text-sm text-white font-medium">Data</span>
@@ -563,11 +578,18 @@
         }
 
         function renderStats() {
-            let totalBal = 0, mIn = 0, mOut = 0;
+            let totalBal = 0, cashBal = 0, revolutBal = 0, mIn = 0, mOut = 0;
             const currentMonthStr = isoDate(new Date()).substring(0, 7);
 
             transactions.forEach(t => {
                 totalBal += t.amount;
+                const acc = t.account || "Revolut";
+                if (acc === "Contanti") {
+                    cashBal += t.amount;
+                } else {
+                    revolutBal += t.amount;
+                }
+
                 if (t.date.substring(0, 7) === currentMonthStr) {
                     if (t.amount > 0) mIn += t.amount;
                     else mOut -= t.amount;
@@ -575,6 +597,8 @@
             });
 
             document.getElementById('statBalance').textContent = formatEur(totalBal);
+            document.getElementById('statCashBalance').textContent = formatEur(cashBal);
+            document.getElementById('statRevolutBalance').textContent = formatEur(revolutBal);
             document.getElementById('statIncome').textContent = formatEur(mIn);
             document.getElementById('statExpense').textContent = formatEur(mOut);
         }
@@ -672,6 +696,8 @@
             container.innerHTML = list.slice(0, 15).map(t => {
                 const cInfo = getCatInfo(t.cat);
                 const isPos = t.amount > 0;
+                const accountName = t.account || "Revolut";
+                const accountBadge = accountName === "Contanti" ? "💶 Contanti" : "💳 Revolut";
                 return `
                     <div class="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
                         <div class="flex items-center gap-4">
@@ -680,7 +706,7 @@
                             </div>
                             <div>
                                 <p class="font-bold text-sm text-white">${escapeHtml(t.desc)}</p>
-                                <p class="text-xs text-ios-gray font-medium mt-0.5">${t.cat} &bull; ${new Date(t.date).toLocaleDateString('it-IT', { day: '2-digit', month: 'short' })}</p>
+                                <p class="text-xs text-ios-gray font-medium mt-0.5">${t.cat} &bull; ${accountBadge} &bull; ${new Date(t.date).toLocaleDateString('it-IT', { day: '2-digit', month: 'short' })}</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-3">
@@ -907,6 +933,7 @@
             setTxModalType('out');
             document.getElementById('txDesc').value = '';
             document.getElementById('txAmount').value = '';
+            document.getElementById('txAccount').value = 'Revolut';
             document.getElementById('txDate').value = isoDate(new Date());
             document.getElementById('modalNewTx').showModal();
         }
@@ -933,13 +960,14 @@
             e.preventDefault();
             let desc = document.getElementById('txDesc').value.trim();
             let amount = parseFloat(document.getElementById('txAmount').value);
+            let account = document.getElementById('txAccount').value;
             let date = document.getElementById('txDate').value;
             let cat = document.getElementById('txCat').value;
 
             if (desc && amount > 0 && date) {
-                const newTx = { id: uid(), desc, amount: currentTxType === 'out' ? -amount : amount, cat, date };
+                const newTx = { id: uid(), desc, amount: currentTxType === 'out' ? -amount : amount, cat, account, date };
                 closeModal('modalNewTx');
-                await saveTxStore(newTx); // Salva su Realtime DB
+                await saveTxStore(newTx);
             }
         }
 

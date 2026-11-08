@@ -2,8 +2,8 @@
 <html lang="it" class="dark">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
-    <title>Finanze Personali – iOS Edition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Finanze Personali – iOS Pro</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Phosphor Icons -->
@@ -15,13 +15,13 @@
             theme: {
                 extend: {
                     fontFamily: { 
-                        sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Text"', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'] 
+                        sans: ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'] 
                     },
                     colors: {
                         ios: {
                             bg: '#000000',
                             card: 'rgba(28, 28, 30, 0.6)',
-                            cardBorder: 'rgba(255, 255, 255, 0.1)',
+                            border: 'rgba(255, 255, 255, 0.1)',
                             blue: '#0A84FF',
                             green: '#30D158',
                             red: '#FF453A',
@@ -29,7 +29,7 @@
                             purple: '#BF5AF2',
                             teal: '#64D2FF',
                             gray: '#8E8E93',
-                            lightGray: '#E5E5EA'
+                            lightgray: '#EBEBF5'
                         }
                     }
                 }
@@ -39,355 +39,355 @@
     <style>
         body {
             background-color: #000000;
-            color: #F5F5F7;
+            color: #FFFFFF;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
 
-        /* Effetto Apple Intelligence / Siri Glow */
+        /* Effetto Apple Intelligence Glow */
         .ambient-glow {
             position: fixed;
-            top: 50%; left: 50%;
-            width: 150vw; height: 150vh;
-            transform: translate(-50%, -50%);
+            top: 0; left: 0; width: 100vw; height: 100vh;
             z-index: -1;
+            overflow: hidden;
             pointer-events: none;
-            background: radial-gradient(circle at 30% 30%, rgba(94, 92, 230, 0.15), transparent 40%),
-                        radial-gradient(circle at 70% 70%, rgba(10, 132, 255, 0.15), transparent 40%),
-                        radial-gradient(circle at 50% 50%, rgba(191, 90, 242, 0.1), transparent 50%);
-            filter: blur(80px);
-            animation: rotateGlow 20s linear infinite;
+            background: #000000;
+        }
+        .glow-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.25;
+            animation: pulseGlow 15s infinite alternate ease-in-out;
+        }
+        .orb-1 { width: 70vw; height: 70vw; top: -10%; left: -10%; background: radial-gradient(circle, rgba(10,132,255,0.6) 0%, transparent 70%); }
+        .orb-2 { width: 60vw; height: 60vw; bottom: -10%; right: -10%; background: radial-gradient(circle, rgba(191,90,242,0.4) 0%, transparent 70%); animation-delay: -5s; }
+        .orb-3 { width: 50vw; height: 50vw; top: 40%; left: 30%; background: radial-gradient(circle, rgba(48,209,88,0.2) 0%, transparent 70%); animation-delay: -10s; }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.1) translate(30px, -30px); }
         }
 
-        @keyframes rotateGlow {
-            0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
-            50% { transform: translate(-50%, -50%) rotate(180deg) scale(1.1); }
-            100% { transform: translate(-50%, -50%) rotate(360deg) scale(1); }
+        /* Glassmorphism in stile iOS */
+        .glass-panel {
+            background: rgba(28, 28, 30, 0.45);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 0.5px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border-radius: 24px;
         }
 
-        /* Materiale Glass stile iOS */
-        .ios-glass {
-            background: rgba(28, 28, 30, 0.65);
-            backdrop-filter: blur(40px) saturate(200%);
-            -webkit-backdrop-filter: blur(40px) saturate(200%);
-            border: 0.5px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-        }
-
-        .ios-glass-pill {
+        .glass-pill {
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
+            border: 0.5px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Dynamic Island Menu Nav */
+        .dynamic-island-nav {
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 0.5px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            border-radius: 40px;
         }
 
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-        
-        input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(1);
-            opacity: 0.5;
-        }
 
-        ::-webkit-scrollbar { width: 0px; height: 0px; } /* Nascosta per stile iOS nativo */
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
 
-        /* Dialog iOS Style */
-        dialog { background: transparent; margin: auto; }
+        dialog { background: transparent; margin: auto; border: none; outline: none; }
         dialog::backdrop {
             background: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
         }
 
-        .dynamic-island {
-            background: #000;
-            border-radius: 999px;
-            box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 10px 30px rgba(0,0,0,0.8);
-            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+        .donut-segment {
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            cursor: pointer;
+        }
+        .donut-segment:hover {
+            opacity: 0.8;
+            transform: scale(1.03);
+            transform-origin: center;
         }
     </style>
 </head>
 <body class="flex flex-col md:flex-row min-h-screen selection:bg-ios-blue selection:text-white pb-28 md:pb-8">
 
     <!-- Sfondo animato -->
-    <div class="ambient-glow"></div>
+    <div class="ambient-glow">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
 
     <!-- Barra laterale (Desktop) -->
-    <aside class="hidden md:flex flex-col w-72 h-screen sticky top-0 ios-glass border-r-0 border-white/10 z-20 p-6">
-        <div class="flex items-center gap-4 mb-10">
-            <div class="w-12 h-12 rounded-[1.25rem] bg-gradient-to-br from-ios-blue to-ios-purple flex items-center justify-center text-white shadow-lg shadow-ios-blue/30">
-                <i class="ph ph-wallet text-2xl font-bold"></i>
+    <aside class="hidden md:flex flex-col w-72 h-screen sticky top-0 bg-black/40 backdrop-blur-3xl border-r border-ios-border z-20 p-6">
+        <div class="flex items-center gap-3.5 mb-8">
+            <div class="w-12 h-12 rounded-2xl glass-pill flex items-center justify-center text-ios-blue shadow-[0_0_30px_rgba(10,132,255,0.3)]">
+                <i class="ph-fill ph-apple-logo text-2xl"></i>
             </div>
             <div>
-                <h1 class="text-[17px] font-bold tracking-tight">Apple Finance</h1>
-                <p class="text-xs text-ios-gray font-medium flex items-center gap-1.5 mt-0.5">
-                    <span id="syncIndicator" class="w-2 h-2 rounded-full bg-ios-green inline-block shadow-[0_0_8px_#30D158]"></span> iCloud Sync
+                <h1 class="text-lg font-bold tracking-tight text-white">Finanze Pro</h1>
+                <p class="text-[11px] text-ios-gray font-medium flex items-center gap-1.5 mt-0.5">
+                    <span id="syncIndicator" class="w-2 h-2 rounded-full bg-ios-gray inline-block"></span> Sincronizzato con iCloud
                 </p>
             </div>
         </div>
 
         <nav class="space-y-1 flex-1">
-            <p class="text-[11px] font-bold text-ios-gray uppercase tracking-widest mb-3 px-3">Menu Principale</p>
-            <a href="#sec-dash" class="flex items-center gap-3.5 px-4 py-3 rounded-2xl text-[15px] font-semibold text-white bg-white/10 transition-all">
+            <p class="text-[10px] font-semibold text-ios-gray uppercase tracking-widest mb-3 px-3">Menu</p>
+            <a href="#sec-dash" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-white bg-white/10 transition-all">
                 <i class="ph ph-squares-four text-xl text-ios-blue"></i> Dashboard
             </a>
-            <a href="#sec-ai" class="flex items-center gap-3.5 px-4 py-3 rounded-2xl text-[15px] font-semibold text-ios-gray hover:text-white hover:bg-white/5 transition-all">
-                <i class="ph ph-sparkle text-xl text-ios-purple"></i> AI Insights
+            <a href="#sec-analytics" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-ios-gray hover:text-white hover:bg-white/5 transition-all">
+                <i class="ph ph-chart-pie-slice text-xl"></i> Grafici & Statistiche
             </a>
-            <a href="#sec-analytics" class="flex items-center gap-3.5 px-4 py-3 rounded-2xl text-[15px] font-semibold text-ios-gray hover:text-white hover:bg-white/5 transition-all">
-                <i class="ph ph-chart-pie-slice text-xl text-ios-orange"></i> Analisi
+            <a href="#sec-tx" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-ios-gray hover:text-white hover:bg-white/5 transition-all">
+                <i class="ph ph-list-dashes text-xl"></i> Cronologia
             </a>
-            <a href="#sec-tx" class="flex items-center gap-3.5 px-4 py-3 rounded-2xl text-[15px] font-semibold text-ios-gray hover:text-white hover:bg-white/5 transition-all">
-                <i class="ph ph-list-dashes text-xl text-ios-green"></i> Transazioni
+            <a href="#sec-bud" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-ios-gray hover:text-white hover:bg-white/5 transition-all">
+                <i class="ph ph-wallet text-xl"></i> Budget Categorie
             </a>
-            <a href="#sec-goals" class="flex items-center gap-3.5 px-4 py-3 rounded-2xl text-[15px] font-semibold text-ios-gray hover:text-white hover:bg-white/5 transition-all">
-                <i class="ph ph-target text-xl text-ios-red"></i> Obiettivi
+            <a href="#sec-goals" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-ios-gray hover:text-white hover:bg-white/5 transition-all">
+                <i class="ph ph-target text-xl"></i> Obiettivi
+            </a>
+            <a href="#sec-subs" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-ios-gray hover:text-white hover:bg-white/5 transition-all">
+                <i class="ph ph-calendar-check text-xl"></i> Abbonamenti
             </a>
         </nav>
-
-        <div class="pt-4 border-t border-white/10 space-y-3">
-            <button onclick="openCustomizerModal()" class="w-full flex items-center justify-center gap-2 ios-glass-pill hover:bg-white/10 text-white py-3 rounded-2xl text-[13px] font-semibold transition-all">
-                <i class="ph ph-faders text-lg text-ios-gray"></i> Personalizza
-            </button>
-        </div>
     </aside>
 
-    <!-- Contenuto principale -->
-    <main class="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-8 space-y-8">
+    <!-- Contenuto Principale -->
+    <main class="flex-1 max-w-3xl w-full mx-auto p-4 sm:p-8 space-y-6">
         
         <!-- Header -->
-        <header class="flex justify-between items-end mt-4 sm:mt-0">
+        <header class="glass-panel p-6 flex justify-between items-center">
             <div>
-                <p class="text-[13px] text-ios-gray font-semibold uppercase tracking-wider mb-1" id="dateText"></p>
-                <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-white" id="welcomeText">Bentornato</h2>
+                <h2 class="text-2xl font-bold tracking-tight text-white" id="welcomeText">Bentornato</h2>
+                <p class="text-sm text-ios-gray mt-0.5 capitalize font-medium" id="dateText"></p>
             </div>
-            <button onclick="openNewTxModal()" class="hidden md:flex items-center gap-2 bg-ios-blue hover:bg-blue-500 text-white px-5 py-3 rounded-full font-semibold transition-all shadow-[0_4px_20px_rgba(10,132,255,0.4)] text-[15px]">
-                <i class="ph ph-plus-circle text-xl"></i> Nuova Transazione
+            <button onclick="openNewTxModal()" class="flex items-center gap-2 bg-white text-black px-5 py-3 rounded-full font-bold transition-all hover:scale-105 active:scale-95 text-sm shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                <i class="ph ph-plus text-lg font-bold"></i> <span class="hidden sm:inline">Nuova</span>
             </button>
         </header>
 
-        <!-- CONTAINER DINAMICO ORDINABILE -->
-        <div id="dynamicDashboardContainer" class="space-y-8">
+        <!-- CONTAINER SEZIONI -->
+        <div id="dynamicDashboardContainer" class="space-y-6">
             
-            <!-- SEZIONE DASHBOARD: SALDO -->
-            <section id="sec-dash" data-section-key="dash" class="space-y-4 scroll-mt-6">
-                <div class="ios-glass p-6 sm:p-8 rounded-[2rem] space-y-4">
+            <!-- SEZIONE DASH: SALDO -->
+            <section id="sec-dash" class="space-y-4 scroll-mt-6">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="glass-panel p-6 space-y-1">
+                        <span class="text-xs text-ios-gray font-semibold">Saldo Totale</span>
+                        <div class="text-3xl font-bold tracking-tight text-white" id="statBalance">€ 0,00</div>
+                    </div>
+                    <div class="glass-panel p-6 space-y-1">
+                        <span class="text-xs text-ios-gray font-semibold">Entrate Mese</span>
+                        <div class="text-2xl font-bold tracking-tight text-ios-green" id="statIncome">€ 0,00</div>
+                    </div>
+                    <div class="glass-panel p-6 space-y-1">
+                        <span class="text-xs text-ios-gray font-semibold">Uscite Mese</span>
+                        <div class="text-2xl font-bold tracking-tight text-white" id="statExpense">€ 0,00</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SEZIONE ANALISI E GRAFICI -->
+            <section id="sec-analytics" class="space-y-4 scroll-mt-6">
+                <!-- Grafico Donut -->
+                <div class="glass-panel p-6 space-y-6">
                     <div>
-                        <span class="text-[13px] text-ios-gray font-semibold">Saldo Attuale</span>
-                        <div class="text-4xl sm:text-5xl font-bold tracking-tight text-white mt-1" id="statBalance">€ 0,00</div>
+                        <h3 class="font-bold text-lg text-white">Spese per Categoria</h3>
+                        <p class="text-sm text-ios-gray">Riepilogo del mese corrente</p>
                     </div>
-                    <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
-                        <div>
-                            <span class="text-[11px] text-ios-gray font-semibold uppercase">Entrate Mese</span>
-                            <div class="text-xl font-bold text-ios-green mt-0.5" id="statIncome">€ 0,00</div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
+                        <div class="relative flex justify-center items-center py-2">
+                            <svg class="w-48 h-48" viewBox="0 0 100 100" id="donutChartSvg"></svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center">
+                                <span class="text-xs text-ios-gray font-medium">Uscite</span>
+                                <span class="text-lg font-bold text-white mt-1" id="donutTotalText">€ 0</span>
+                            </div>
                         </div>
-                        <div>
-                            <span class="text-[11px] text-ios-gray font-semibold uppercase">Uscite Mese</span>
-                            <div class="text-xl font-bold text-ios-red mt-0.5" id="statExpense">€ 0,00</div>
-                        </div>
+                        <div class="space-y-2.5" id="donutLegendContainer"></div>
                     </div>
                 </div>
             </section>
 
-            <!-- SEZIONE AI INSIGHTS -->
-            <section id="sec-ai" data-section-key="ai" class="ios-glass p-6 sm:p-8 rounded-[2rem] space-y-5 scroll-mt-6 relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-ios-purple/20 blur-3xl rounded-full -mr-10 -mt-10 pointer-events-none"></div>
-                <div class="flex items-center gap-3">
-                    <i class="ph-fill ph-sparkle text-2xl text-ios-purple"></i>
-                    <h3 class="font-bold text-xl text-white">Apple Intelligence</h3>
-                </div>
-                
-                <div class="space-y-3" id="aiInsightsContainer"></div>
-
-                <div class="pt-4 border-t border-white/10">
-                    <div class="relative">
-                        <input type="text" id="aiChatInput" placeholder="Chiedi a Siri sulle tue finanze..." class="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-4 py-3.5 text-[15px] text-white placeholder-ios-gray focus:outline-none focus:bg-white/10 transition-all backdrop-blur-md">
-                        <i class="ph ph-chat-circle text-xl text-ios-gray absolute left-4 top-3.5"></i>
-                        <button onclick="askGeminiFinancialAdvice()" id="aiSendBtn" class="absolute right-2 top-2 bg-ios-blue text-white px-4 py-1.5 rounded-xl text-[13px] font-semibold hover:bg-blue-500 transition-all">Chiedi</button>
-                    </div>
-                    <div id="aiChatResponse" class="hidden mt-4 p-4 rounded-2xl bg-white/5 border border-white/10 text-[14px] text-ios-lightGray leading-relaxed backdrop-blur-xl"></div>
-                </div>
-            </section>
-
-            <!-- SEZIONE ANALISI (DONUT) -->
-            <section id="sec-analytics" data-section-key="analytics" class="ios-glass p-6 sm:p-8 rounded-[2rem] space-y-6 scroll-mt-6">
-                <div>
-                    <h3 class="font-bold text-xl text-white">Analisi Spese</h3>
-                    <p class="text-[13px] text-ios-gray mt-1">Distribuzione del mese corrente</p>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 items-center">
-                    <div class="relative flex justify-center items-center">
-                        <svg class="w-48 h-48 drop-shadow-2xl" viewBox="0 0 100 100" id="donutChartSvg"></svg>
-                        <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center">
-                            <span class="text-[11px] text-ios-gray font-semibold uppercase">Uscite</span>
-                            <span class="text-xl font-bold text-white mt-0.5" id="donutTotalText">€ 0</span>
-                        </div>
-                    </div>
-                    <div class="space-y-2.5" id="donutLegendContainer"></div>
-                </div>
-            </section>
-
-            <!-- TRANSAZIONI -->
-            <section id="sec-tx" data-section-key="tx" class="ios-glass p-6 sm:p-8 rounded-[2rem] space-y-5 scroll-mt-6">
+            <!-- TRANSAZIONI RECENTI -->
+            <section id="sec-tx" class="glass-panel p-6 space-y-5 scroll-mt-6">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                    <h3 class="font-bold text-xl text-white">Transazioni Recenti</h3>
-                    <div class="flex bg-white/5 p-1 rounded-xl w-full sm:w-auto border border-white/10">
-                        <button onclick="filterTransactions('all')" id="filterAll" class="flex-1 sm:flex-initial px-4 py-1.5 text-[13px] font-semibold rounded-lg bg-white/20 text-white shadow-sm transition-all">Tutte</button>
-                        <button onclick="filterTransactions('in')" id="filterIn" class="flex-1 sm:flex-initial px-4 py-1.5 text-[13px] font-semibold rounded-lg text-ios-gray hover:text-white transition-all">Entrate</button>
-                        <button onclick="filterTransactions('out')" id="filterOut" class="flex-1 sm:flex-initial px-4 py-1.5 text-[13px] font-semibold rounded-lg text-ios-gray hover:text-white transition-all">Uscite</button>
+                    <div>
+                        <h3 class="font-bold text-lg text-white">Ultime Transazioni</h3>
+                    </div>
+                    <div class="flex bg-white/10 p-1 rounded-full w-full sm:w-auto">
+                        <button onclick="filterTransactions('all')" id="filterAll" class="flex-1 sm:flex-initial px-4 py-1.5 text-xs font-semibold rounded-full bg-white text-black shadow transition-all">Tutte</button>
+                        <button onclick="filterTransactions('in')" id="filterIn" class="flex-1 sm:flex-initial px-4 py-1.5 text-xs font-semibold rounded-full text-ios-lightgray hover:text-white transition-all">Entrate</button>
+                        <button onclick="filterTransactions('out')" id="filterOut" class="flex-1 sm:flex-initial px-4 py-1.5 text-xs font-semibold rounded-full text-ios-lightgray hover:text-white transition-all">Uscite</button>
                     </div>
                 </div>
-                <div class="space-y-2" id="transactionsListContainer"></div>
+                <div class="space-y-3 pt-1" id="transactionsListContainer"></div>
+            </section>
+
+            <!-- BUDGET CATEGORIE -->
+            <section id="sec-bud" class="glass-panel p-6 space-y-5 scroll-mt-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="font-bold text-lg text-white">Budget Mensili</h3>
+                        <p class="text-sm text-ios-gray">Monitora i tuoi limiti di spesa</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1" id="budgetListContainer"></div>
             </section>
 
             <!-- OBIETTIVI -->
-            <section id="sec-goals" data-section-key="goals" class="ios-glass p-6 sm:p-8 rounded-[2rem] space-y-5 scroll-mt-6">
+            <section id="sec-goals" class="glass-panel p-6 space-y-5 scroll-mt-6">
                 <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-xl text-white">Obiettivi di Risparmio</h3>
-                    <button onclick="openPromptModal('Nuovo Obiettivo', 'Nome obiettivo', 'Importo da raggiungere', saveNewGoal)" class="bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full text-[13px] font-semibold text-white transition-all">
-                        + Nuovo
+                    <div>
+                        <h3 class="font-bold text-lg text-white">Obiettivi di Risparmio</h3>
+                    </div>
+                    <button onclick="openPromptModal('Nuovo Obiettivo', 'Nome obiettivo', 'Importo da raggiungere', saveNewGoal)" class="bg-white/10 px-4 py-2 rounded-full text-xs font-bold text-white hover:bg-white/20 transition-all">
+                        Aggiungi
                     </button>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="goalsListContainer"></div>
+                <div class="space-y-4 pt-1" id="goalsListContainer"></div>
+            </section>
+
+            <!-- ABBONAMENTI -->
+            <section id="sec-subs" class="glass-panel p-6 space-y-5 scroll-mt-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="font-bold text-lg text-white">Abbonamenti</h3>
+                        <p class="text-sm text-ios-gray" id="subsTotalText">€ 0,00 / mese</p>
+                    </div>
+                    <button onclick="openPromptModal('Nuovo Abbonamento', 'Nome servizio', 'Costo mensile', saveNewSub)" class="bg-white/10 px-4 py-2 rounded-full text-xs font-bold text-white hover:bg-white/20 transition-all">
+                        Aggiungi
+                    </button>
+                </div>
+                <div class="space-y-3 pt-1" id="subsListContainer"></div>
             </section>
         </div>
     </main>
 
-    <!-- Barra navigazione mobile (Floating Island Style) -->
-    <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 dynamic-island z-50 px-6 py-3 flex justify-between items-center gap-6 w-[90%] max-w-sm backdrop-blur-2xl bg-black/80 border border-white/20">
-        <a href="#sec-dash" class="text-ios-blue p-2"><i class="ph-fill ph-squares-four text-[22px]"></i></a>
-        <a href="#sec-ai" class="text-ios-gray hover:text-white p-2 transition-colors"><i class="ph-fill ph-sparkle text-[22px]"></i></a>
-        <button onclick="openNewTxModal()" class="w-12 h-12 bg-ios-blue rounded-full flex items-center justify-center text-white shadow-[0_4px_15px_rgba(10,132,255,0.6)] active:scale-95 transform -translate-y-4 border-[3px] border-black">
-            <i class="ph ph-plus text-xl font-bold"></i>
-        </button>
-        <a href="#sec-analytics" class="text-ios-gray hover:text-white p-2 transition-colors"><i class="ph-fill ph-chart-pie-slice text-[22px]"></i></a>
-        <button onclick="openCustomizerModal()" class="text-ios-gray hover:text-white p-2 transition-colors"><i class="ph-fill ph-faders text-[22px]"></i></button>
+    <!-- Navigazione "Dynamic Island" Mobile -->
+    <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 dynamic-island-nav z-50 px-6 py-3 flex gap-6 items-center shadow-2xl">
+        <a href="#sec-dash" class="flex flex-col items-center text-white hover:scale-110 transition-transform">
+            <i class="ph-fill ph-squares-four text-2xl"></i>
+        </a>
+        <a href="#sec-analytics" class="flex flex-col items-center text-ios-gray hover:text-white hover:scale-110 transition-transform">
+            <i class="ph-fill ph-chart-pie-slice text-2xl"></i>
+        </a>
+        <a href="#sec-goals" class="flex flex-col items-center text-ios-gray hover:text-white hover:scale-110 transition-transform">
+            <i class="ph-fill ph-target text-2xl"></i>
+        </a>
+        <a href="#sec-tx" class="flex flex-col items-center text-ios-gray hover:text-white hover:scale-110 transition-transform">
+            <i class="ph-fill ph-list-dashes text-2xl"></i>
+        </a>
     </nav>
-
-    <!-- MODALE: Personalizzazione -->
-    <dialog id="modalCustomizer" class="w-full max-w-sm p-4">
-        <div class="ios-glass p-6 rounded-[2rem] relative shadow-2xl space-y-5">
-            <button onclick="closeModal('modalCustomizer')" class="absolute top-5 right-5 text-ios-gray hover:text-white"><i class="ph ph-x-circle-fill text-2xl"></i></button>
-            <div>
-                <h3 class="text-lg font-bold text-white">Layout</h3>
-                <p class="text-[13px] text-ios-gray mt-0.5">Scegli cosa mostrare</p>
-            </div>
-            <div class="space-y-2 max-h-[50vh] overflow-y-auto" id="customizerSectionsList"></div>
-            <button onclick="saveDashboardCustomization()" class="w-full bg-white text-black hover:bg-gray-200 font-bold py-3.5 rounded-2xl transition-all text-[15px]">Fine</button>
-        </div>
-    </dialog>
 
     <!-- MODALE: Nuova Transazione -->
     <dialog id="modalNewTx" class="w-full max-w-sm p-4">
-        <div class="ios-glass p-6 rounded-[2.5rem] relative shadow-2xl space-y-5">
-            <button onclick="closeModal('modalNewTx')" class="absolute top-5 right-5 text-ios-gray hover:text-white bg-white/10 rounded-full p-1"><i class="ph ph-x text-lg"></i></button>
-            <h3 class="text-xl font-bold text-white text-center pt-2">Aggiungi</h3>
+        <div class="glass-panel p-6 relative shadow-2xl space-y-5 rounded-3xl">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-bold text-white">Nuova Registrazione</h3>
+                <button onclick="closeModal('modalNewTx')" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-ios-gray hover:text-white"><i class="ph ph-x text-lg"></i></button>
+            </div>
 
-            <div class="flex bg-white/5 p-1 rounded-xl border border-white/10">
-                <button type="button" id="tabOut" class="flex-1 py-2 text-[13px] font-semibold rounded-lg bg-white text-black shadow-sm transition-all" onclick="setTxModalType('out')">Uscita</button>
-                <button type="button" id="tabIn" class="flex-1 py-2 text-[13px] font-semibold rounded-lg text-ios-gray hover:text-white transition-all" onclick="setTxModalType('in')">Entrata</button>
+            <div class="flex bg-black/50 p-1 rounded-xl">
+                <button type="button" id="tabOut" class="flex-1 py-2.5 text-sm font-bold rounded-lg bg-ios-red text-white transition-all shadow" onclick="setTxModalType('out')">Uscita</button>
+                <button type="button" id="tabIn" class="flex-1 py-2.5 text-sm font-bold rounded-lg text-ios-gray hover:text-white transition-all" onclick="setTxModalType('in')">Entrata</button>
             </div>
 
             <form id="formNewTx" class="space-y-4">
                 <div>
-                    <input type="text" id="txDesc" required placeholder="Cosa hai pagato?" oninput="handleSmartCategoryPredict(this.value)" class="w-full bg-transparent border-b border-white/20 px-2 py-3 text-lg text-white placeholder-ios-gray focus:outline-none focus:border-ios-blue transition-colors font-semibold">
+                    <input type="text" id="txDesc" required placeholder="Titolo (Es. Spesa Conad...)" class="w-full bg-black/40 rounded-xl px-4 py-3.5 text-base text-white placeholder-ios-gray focus:outline-none focus:ring-2 focus:ring-ios-blue border border-white/5 transition-all">
                 </div>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-2 gap-3">
                     <div>
-                        <input type="number" id="txAmount" required min="0.01" step="0.01" placeholder="€ 0,00" class="w-full bg-transparent border-b border-white/20 px-2 py-3 text-lg text-white placeholder-ios-gray focus:outline-none focus:border-ios-blue transition-colors font-bold">
+                        <input type="number" id="txAmount" required min="0.01" step="0.01" placeholder="Importo €" class="w-full bg-black/40 rounded-xl px-4 py-3.5 text-base text-white placeholder-ios-gray focus:outline-none focus:ring-2 focus:ring-ios-blue border border-white/5 transition-all">
                     </div>
                     <div>
-                        <input type="date" id="txDate" required class="w-full bg-transparent border-b border-white/20 px-2 py-3 text-[15px] text-white focus:outline-none focus:border-ios-blue transition-colors" style="color-scheme: dark;">
+                        <input type="date" id="txDate" required class="w-full bg-black/40 rounded-xl px-4 py-3.5 text-base text-white focus:outline-none focus:ring-2 focus:ring-ios-blue border border-white/5 transition-all" style="color-scheme: dark;">
                     </div>
                 </div>
-                <div class="pt-2">
-                    <div class="flex justify-between items-center mb-2 px-1">
-                        <span class="text-[13px] text-ios-gray font-semibold">Categoria</span>
-                        <span id="aiCategoryBadge" class="text-[11px] text-ios-purple font-bold hidden"><i class="ph-fill ph-sparkle"></i> Auto-rilevata</span>
-                    </div>
-                    <select id="txCat" class="w-full bg-white/10 rounded-xl px-4 py-3 text-[15px] font-medium text-white focus:outline-none border border-white/10 appearance-none"></select>
+                <div>
+                    <select id="txCat" class="w-full bg-black/40 rounded-xl px-4 py-3.5 text-base text-white focus:outline-none focus:ring-2 focus:ring-ios-blue border border-white/5 appearance-none"></select>
                 </div>
-                <button type="submit" class="w-full mt-4 bg-ios-blue hover:bg-blue-500 text-white font-bold py-3.5 rounded-2xl transition-all shadow-[0_4px_15px_rgba(10,132,255,0.4)] text-[15px]">Salva</button>
+                <button type="submit" class="w-full bg-white text-black font-bold py-4 rounded-xl transition-all hover:bg-gray-200 text-base shadow-[0_4px_20px_rgba(255,255,255,0.2)] mt-2">Salva Transazione</button>
             </form>
         </div>
     </dialog>
 
-    <!-- MODALE: Prompt -->
+    <!-- MODALE: Prompt generico -->
     <dialog id="modalPrompt" class="w-full max-w-sm p-4">
-        <div class="ios-glass p-6 rounded-[2rem] relative shadow-2xl space-y-4">
-            <button onclick="closeModal('modalPrompt')" class="absolute top-5 right-5 text-ios-gray hover:text-white"><i class="ph ph-x-circle-fill text-2xl"></i></button>
-            <h3 class="text-lg font-bold text-white" id="promptTitle">Titolo</h3>
+        <div class="glass-panel p-6 relative shadow-2xl space-y-5 rounded-3xl">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-bold text-white" id="promptTitle">Titolo</h3>
+                <button onclick="closeModal('modalPrompt')" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-ios-gray hover:text-white"><i class="ph ph-x text-lg"></i></button>
+            </div>
             <form id="formPrompt" class="space-y-4">
                 <div>
-                    <label class="block text-[13px] font-semibold text-ios-gray mb-1" id="promptLabelName">Nome</label>
-                    <input type="text" id="promptName" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-[15px] text-white focus:outline-none focus:bg-white/10">
+                    <label class="block text-xs font-semibold text-ios-gray mb-1.5" id="promptLabelName">Nome</label>
+                    <input type="text" id="promptName" required class="w-full bg-black/40 rounded-xl px-4 py-3.5 text-base text-white focus:outline-none focus:ring-2 focus:ring-ios-blue border border-white/5">
                 </div>
                 <div>
-                    <label class="block text-[13px] font-semibold text-ios-gray mb-1" id="promptLabelAmount">Importo</label>
-                    <input type="number" id="promptAmount" required min="0.01" step="0.01" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-[15px] text-white focus:outline-none focus:bg-white/10">
+                    <label class="block text-xs font-semibold text-ios-gray mb-1.5" id="promptLabelAmount">Importo</label>
+                    <input type="number" id="promptAmount" required min="0.01" step="0.01" class="w-full bg-black/40 rounded-xl px-4 py-3.5 text-base text-white focus:outline-none focus:ring-2 focus:ring-ios-blue border border-white/5">
                 </div>
-                <button type="submit" class="w-full bg-white text-black hover:bg-gray-200 font-bold py-3.5 rounded-xl transition-all text-[15px]">Conferma</button>
+                <button type="submit" class="w-full bg-white text-black font-bold py-4 rounded-xl transition-all hover:bg-gray-200 text-base mt-2">Conferma</button>
             </form>
         </div>
     </dialog>
 
-    <!-- LOGICA E FIREBASE -->
+    <!-- LOGICA E FIREBASE (REALTIME DATABASE) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getDatabase, ref, set, remove, onValue } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
-        // Fallback robusto rispettando i path di sistema richiesti
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'finanze-enterprise-github';
+        const appId = 'finanze-ios-pro';
         
-        // Uso la config Firebase passata dall'utente nel prompt
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+        // Uso la config Firebase passata dall'utente (Assicurati che il databaseURL sia esatto)
+        const firebaseConfig = {
             apiKey: "AIzaSyBXRuAqeTHsDWvJXkRwJE8OHm1-OKPKXMQ",
             authDomain: "portfolio-2711.firebaseapp.com",
             databaseURL: "https://portfolio-2711-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "portfolio-2711",
             storageBucket: "portfolio-2711.firebasestorage.app",
             messagingSenderId: "811337487301",
-            appId: "1:811337487301:web:42c442fb45b8a27fdd71ac"
+            appId: "1:811337487301:web:42c442fb45b8a27fdd71ac",
+            measurementId: "G-6J5D5M02RR"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getFirestore(app);
+        const db = getDatabase(app); // Usa Realtime Database
 
         const CATS = {
-            "Casa": { icon: "ph-house", color: "text-ios-blue", hex: "#0A84FF" },
-            "Spesa": { icon: "ph-shopping-cart", color: "text-ios-green", hex: "#30D158" },
-            "Trasporti": { icon: "ph-car", color: "text-ios-orange", hex: "#FF9F0A" },
-            "Svago": { icon: "ph-popcorn", color: "text-ios-purple", hex: "#BF5AF2" },
-            "Salute": { icon: "ph-heartbeat", color: "text-ios-red", hex: "#FF453A" },
-            "Stipendio": { icon: "ph-money", color: "text-ios-teal", hex: "#64D2FF" },
-            "Altro": { icon: "ph-tag", color: "text-ios-gray", hex: "#8E8E93" }
+            "Casa": { icon: "ph-house", color: "text-ios-blue", bg: "bg-ios-blue", hex: "#0A84FF" },
+            "Spesa": { icon: "ph-shopping-cart", color: "text-ios-green", bg: "bg-ios-green", hex: "#30D158" },
+            "Trasporti": { icon: "ph-car", color: "text-ios-orange", bg: "bg-ios-orange", hex: "#FF9F0A" },
+            "Svago": { icon: "ph-popcorn", color: "text-ios-purple", bg: "bg-ios-purple", hex: "#BF5AF2" },
+            "Salute": { icon: "ph-heartbeat", color: "text-ios-red", bg: "bg-ios-red", hex: "#FF453A" },
+            "Stipendio": { icon: "ph-money", color: "text-ios-teal", bg: "bg-ios-teal", hex: "#64D2FF" },
+            "Altro": { icon: "ph-sparkle", color: "text-ios-gray", bg: "bg-ios-gray", hex: "#8E8E93" }
         };
         const OUT_CATS = ["Casa", "Spesa", "Trasporti", "Svago", "Salute", "Altro"];
         const IN_CATS = ["Stipendio", "Altro"];
 
-        const AI_KEYWORDS = {
-            "Spesa": ["conad", "esselunga", "coop", "lidl", "carrefour", "supermercato", "spesa", "pam", "md", "eurospin", "despar", "alimentari", "spesa"],
-            "Trasporti": ["benzina", "eni", "q8", "shell", "autostrada", "telepass", "trenitalia", "italo", "metro", "bus", "parcheggio", "taxi", "uber", "treno", "volo", "ryanair"],
-            "Casa": ["affitto", "mutuo", "enel", "luce", "gas", "acqua", "condominio", "ikea", "leroy", "bolletta", "internet", "fibra"],
-            "Svago": ["netflix", "spotify", "cinema", "ristorante", "pizzeria", "pub", "bar", "amazon", "apple", "playstation", "steam", "game", "cena", "pranzo", "drink"],
-            "Salute": ["farmacia", "medico", "visita", "ospedale", "ticket", "dentista", "parafarmacia"]
-        };
-
-        const SECTION_NAMES = {
-            dash: "Dashboard Principale",
-            ai: "Apple Intelligence Insights",
-            analytics: "Analisi e Grafici",
-            tx: "Transazioni Recenti",
-            goals: "Obiettivi Risparmio"
-        };
-
         let transactions = [];
         let appState = {
-            goals: [{ id: "g1", n: "Vacanza", t: 1500, s: 300 }],
-            sectionOrder: ['dash', 'ai', 'analytics', 'tx', 'goals'],
-            sectionHidden: []
+            budgets: { Casa: 700, Spesa: 400, Trasporti: 200, Svago: 150, Salute: 100, Altro: 50 },
+            subs: [],
+            goals: []
         };
 
         let currentTxType = 'out';
@@ -395,29 +395,22 @@
         let activePromptCb = null;
         let userId = null;
 
-        const uid = () => crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2, 9);
+        const uid = () => (typeof crypto !== 'undefined' && crypto.randomUUID) ? crypto.randomUUID() : Math.random().toString(36).substring(2, 15);
         const formatEur = n => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(n);
         const isoDate = d => d.toISOString().split('T')[0];
         const escapeHtml = str => String(str).replace(/[&<>'"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[m]);
 
         async function initAuthAndData() {
             try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
+                await signInAnonymously(auth);
             } catch (err) {
                 console.error("Auth error:", err);
-                alert("Errore di connessione al database. Riprova.");
-                return;
             }
 
-            userId = auth.currentUser?.uid;
-            if (!userId) return;
-
-            document.getElementById('syncIndicator').classList.add('shadow-[0_0_8px_#30D158]');
-
+            // Imposta userId
+            userId = auth.currentUser?.uid || "user_local_fallback";
+            
+            // UI setup
             const h = new Date().getHours();
             document.getElementById('welcomeText').textContent = h < 12 ? "Buongiorno" : h < 18 ? "Buon pomeriggio" : "Buonasera";
             document.getElementById('dateText').textContent = new Date().toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' });
@@ -426,55 +419,60 @@
             document.getElementById('formNewTx').addEventListener('submit', handleTxSubmit);
             document.getElementById('formPrompt').addEventListener('submit', handlePromptSubmit);
 
-            setupFirestoreListeners();
+            setupDatabaseListeners();
         }
 
-        function setupFirestoreListeners() {
+        function setupDatabaseListeners() {
             if (!userId) return;
 
-            const txCol = collection(db, 'artifacts', appId, 'users', userId, 'transactions');
-            onSnapshot(query(txCol), (snapshot) => {
+            // Ascolta Transazioni in Realtime
+            const txRef = ref(db, `artifacts/${appId}/users/${userId}/transactions`);
+            onValue(txRef, (snapshot) => {
                 transactions = [];
-                snapshot.forEach(docSnap => {
-                    transactions.push({ id: docSnap.id, ...docSnap.data() });
+                document.getElementById('syncIndicator').className = "w-2 h-2 rounded-full bg-ios-green inline-block shadow-[0_0_8px_rgba(48,209,88,0.8)]";
+                
+                snapshot.forEach(child => {
+                    transactions.push({ id: child.key, ...child.val() });
                 });
+                
                 transactions.sort((a,b) => b.date.localeCompare(a.date));
                 renderEverything();
-            }, (err) => console.error("Error fetching transactions:", err));
+            }, (error) => {
+                console.error("DB Error Transazioni:", error);
+                document.getElementById('syncIndicator').className = "w-2 h-2 rounded-full bg-ios-red inline-block";
+            });
 
-            const stateDocRef = doc(db, 'artifacts', appId, 'users', userId, 'settings', 'appState');
-            onSnapshot(stateDocRef, (docSnap) => {
-                if (docSnap.exists()) {
-                    appState = { ...appState, ...docSnap.data() };
+            // Ascolta Stato App in Realtime
+            const stateRef = ref(db, `artifacts/${appId}/users/${userId}/settings/appState`);
+            onValue(stateRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    appState = snapshot.val();
+                    if (!appState.budgets) appState.budgets = { Casa: 700, Spesa: 400, Trasporti: 200, Svago: 150, Salute: 100, Altro: 50 };
+                    if (!appState.subs) appState.subs = [];
+                    if (!appState.goals) appState.goals = [];
                 } else {
-                    saveStateStore();
+                    saveStateStore(); // Inizializza se non esiste
                 }
                 renderEverything();
-            }, (err) => console.error("Error fetching state:", err));
+            });
         }
 
         async function saveTxStore(t) {
             if (!userId) return;
-            // Optimistic Update
-            transactions.unshift(t);
-            transactions.sort((a,b) => b.date.localeCompare(a.date));
-            renderEverything();
-
             try {
-                await setDoc(doc(db, 'artifacts', appId, 'users', userId, 'transactions', t.id), t);
+                // Utilizza 'set' su un ref specifico del database realtime
+                await set(ref(db, `artifacts/${appId}/users/${userId}/transactions/${t.id}`), t);
             } catch (err) {
                 console.error("Save tx error:", err);
-                // Rollback if needed
+                alert("Errore salvataggio. Controlla le regole Firebase Realtime Database.");
             }
         }
 
         async function deleteTxStore(id) {
             if (!userId) return;
-            transactions = transactions.filter(t => t.id !== id);
-            renderEverything();
-
             try {
-                await deleteDoc(doc(db, 'artifacts', appId, 'users', userId, 'transactions', id));
+                // Rimuovi dal realtime db
+                await remove(ref(db, `artifacts/${appId}/users/${userId}/transactions/${id}`));
             } catch (err) {
                 console.error("Delete tx error:", err);
             }
@@ -483,196 +481,19 @@
         async function saveStateStore() {
             if (!userId) return;
             try {
-                await setDoc(doc(db, 'artifacts', appId, 'users', userId, 'settings', 'appState'), appState);
+                await set(ref(db, `artifacts/${appId}/users/${userId}/settings/appState`), appState);
             } catch (err) {
                 console.error("Save state error:", err);
             }
         }
 
         function renderEverything() {
-            applyDashboardLayout();
             renderStats();
-            renderAiInsights();
             renderDonutChart();
             renderTransactions();
+            renderBudgets();
             renderGoals();
-        }
-
-        function applyDashboardLayout() {
-            const container = document.getElementById('dynamicDashboardContainer');
-            const order = appState.sectionOrder || Object.keys(SECTION_NAMES);
-            const hidden = appState.sectionHidden || [];
-
-            order.forEach(key => {
-                const el = document.getElementById(`sec-${key}`);
-                if (el) {
-                    if (hidden.includes(key)) {
-                        el.classList.add('hidden');
-                    } else {
-                        el.classList.remove('hidden');
-                        container.appendChild(el);
-                    }
-                }
-            });
-        }
-
-        window.openCustomizerModal = function() {
-            const list = document.getElementById('customizerSectionsList');
-            const order = appState.sectionOrder || Object.keys(SECTION_NAMES);
-            const hidden = appState.sectionHidden || [];
-
-            list.innerHTML = order.map((key, idx) => {
-                const name = SECTION_NAMES[key] || key;
-                const isHidden = hidden.includes(key);
-                return `
-                    <div class="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5">
-                        <div class="flex items-center gap-4">
-                            <div class="flex flex-col gap-1">
-                                <button type="button" onclick="moveSectionIndex('${key}', -1)" class="text-ios-gray hover:text-white"><i class="ph-fill ph-caret-up"></i></button>
-                                <button type="button" onclick="moveSectionIndex('${key}', 1)" class="text-ios-gray hover:text-white"><i class="ph-fill ph-caret-down"></i></button>
-                            </div>
-                            <span class="font-semibold text-[15px] text-white">${escapeHtml(name)}</span>
-                        </div>
-                        <button type="button" onclick="toggleSectionHidden('${key}')" class="w-12 h-7 rounded-full transition-colors relative ${isHidden ? 'bg-white/20' : 'bg-ios-green'}">
-                            <span class="absolute top-1 w-5 h-5 rounded-full bg-white transition-all shadow-sm ${isHidden ? 'left-1' : 'left-6'}"></span>
-                        </button>
-                    </div>
-                `;
-            }).join('');
-
-            document.getElementById('modalCustomizer').showModal();
-        }
-
-        window.moveSectionIndex = function(key, dir) {
-            let order = [...(appState.sectionOrder || Object.keys(SECTION_NAMES))];
-            let idx = order.indexOf(key);
-            if (idx < 0) return;
-            let targetIdx = idx + dir;
-            if (targetIdx < 0 || targetIdx >= order.length) return;
-            
-            let temp = order[idx];
-            order[idx] = order[targetIdx];
-            order[targetIdx] = temp;
-
-            appState.sectionOrder = order;
-            openCustomizerModal();
-        }
-
-        window.toggleSectionHidden = function(key) {
-            let hidden = [...(appState.sectionHidden || [])];
-            if (hidden.includes(key)) {
-                hidden = hidden.filter(k => k !== key);
-            } else {
-                hidden.push(key);
-            }
-            appState.sectionHidden = hidden;
-            openCustomizerModal();
-        }
-
-        window.saveDashboardCustomization = async function() {
-            await saveStateStore();
-            closeModal('modalCustomizer');
-            renderEverything();
-        }
-
-        window.handleSmartCategoryPredict = function(val) {
-            const text = val.toLowerCase();
-            let matchedCat = null;
-
-            for (const [cat, keywords] of Object.entries(AI_KEYWORDS)) {
-                if (keywords.some(kw => text.includes(kw))) {
-                    matchedCat = cat;
-                    break;
-                }
-            }
-
-            const select = document.getElementById('txCat');
-            const badge = document.getElementById('aiCategoryBadge');
-
-            if (matchedCat && (currentTxType === 'out' ? OUT_CATS.includes(matchedCat) : IN_CATS.includes(matchedCat))) {
-                select.value = matchedCat;
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-            }
-        }
-
-        function renderAiInsights() {
-            const container = document.getElementById('aiInsightsContainer');
-            if (!container) return;
-            const currentMonthStr = isoDate(new Date()).substring(0, 7);
-
-            let mOut = 0;
-            let currentSpendByCat = {};
-
-            transactions.forEach(t => {
-                if (t.amount < 0 && t.date.substring(0, 7) === currentMonthStr) {
-                    mOut += Math.abs(t.amount);
-                    currentSpendByCat[t.cat] = (currentSpendByCat[t.cat] || 0) + Math.abs(t.amount);
-                }
-            });
-
-            let insights = [];
-            
-            // Insight base generato localmente per efficienza
-            if (mOut > 0) {
-                let maxCat = Object.keys(currentSpendByCat).reduce((a, b) => currentSpendByCat[a] > currentSpendByCat[b] ? a : b);
-                insights.push(`La tua spesa maggiore questo mese è in <strong class="text-white">${maxCat}</strong> con ${formatEur(currentSpendByCat[maxCat])}.`);
-            } else {
-                insights.push(`Non hai ancora registrato uscite in questo mese. Ottimo inizio!`);
-            }
-
-            container.innerHTML = insights.map(txt => `
-                <div class="p-4 rounded-2xl bg-ios-purple/10 border border-ios-purple/20 text-[14px] text-ios-lightGray flex items-start gap-3">
-                    <i class="ph-fill ph-magic-wand text-lg text-ios-purple shrink-0 mt-0.5"></i>
-                    <span>${txt}</span>
-                </div>
-            `).join('');
-        }
-
-        window.askGeminiFinancialAdvice = async function() {
-            const inputEl = document.getElementById('aiChatInput');
-            const respEl = document.getElementById('aiChatResponse');
-            const btnEl = document.getElementById('aiSendBtn');
-            const query = inputEl.value.trim();
-
-            if (!query) return;
-
-            btnEl.disabled = true;
-            btnEl.innerHTML = '<i class="ph ph-spinner animate-spin"></i>';
-            respEl.classList.remove('hidden');
-            respEl.innerHTML = '<span class="animate-pulse">Siri sta analizzando...</span>';
-
-            let totalBal = transactions.reduce((s, t) => s + t.amount, 0);
-            let totalOut = transactions.filter(t => t.amount < 0).reduce((s, t) => s + Math.abs(t.amount), 0);
-
-            const systemPrompt = "Sei Apple Intelligence, integrato nell'app Finanze. Rispondi in modo conciso, elegante e utile in italiano. Agisci come un assistente finanziario esperto iOS.";
-            const userContext = `Dati utente: Saldo ${totalBal}€, Uscite tot ${totalOut}€. Domanda: ${query}`;
-
-            try {
-                const apiKey = "";
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-                
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: userContext }] }],
-                        systemInstruction: { parts: [{ text: systemPrompt }] }
-                    })
-                });
-
-                const result = await response.json();
-                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
-                respEl.innerHTML = text ? text.replace(/\n/g, '<br>') : "Spiacente, non ho potuto elaborare la richiesta.";
-            } catch (err) {
-                console.error("AI Error:", err);
-                respEl.textContent = "Errore di connessione ai servizi cloud.";
-            } finally {
-                btnEl.disabled = false;
-                btnEl.textContent = 'Chiedi';
-                inputEl.value = '';
-            }
+            renderSubs();
         }
 
         function renderStats() {
@@ -695,7 +516,6 @@
         function renderDonutChart() {
             const svg = document.getElementById('donutChartSvg');
             const legend = document.getElementById('donutLegendContainer');
-            const totalText = document.getElementById('donutTotalText');
             if (!svg || !legend) return;
 
             const currentMonthStr = isoDate(new Date()).substring(0, 7);
@@ -704,16 +524,17 @@
 
             transactions.forEach(t => {
                 if (t.amount < 0 && t.date.substring(0, 7) === currentMonthStr) {
-                    spendMap[t.cat] = (spendMap[t.cat] || 0) + Math.abs(t.amount);
+                    const c = t.cat;
+                    spendMap[c] = (spendMap[c] || 0) + Math.abs(t.amount);
                     totalOut += Math.abs(t.amount);
                 }
             });
 
-            totalText.textContent = formatEur(totalOut).replace(',00','');
+            document.getElementById('donutTotalText').textContent = formatEur(totalOut).replace(',00','');
 
             if (totalOut === 0) {
-                svg.innerHTML = `<circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="12"/>`;
-                legend.innerHTML = `<p class="text-[13px] text-ios-gray py-4">Nessuna spesa da analizzare.</p>`;
+                svg.innerHTML = `<circle cx="50" cy="50" r="38" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="14"/>`;
+                legend.innerHTML = `<p class="text-sm text-ios-gray py-4">Nessuna uscita questo mese.</p>`;
                 return;
             }
 
@@ -723,26 +544,26 @@
 
             for (const [cat, amount] of Object.entries(spendMap)) {
                 const pct = (amount / totalOut) * 100;
-                const colorHex = CATS[cat]?.hex || "#8E8E93";
                 const strokeDasharray = `${pct} ${100 - pct}`;
                 const strokeDashoffset = -cumulativePercent;
+                const colorHex = CATS[cat]?.hex || "#8E8E93";
 
                 svgHTML += `
-                    <circle cx="50" cy="50" r="40" fill="none" stroke="${colorHex}" stroke-width="14"
+                    <circle cx="50" cy="50" r="38" fill="none" stroke="${colorHex}" stroke-width="14"
                         stroke-dasharray="${strokeDasharray}" stroke-dashoffset="${strokeDashoffset}"
-                        class="transition-all duration-1000 ease-out" pathLength="100" stroke-linecap="round">
+                        class="donut-segment" pathLength="100">
                     </circle>
                 `;
 
                 legendHTML += `
-                    <div class="flex items-center justify-between text-[14px] p-3 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-md">
-                        <div class="flex items-center gap-3 font-semibold text-white">
+                    <div class="flex items-center justify-between text-sm p-3 rounded-xl bg-white/5 border border-white/5">
+                        <div class="flex items-center gap-2.5 font-semibold text-white">
                             <span class="w-3 h-3 rounded-full shadow-sm" style="background-color: ${colorHex}"></span>
-                            <span>${cat}</span>
+                            ${cat}
                         </div>
-                        <div class="text-right">
+                        <div class="text-right flex items-center gap-2">
                             <span class="font-bold text-white">${formatEur(amount)}</span>
-                            <span class="text-ios-gray ml-1 text-[12px]">${pct.toFixed(0)}%</span>
+                            <span class="text-ios-gray text-xs w-10 text-right">${pct.toFixed(0)}%</span>
                         </div>
                     </div>
                 `;
@@ -750,7 +571,7 @@
                 cumulativePercent += pct;
             }
 
-            svg.innerHTML = `<g transform="rotate(-90 50 50)">${svgHTML}</g>`;
+            svg.innerHTML = svgHTML;
             legend.innerHTML = legendHTML;
         }
 
@@ -759,9 +580,11 @@
             ['all', 'in', 'out'].forEach(f => {
                 const btn = document.getElementById(`filter${f.charAt(0).toUpperCase() + f.slice(1)}`);
                 if (btn) {
-                    btn.className = f === filter 
-                        ? "flex-1 sm:flex-initial px-4 py-1.5 text-[13px] font-semibold rounded-lg bg-white text-black shadow-sm transition-all"
-                        : "flex-1 sm:flex-initial px-4 py-1.5 text-[13px] font-semibold rounded-lg text-ios-gray hover:text-white transition-all";
+                    if (f === filter) {
+                        btn.className = "flex-1 sm:flex-initial px-4 py-1.5 text-xs font-semibold rounded-full bg-white text-black shadow transition-all";
+                    } else {
+                        btn.className = "flex-1 sm:flex-initial px-4 py-1.5 text-xs font-semibold rounded-full text-ios-lightgray hover:text-white transition-all";
+                    }
                 }
             });
             renderTransactions();
@@ -775,7 +598,7 @@
             if (currentFilter === 'out') list = transactions.filter(t => t.amount < 0);
 
             if (list.length === 0) {
-                container.innerHTML = `<div class="text-center py-8 text-ios-gray text-[14px] font-medium">Nessuna transazione trovata.</div>`;
+                container.innerHTML = `<div class="text-center py-6 text-ios-gray text-sm font-medium">Nessuna transazione trovata.</div>`;
                 return;
             }
 
@@ -783,62 +606,144 @@
                 const cInfo = CATS[t.cat] || CATS["Altro"];
                 const isPos = t.amount > 0;
                 return `
-                    <div class="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-md">
+                    <div class="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-[1rem] flex items-center justify-center text-xl text-white shadow-md" style="background-color: ${cInfo.hex}">
-                                <i class="ph-fill ${cInfo.icon}"></i>
+                            <div class="w-12 h-12 rounded-full glass-pill flex items-center justify-center ${cInfo.color}">
+                                <i class="ph ${cInfo.icon} text-xl"></i>
                             </div>
                             <div>
-                                <p class="font-bold text-[15px] text-white">${escapeHtml(t.desc)}</p>
-                                <p class="text-[12px] text-ios-gray font-medium">${t.cat} &bull; ${new Date(t.date).toLocaleDateString('it-IT', { day: '2-digit', month: 'short' })}</p>
+                                <p class="font-bold text-sm text-white">${escapeHtml(t.desc)}</p>
+                                <p class="text-xs text-ios-gray font-medium mt-0.5">${t.cat} &bull; ${new Date(t.date).toLocaleDateString('it-IT', { day: '2-digit', month: 'short' })}</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-3">
-                            <div class="font-bold text-[16px] ${isPos ? 'text-ios-green' : 'text-white'} text-right tracking-tight">
+                            <div class="font-bold text-base ${isPos ? 'text-ios-green' : 'text-white'} text-right">
                                 ${isPos ? '+' : ''}${formatEur(t.amount)}
                             </div>
-                            <button onclick="deleteTx('${t.id}')" class="text-ios-gray hover:text-ios-red p-1.5 transition-colors"><i class="ph-fill ph-trash-simple text-xl"></i></button>
+                            <button onclick="deleteTx('${t.id}')" class="w-8 h-8 rounded-full bg-white/5 flex justify-center items-center text-ios-gray hover:text-ios-red hover:bg-ios-red/20 transition-colors"><i class="ph ph-trash text-sm"></i></button>
                         </div>
                     </div>
                 `;
             }).join('');
         }
 
+        function renderBudgets() {
+            const container = document.getElementById('budgetListContainer');
+            if (!container) return;
+            const currentMonthStr = isoDate(new Date()).substring(0, 7);
+            let spendMap = {};
+
+            transactions.forEach(t => {
+                if (t.amount < 0 && t.date.substring(0, 7) === currentMonthStr) {
+                    spendMap[t.cat] = (spendMap[t.cat] || 0) + Math.abs(t.amount);
+                }
+            });
+
+            container.innerHTML = OUT_CATS.map(cat => {
+                const limit = appState.budgets?.[cat] || 0;
+                const spent = spendMap[cat] || 0;
+                const pct = limit > 0 ? Math.min(100, (spent / limit) * 100) : (spent > 0 ? 100 : 0);
+                const isOver = spent > limit && limit > 0;
+                const cInfo = CATS[cat] || { icon: "ph-tag", color: "text-ios-blue", bg: "bg-ios-blue" };
+
+                return `
+                    <div class="p-5 rounded-2xl bg-white/5 border border-white/5">
+                        <div class="flex justify-between items-center mb-3">
+                            <div class="flex items-center gap-2.5 font-bold text-sm text-white">
+                                <i class="ph ${cInfo.icon} ${cInfo.color} text-lg"></i> ${cat}
+                            </div>
+                            <div class="text-sm font-bold ${isOver ? 'text-ios-red' : 'text-ios-lightgray'}">
+                                ${formatEur(spent)} <span class="text-ios-gray font-normal mx-1">/</span>
+                                <input type="number" min="0" value="${limit}" onchange="updateBudgetLimit('${cat}', this.value)" class="w-16 bg-transparent border-b border-white/20 text-right text-white focus:outline-none focus:border-ios-blue text-sm">
+                            </div>
+                        </div>
+                        <div class="h-2.5 rounded-full bg-black/50 overflow-hidden shadow-inner">
+                            <div class="h-full rounded-full transition-all duration-700 ${isOver ? 'bg-ios-red' : cInfo.bg}" style="width: ${pct}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        window.updateBudgetLimit = function(cat, val) {
+            appState.budgets[cat] = Math.max(0, parseFloat(val) || 0);
+            saveStateStore();
+        }
+
         function renderGoals() {
             const container = document.getElementById('goalsListContainer');
             if (!container) return;
             if (!appState.goals || appState.goals.length === 0) {
-                container.innerHTML = `<div class="col-span-2 text-center py-6 text-ios-gray text-[14px]">Nessun obiettivo. Tocca Nuovo per iniziare.</div>`;
+                container.innerHTML = `<div class="text-center py-4 text-ios-gray text-sm">Nessun obiettivo. Premi Aggiungi.</div>`;
                 return;
             }
 
             container.innerHTML = appState.goals.map(g => {
                 let pct = Math.min(100, (g.s / g.t) * 100);
                 return `
-                    <div class="p-5 rounded-[1.5rem] bg-white/5 border border-white/5 space-y-4 backdrop-blur-md relative overflow-hidden">
-                        <div class="absolute top-0 right-0 w-24 h-24 bg-ios-blue/10 blur-2xl rounded-full -mr-10 -mt-10 pointer-events-none"></div>
+                    <div class="p-5 rounded-2xl bg-white/5 border border-white/5 space-y-4">
                         <div class="flex justify-between items-start">
                             <div>
-                                <h4 class="font-bold text-[16px] text-white">${escapeHtml(g.n)}</h4>
-                                <p class="text-[12px] text-ios-gray mt-0.5">Obiettivo: ${formatEur(g.t)}</p>
+                                <h4 class="font-bold text-base text-white">${escapeHtml(g.n)}</h4>
+                                <div class="flex items-center gap-2 mt-1.5">
+                                    <input type="number" min="0" max="${g.t}" value="${g.s}" onchange="updateGoalSaved('${g.id}', this.value)" class="w-24 bg-black/60 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white font-bold focus:outline-none focus:ring-1 focus:ring-ios-blue">
+                                    <span class="text-xs text-ios-gray font-medium">su ${formatEur(g.t)}</span>
+                                </div>
                             </div>
-                            <button onclick="deleteGoal('${g.id}')" class="text-ios-gray hover:text-ios-red p-1 z-10"><i class="ph-fill ph-trash-simple text-lg"></i></button>
+                            <button onclick="deleteGoal('${g.id}')" class="w-8 h-8 rounded-full bg-white/5 flex justify-center items-center text-ios-gray hover:text-ios-red hover:bg-ios-red/20 transition-colors"><i class="ph ph-trash text-sm"></i></button>
                         </div>
-                        <div>
-                            <div class="flex justify-between text-[12px] font-semibold mb-2">
-                                <span class="text-white">Risparmiato: ${formatEur(g.s)}</span>
-                                <span class="text-ios-blue">${pct.toFixed(0)}%</span>
-                            </div>
-                            <div class="h-2.5 rounded-full bg-white/10 overflow-hidden shadow-inner">
-                                <div class="h-full rounded-full bg-ios-blue" style="width: ${pct}%"></div>
-                            </div>
-                        </div>
-                        <div class="pt-1 z-10 relative">
-                             <input type="number" min="0" max="${g.t}" value="${g.s}" onchange="updateGoalSaved('${g.id}', this.value)" class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-[14px] text-white focus:outline-none focus:border-ios-blue transition-colors text-center" placeholder="Aggiorna salvataggio">
+                        <div class="h-3 rounded-full bg-black/50 overflow-hidden shadow-inner relative">
+                            <div class="h-full rounded-full bg-ios-blue transition-all duration-700" style="width: ${pct}%"></div>
+                            <span class="absolute right-2 top-0 text-[9px] font-bold text-white/50 leading-3">${pct.toFixed(0)}%</span>
                         </div>
                     </div>
                 `;
             }).join('');
+        }
+
+        window.updateGoalSaved = async function(id, val) {
+            let g = appState.goals.find(x => x.id === id);
+            if (g) {
+                g.s = Math.max(0, parseFloat(val) || 0);
+                await saveStateStore();
+            }
+        }
+
+        window.saveNewGoal = function(n, a) {
+            appState.goals.push({ id: uid(), n, t: a, s: 0 });
+        }
+        window.deleteGoal = async function(id) {
+            appState.goals = appState.goals.filter(g => g.id !== id);
+            await saveStateStore();
+        }
+
+        function renderSubs() {
+            const container = document.getElementById('subsListContainer');
+            if (container) {
+                let subTotal = 0;
+                const subs = appState.subs || [];
+                container.innerHTML = subs.length === 0 ? `<p class="text-sm text-ios-gray py-2 text-center">Nessun abbonamento.</p>` : subs.map(s => {
+                    subTotal += s.a;
+                    return `
+                        <div class="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                            <span class="font-bold text-sm text-white">${escapeHtml(s.n)}</span>
+                            <div class="flex items-center gap-4">
+                                <span class="font-bold text-white">${formatEur(s.a)}</span>
+                                <button onclick="deleteSub('${s.id}')" class="text-ios-gray hover:text-ios-red"><i class="ph ph-trash text-lg"></i></button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                document.getElementById('subsTotalText').textContent = `${formatEur(subTotal)} / mese`;
+            }
+        }
+
+        window.saveNewSub = function(n, a) {
+            appState.subs.push({ id: uid(), n, a });
+        }
+        window.deleteSub = async function(id) {
+            appState.subs = appState.subs.filter(s => s.id !== id);
+            await saveStateStore();
         }
 
         window.openNewTxModal = function() {
@@ -846,7 +751,6 @@
             document.getElementById('txDesc').value = '';
             document.getElementById('txAmount').value = '';
             document.getElementById('txDate').value = isoDate(new Date());
-            document.getElementById('aiCategoryBadge').classList.add('hidden');
             document.getElementById('modalNewTx').showModal();
         }
 
@@ -857,13 +761,13 @@
             const selectCat = document.getElementById('txCat');
 
             if (type === 'out') {
-                tabOut.className = "flex-1 py-2 text-[13px] font-bold rounded-lg bg-white text-black shadow-sm transition-all";
-                tabIn.className = "flex-1 py-2 text-[13px] font-semibold rounded-lg text-ios-gray hover:text-white transition-all bg-transparent";
-                selectCat.innerHTML = OUT_CATS.map(c => `<option value="${c}" style="background:#1c1c1e">${c}</option>`).join('');
+                tabOut.className = "flex-1 py-2.5 text-sm font-bold rounded-lg bg-white text-black transition-all shadow";
+                tabIn.className = "flex-1 py-2.5 text-sm font-bold rounded-lg text-ios-gray hover:text-white transition-all";
+                selectCat.innerHTML = OUT_CATS.map(c => `<option value="${c}" style="background:#000">${c}</option>`).join('');
             } else {
-                tabIn.className = "flex-1 py-2 text-[13px] font-bold rounded-lg bg-white text-black shadow-sm transition-all";
-                tabOut.className = "flex-1 py-2 text-[13px] font-semibold rounded-lg text-ios-gray hover:text-white transition-all bg-transparent";
-                selectCat.innerHTML = IN_CATS.map(c => `<option value="${c}" style="background:#1c1c1e">${c}</option>`).join('');
+                tabIn.className = "flex-1 py-2.5 text-sm font-bold rounded-lg bg-white text-black transition-all shadow";
+                tabOut.className = "flex-1 py-2.5 text-sm font-bold rounded-lg text-ios-gray hover:text-white transition-all";
+                selectCat.innerHTML = IN_CATS.map(c => `<option value="${c}" style="background:#000">${c}</option>`).join('');
             }
         }
 
@@ -874,10 +778,10 @@
             let date = document.getElementById('txDate').value;
             let cat = document.getElementById('txCat').value;
 
-            if (desc && amount > 0 && date && userId) {
+            if (desc && amount > 0 && date) {
                 const newTx = { id: uid(), desc, amount: currentTxType === 'out' ? -amount : amount, cat, date };
                 closeModal('modalNewTx');
-                await saveTxStore(newTx); // Salva su DB e aggiorna UI
+                await saveTxStore(newTx); // Salva su Realtime DB
             }
         }
 
@@ -901,25 +805,6 @@
             if (n && a > 0 && activePromptCb) {
                 activePromptCb(n, a);
                 closeModal('modalPrompt');
-                await saveStateStore();
-            }
-        }
-
-        window.saveNewGoal = function(n, a) {
-            if (!appState.goals) appState.goals = [];
-            appState.goals.push({ id: uid(), n, t: a, s: 0 });
-            renderGoals(); // optimistic
-        }
-        window.deleteGoal = async function(id) {
-            appState.goals = appState.goals.filter(g => g.id !== id);
-            renderGoals(); // optimistic
-            await saveStateStore();
-        }
-        window.updateGoalSaved = async function(id, val) {
-            let g = appState.goals.find(x => x.id === id);
-            if (g) {
-                g.s = Math.max(0, parseFloat(val) || 0);
-                renderGoals(); // optimistic
                 await saveStateStore();
             }
         }

@@ -132,8 +132,8 @@
     <!-- Barra laterale (Desktop) -->
     <aside class="hidden md:flex flex-col w-72 h-screen sticky top-0 bg-black/40 backdrop-blur-3xl border-r border-ios-border z-20 p-6">
         <div class="flex items-center gap-3.5 mb-8">
-            <div class="w-12 h-12 rounded-2xl glass-pill flex items-center justify-center text-ios-blue shadow-[0_0_30px_rgba(10,132,255,0.3)]">
-                <i class="ph-fill ph-apple-logo text-2xl"></i>
+            <div class="w-12 h-12 rounded-2xl glass-pill flex items-center justify-center text-2xl shadow-[0_0_30px_rgba(10,132,255,0.3)]">
+                💼
             </div>
             <div>
                 <h1 class="text-lg font-bold tracking-tight text-white">Finanze Pro</h1>
@@ -146,25 +146,25 @@
         <nav class="space-y-1 flex-1">
             <p class="text-[10px] font-semibold text-ios-gray uppercase tracking-widest mb-3 px-3">Menu</p>
             <a href="#sec-dash" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-white bg-white/10 transition-all">
-                <i class="ph ph-squares-four text-xl text-ios-blue"></i> Dashboard
+                <span class="text-xl">📊</span> Dashboard
             </a>
             <a href="#sec-analytics" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-ios-gray hover:text-white hover:bg-white/5 transition-all">
-                <i class="ph ph-chart-pie-slice text-xl"></i> Grafici & Statistiche
+                <span class="text-xl">📈</span> Grafici & Statistiche
             </a>
             <a href="#sec-tx" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-ios-gray hover:text-white hover:bg-white/5 transition-all">
-                <i class="ph ph-list-dashes text-xl"></i> Cronologia
+                <span class="text-xl">🕰️</span> Cronologia
             </a>
             <a href="#sec-bud" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-ios-gray hover:text-white hover:bg-white/5 transition-all">
-                <i class="ph ph-wallet text-xl"></i> Budget Categorie
+                <span class="text-xl">💳</span> Budget Categorie
             </a>
             <a href="#sec-cats" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-ios-gray hover:text-white hover:bg-white/5 transition-all">
-                <i class="ph ph-tag text-xl"></i> Categorie Personalizzate
+                <span class="text-xl">🏷️</span> Categorie Personalizzate
             </a>
             <a href="#sec-goals" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-ios-gray hover:text-white hover:bg-white/5 transition-all">
-                <i class="ph ph-target text-xl"></i> Obiettivi
+                <span class="text-xl">🎯</span> Obiettivi
             </a>
             <a href="#sec-subs" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-ios-gray hover:text-white hover:bg-white/5 transition-all">
-                <i class="ph ph-calendar-check text-xl"></i> Abbonamenti
+                <span class="text-xl">🔄</span> Abbonamenti
             </a>
         </nav>
     </aside>
@@ -175,11 +175,11 @@
         <!-- Header -->
         <header class="glass-panel p-6 flex justify-between items-center">
             <div>
-                <h2 class="text-2xl font-bold tracking-tight text-white" id="welcomeText">Bentornato</h2>
+                <h2 class="text-2xl font-bold tracking-tight text-white" id="welcomeText">Bentornato 👋</h2>
                 <p class="text-sm text-ios-gray mt-0.5 capitalize font-medium" id="dateText"></p>
             </div>
             <button onclick="openNewTxModal()" class="flex items-center gap-2 bg-white text-black px-5 py-3 rounded-full font-bold transition-all hover:scale-105 active:scale-95 text-sm shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-                <i class="ph ph-plus text-lg font-bold"></i> <span class="hidden sm:inline">Nuova</span>
+                <span class="text-lg">✍️</span> <span class="hidden sm:inline">Nuova</span>
             </button>
         </header>
 
@@ -190,15 +190,15 @@
             <section id="sec-dash" class="space-y-4 scroll-mt-6">
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div class="glass-panel p-6 space-y-1">
-                        <span class="text-xs text-ios-gray font-semibold">Saldo Totale</span>
+                        <span class="text-xs text-ios-gray font-semibold">💰 Saldo Totale</span>
                         <div class="text-3xl font-bold tracking-tight text-white" id="statBalance">€ 0,00</div>
                     </div>
                     <div class="glass-panel p-6 space-y-1">
-                        <span class="text-xs text-ios-gray font-semibold">Entrate Mese</span>
+                        <span class="text-xs text-ios-gray font-semibold">📥 Entrate Mese</span>
                         <div class="text-2xl font-bold tracking-tight text-ios-green" id="statIncome">€ 0,00</div>
                     </div>
                     <div class="glass-panel p-6 space-y-1">
-                        <span class="text-xs text-ios-gray font-semibold">Uscite Mese</span>
+                        <span class="text-xs text-ios-gray font-semibold">📤 Uscite Mese</span>
                         <div class="text-2xl font-bold tracking-tight text-white" id="statExpense">€ 0,00</div>
                     </div>
                 </div>
@@ -209,7 +209,7 @@
                 <!-- Grafico Donut -->
                 <div class="glass-panel p-6 space-y-6">
                     <div>
-                        <h3 class="font-bold text-lg text-white">Spese per Categoria</h3>
+                        <h3 class="font-bold text-lg text-white">📊 Spese per Categoria</h3>
                         <p class="text-sm text-ios-gray">Riepilogo del mese corrente</p>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
@@ -229,7 +229,7 @@
             <section id="sec-tx" class="glass-panel p-6 space-y-5 scroll-mt-6">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     <div>
-                        <h3 class="font-bold text-lg text-white">Ultime Transazioni</h3>
+                        <h3 class="font-bold text-lg text-white">🕰️ Ultime Transazioni</h3>
                     </div>
                     <div class="flex bg-white/10 p-1 rounded-full w-full sm:w-auto">
                         <button onclick="filterTransactions('all')" id="filterAll" class="flex-1 sm:flex-initial px-4 py-1.5 text-xs font-semibold rounded-full bg-white text-black shadow transition-all">Tutte</button>
@@ -244,7 +244,7 @@
             <section id="sec-bud" class="glass-panel p-6 space-y-5 scroll-mt-6">
                 <div class="flex justify-between items-center">
                     <div>
-                        <h3 class="font-bold text-lg text-white">Budget Mensili</h3>
+                        <h3 class="font-bold text-lg text-white">💳 Budget Mensili</h3>
                         <p class="text-sm text-ios-gray">Monitora i tuoi limiti di spesa</p>
                     </div>
                 </div>
@@ -255,7 +255,7 @@
             <section id="sec-cats" class="glass-panel p-6 space-y-5 scroll-mt-6">
                 <div class="flex justify-between items-center">
                     <div>
-                        <h3 class="font-bold text-lg text-white">Categorie</h3>
+                        <h3 class="font-bold text-lg text-white">🏷️ Categorie</h3>
                         <p class="text-sm text-ios-gray">Gestisci, modifica ed elimina</p>
                     </div>
                     <button onclick="openAddCategoryModal()" class="bg-white/10 px-4 py-2 rounded-full text-xs font-bold text-white hover:bg-white/20 transition-all">
@@ -269,7 +269,7 @@
             <section id="sec-goals" class="glass-panel p-6 space-y-5 scroll-mt-6">
                 <div class="flex justify-between items-center">
                     <div>
-                        <h3 class="font-bold text-lg text-white">Obiettivi di Risparmio</h3>
+                        <h3 class="font-bold text-lg text-white">🎯 Obiettivi di Risparmio</h3>
                     </div>
                     <button onclick="openPromptModal('Nuovo Obiettivo', 'Nome obiettivo', 'Importo da raggiungere', saveNewGoal)" class="bg-white/10 px-4 py-2 rounded-full text-xs font-bold text-white hover:bg-white/20 transition-all">
                         Aggiungi
@@ -282,7 +282,7 @@
             <section id="sec-subs" class="glass-panel p-6 space-y-5 scroll-mt-6">
                 <div class="flex justify-between items-center">
                     <div>
-                        <h3 class="font-bold text-lg text-white">Abbonamenti</h3>
+                        <h3 class="font-bold text-lg text-white">🔄 Abbonamenti</h3>
                         <p class="text-sm text-ios-gray" id="subsTotalText">€ 0,00 / mese</p>
                     </div>
                     <button onclick="openPromptModal('Nuovo Abbonamento', 'Nome servizio', 'Costo mensile', saveNewSub)" class="bg-white/10 px-4 py-2 rounded-full text-xs font-bold text-white hover:bg-white/20 transition-all">
@@ -296,20 +296,20 @@
 
     <!-- Navigazione "Dynamic Island" Mobile -->
     <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 dynamic-island-nav z-50 px-6 py-3 flex gap-6 items-center shadow-2xl">
-        <a href="#sec-dash" class="flex flex-col items-center text-white hover:scale-110 transition-transform">
-            <i class="ph-fill ph-squares-four text-2xl"></i>
+        <a href="#sec-dash" class="flex flex-col items-center text-white hover:scale-110 transition-transform text-xl">
+            📊
         </a>
-        <a href="#sec-analytics" class="flex flex-col items-center text-ios-gray hover:text-white hover:scale-110 transition-transform">
-            <i class="ph-fill ph-chart-pie-slice text-2xl"></i>
+        <a href="#sec-analytics" class="flex flex-col items-center opacity-70 hover:opacity-100 hover:scale-110 transition-all text-xl">
+            📈
         </a>
-        <a href="#sec-cats" class="flex flex-col items-center text-ios-gray hover:text-white hover:scale-110 transition-transform">
-            <i class="ph-fill ph-tag text-2xl"></i>
+        <a href="#sec-cats" class="flex flex-col items-center opacity-70 hover:opacity-100 hover:scale-110 transition-all text-xl">
+            🏷️
         </a>
-        <a href="#sec-goals" class="flex flex-col items-center text-ios-gray hover:text-white hover:scale-110 transition-transform">
-            <i class="ph-fill ph-target text-2xl"></i>
+        <a href="#sec-goals" class="flex flex-col items-center opacity-70 hover:opacity-100 hover:scale-110 transition-all text-xl">
+            🎯
         </a>
-        <a href="#sec-tx" class="flex flex-col items-center text-ios-gray hover:text-white hover:scale-110 transition-transform">
-            <i class="ph-fill ph-list-dashes text-2xl"></i>
+        <a href="#sec-tx" class="flex flex-col items-center opacity-70 hover:opacity-100 hover:scale-110 transition-all text-xl">
+            🕰️
         </a>
     </nav>
 
@@ -475,7 +475,7 @@
             
             // UI setup
             const h = new Date().getHours();
-            document.getElementById('welcomeText').textContent = h < 12 ? "Buongiorno" : h < 18 ? "Buon pomeriggio" : "Buonasera";
+            document.getElementById('welcomeText').textContent = h < 12 ? "Buongiorno ☀️" : h < 18 ? "Buon pomeriggio ☕" : "Buonasera 🌙";
             document.getElementById('dateText').textContent = new Date().toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' });
             document.getElementById('txDate').value = isoDate(new Date());
 

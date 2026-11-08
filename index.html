@@ -20,7 +20,7 @@
                     colors: {
                         ios: {
                             bg: '#000000',
-                            card: 'rgba(28, 28, 30, 0.6)',
+                            card: 'rgba(28, 28, 30, 0.65)',
                             border: 'rgba(255, 255, 255, 0.1)',
                             blue: '#0A84FF',
                             green: '#30D158',
@@ -37,6 +37,11 @@
         }
     </script>
     <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
             background-color: #000000;
             color: #FFFFFF;
@@ -45,7 +50,7 @@
             scroll-behavior: smooth;
         }
 
-        /* Effetto Apple Intelligence Glow */
+        /* Sfondo animato rifinito */
         .ambient-glow {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -57,44 +62,43 @@
         .glow-orb {
             position: absolute;
             border-radius: 50%;
-            filter: blur(100px);
-            opacity: 0.25;
-            animation: pulseGlow 15s infinite alternate ease-in-out;
+            filter: blur(120px);
+            opacity: 0.2;
+            animation: pulseGlow 18s infinite alternate ease-in-out;
         }
-        .orb-1 { width: 70vw; height: 70vw; top: -10%; left: -10%; background: radial-gradient(circle, rgba(10,132,255,0.6) 0%, transparent 70%); }
-        .orb-2 { width: 60vw; height: 60vw; bottom: -10%; right: -10%; background: radial-gradient(circle, rgba(191,90,242,0.4) 0%, transparent 70%); animation-delay: -5s; }
-        .orb-3 { width: 50vw; height: 50vw; top: 40%; left: 30%; background: radial-gradient(circle, rgba(48,209,88,0.2) 0%, transparent 70%); animation-delay: -10s; }
+        .orb-1 { width: 80vw; height: 80vw; top: -10%; left: -20%; background: radial-gradient(circle, rgba(10,132,255,0.5) 0%, transparent 70%); }
+        .orb-2 { width: 70vw; height: 70vw; bottom: -10%; right: -20%; background: radial-gradient(circle, rgba(191,90,242,0.35) 0%, transparent 70%); animation-delay: -6s; }
 
         @keyframes pulseGlow {
             0% { transform: scale(1) translate(0, 0); }
-            100% { transform: scale(1.1) translate(30px, -30px); }
+            100% { transform: scale(1.1) translate(20px, -20px); }
         }
 
-        /* Glassmorphism in stile iOS */
+        /* Pannelli Glassmorphism geometrici e puliti */
         .glass-panel {
-            background: rgba(28, 28, 30, 0.45);
+            background: rgba(28, 28, 30, 0.55);
             backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px);
-            border: 0.5px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            border-radius: 24px;
+            border: 0.5px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+            border-radius: 28px;
         }
 
         .glass-pill {
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 0.5px solid rgba(255, 255, 255, 0.05);
+            border: 0.5px solid rgba(255, 255, 255, 0.06);
         }
 
-        /* Dynamic Island Menu Nav */
+        /* Dynamic Island Menu Mobile */
         .dynamic-island-nav {
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(10, 10, 12, 0.9);
             backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px);
-            border: 0.5px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-            border-radius: 40px;
+            border: 0.5px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.85);
+            border-radius: 36px;
         }
 
         input[type="number"]::-webkit-inner-spin-button,
@@ -102,11 +106,11 @@
 
         ::-webkit-scrollbar { width: 0px; background: transparent; }
 
-        dialog { background: transparent; margin: auto; border: none; outline: none; }
+        dialog { background: transparent; margin: auto; border: none; outline: none; width: 100%; max-width: 390px; padding: 16px; }
         dialog::backdrop {
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
         }
 
         .donut-segment {
@@ -114,298 +118,293 @@
             cursor: pointer;
         }
         .donut-segment:hover {
-            opacity: 0.8;
+            opacity: 0.85;
             transform: scale(1.03);
             transform-origin: center;
         }
     </style>
 </head>
-<body class="flex flex-col md:flex-row min-h-screen selection:bg-ios-blue selection:text-white pb-28 md:pb-8">
+<body class="flex flex-col md:flex-row min-h-screen selection:bg-ios-blue selection:text-white pb-32 md:pb-12">
 
-    <!-- Sfondo animato -->
+    <!-- Sfondo luminoso dinamico -->
     <div class="ambient-glow">
         <div class="glow-orb orb-1"></div>
         <div class="glow-orb orb-2"></div>
-        <div class="glow-orb orb-3"></div>
     </div>
 
     <!-- Barra laterale (Desktop) -->
-    <aside class="hidden md:flex flex-col w-72 h-screen sticky top-0 bg-black/40 backdrop-blur-3xl border-r border-ios-border z-20 p-6">
-        <div class="flex items-center gap-3.5 mb-8">
+    <aside class="hidden md:flex flex-col w-72 h-screen sticky top-0 bg-black/50 backdrop-blur-3xl border-r border-ios-border z-20 p-6">
+        <div class="flex items-center gap-3.5 mb-10">
             <div class="w-12 h-12 rounded-2xl glass-pill flex items-center justify-center text-2xl shadow-[0_0_30px_rgba(10,132,255,0.3)]">
                 💼
             </div>
             <div>
                 <h1 class="text-lg font-bold tracking-tight text-white">Finanze Pro</h1>
                 <p class="text-[11px] text-ios-gray font-medium flex items-center gap-1.5 mt-0.5">
-                    <span id="syncIndicator" class="w-2 h-2 rounded-full bg-ios-gray inline-block"></span> Sincronizzato con iCloud
+                    <span id="syncIndicator" class="w-2 h-2 rounded-full bg-ios-gray inline-block"></span> iCloud Protetto
                 </p>
             </div>
         </div>
 
-        <nav class="space-y-1 flex-1">
+        <nav class="space-y-1.5 flex-1">
             <p class="text-[10px] font-semibold text-ios-gray uppercase tracking-widest mb-3 px-3">Menu</p>
-            <a href="#sec-dash" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-white bg-white/10 transition-all">
+            <a href="#sec-dash" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-white bg-white/10 transition-all">
                 <span class="text-xl">📊</span> Dashboard
             </a>
-            <a href="#sec-analytics" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-ios-gray hover:text-white hover:bg-white/5 transition-all">
+            <a href="#sec-analytics" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-ios-gray hover:text-white hover:bg-white/5 transition-all">
                 <span class="text-xl">📈</span> Grafici & Statistiche
             </a>
-            <a href="#sec-tx" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-ios-gray hover:text-white hover:bg-white/5 transition-all">
+            <a href="#sec-tx" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-ios-gray hover:text-white hover:bg-white/5 transition-all">
                 <span class="text-xl">🕰️</span> Cronologia
             </a>
-            <a href="#sec-bud" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-ios-gray hover:text-white hover:bg-white/5 transition-all">
+            <a href="#sec-bud" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-ios-gray hover:text-white hover:bg-white/5 transition-all">
                 <span class="text-xl">💳</span> Budget Categorie
             </a>
-            <a href="#sec-cats" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-ios-gray hover:text-white hover:bg-white/5 transition-all">
-                <span class="text-xl">🏷️</span> Categorie Personalizzate
+            <a href="#sec-cats" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-ios-gray hover:text-white hover:bg-white/5 transition-all">
+                <span class="text-xl">🏷️</span> Categorie
             </a>
-            <a href="#sec-goals" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-ios-gray hover:text-white hover:bg-white/5 transition-all">
+            <a href="#sec-goals" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-ios-gray hover:text-white hover:bg-white/5 transition-all">
                 <span class="text-xl">🎯</span> Obiettivi
             </a>
-            <a href="#sec-subs" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-ios-gray hover:text-white hover:bg-white/5 transition-all">
+            <a href="#sec-subs" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-ios-gray hover:text-white hover:bg-white/5 transition-all">
                 <span class="text-xl">🔄</span> Abbonamenti
             </a>
         </nav>
     </aside>
 
-    <!-- Contenuto Principale -->
-    <main class="flex-1 max-w-3xl w-full mx-auto p-4 sm:p-8 space-y-6">
+    <!-- Contenuto Principale Ottimizzato Smartphone -->
+    <main class="flex-1 max-w-xl w-full mx-auto px-4 sm:px-6 pt-5 pb-8 space-y-6">
         
-        <!-- Header -->
-        <header class="glass-panel p-6 flex justify-between items-center">
-            <div>
-                <h2 class="text-2xl font-bold tracking-tight text-white" id="welcomeText">Bentornato 👋</h2>
-                <p class="text-sm text-ios-gray mt-0.5 capitalize font-medium" id="dateText"></p>
+        <!-- Header Centrale & Ordinato -->
+        <header class="glass-panel p-6 sm:p-8 text-center flex flex-col items-center justify-center space-y-3 shadow-2xl">
+            <div class="space-y-1">
+                <h2 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white" id="welcomeText">Bentornato 👋</h2>
+                <p class="text-xs sm:text-sm text-ios-gray capitalize font-medium tracking-wide" id="dateText"></p>
             </div>
-            <button onclick="openNewTxModal()" class="flex items-center gap-2 bg-white text-black px-5 py-3 rounded-full font-bold transition-all hover:scale-105 active:scale-95 text-sm shadow-[0_0_20px_rgba(255,255,255,0.2)]">
-                <span class="text-lg">✍️</span> <span class="hidden sm:inline">Nuova</span>
+            <button onclick="openNewTxModal()" class="w-full sm:w-auto mt-2 flex items-center justify-center gap-2.5 bg-white text-black px-6 py-3.5 rounded-2xl font-bold transition-all active:scale-95 text-sm shadow-[0_4px_25px_rgba(255,255,255,0.25)]">
+                <span class="text-lg">✍️</span> <span>Nuova Registrazione</span>
             </button>
         </header>
 
-        <!-- CONTAINER SEZIONI -->
+        <!-- CONTAINER SEZIONI GEOMETRICHE -->
         <div id="dynamicDashboardContainer" class="space-y-6">
             
-            <!-- SEZIONE DASH: SALDO -->
+            <!-- SEZIONE DASH: SALDO & FLUSSI -->
             <section id="sec-dash" class="space-y-4 scroll-mt-6">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-                    <div class="glass-panel p-5 space-y-1">
-                        <span class="text-xs text-ios-gray font-semibold">💶 Contanti</span>
-                        <div class="text-2xl font-bold tracking-tight text-white" id="statCashBalance">€ 0,00</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="glass-panel p-6 text-center space-y-2">
+                        <span class="text-xs text-ios-gray font-bold uppercase tracking-wider">📈 Entrate del Mese</span>
+                        <div class="text-3xl font-black tracking-tight text-ios-green" id="statIncome">€ 0,00</div>
                     </div>
-                    <div class="glass-panel p-5 space-y-1">
-                        <span class="text-xs text-ios-gray font-semibold">💳 Revolut</span>
-                        <div class="text-2xl font-bold tracking-tight text-white" id="statRevolutBalance">€ 0,00</div>
+                    <div class="glass-panel p-6 text-center space-y-2">
+                        <span class="text-xs text-ios-gray font-bold uppercase tracking-wider">📉 Uscite del Mese</span>
+                        <div class="text-3xl font-black tracking-tight text-ios-red" id="statExpense">€ 0,00</div>
                     </div>
-                    <div class="glass-panel p-5 space-y-1">
-                        <span class="text-xs text-ios-gray font-semibold">💰 Saldo Totale</span>
-                        <div class="text-2xl font-bold tracking-tight text-ios-blue" id="statBalance">€ 0,00</div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="glass-panel p-5 text-center space-y-1.5">
+                        <span class="text-[11px] text-ios-gray font-bold uppercase tracking-wider">💶 Contanti</span>
+                        <div class="text-xl font-bold tracking-tight text-white" id="statCashBalance">€ 0,00</div>
                     </div>
-                    <div class="glass-panel p-5 space-y-1">
-                        <span class="text-xs text-ios-gray font-semibold">📈 Entrate Mese</span>
-                        <div class="text-2xl font-bold tracking-tight text-ios-green" id="statIncome">€ 0,00</div>
+                    <div class="glass-panel p-5 text-center space-y-1.5">
+                        <span class="text-[11px] text-ios-gray font-bold uppercase tracking-wider">💳 Revolut</span>
+                        <div class="text-xl font-bold tracking-tight text-white" id="statRevolutBalance">€ 0,00</div>
                     </div>
-                    <div class="glass-panel p-5 space-y-1">
-                        <span class="text-xs text-ios-gray font-semibold">📉 Uscite Mese</span>
-                        <div class="text-2xl font-bold tracking-tight text-ios-red" id="statExpense">€ 0,00</div>
+                    <div class="glass-panel p-5 text-center space-y-1.5">
+                        <span class="text-[11px] text-ios-gray font-bold uppercase tracking-wider">💰 Saldo Totale</span>
+                        <div class="text-2xl font-black tracking-tight text-ios-blue" id="statBalance">€ 0,00</div>
                     </div>
                 </div>
             </section>
 
             <!-- SEZIONE ANALISI E GRAFICI -->
-            <section id="sec-analytics" class="space-y-4 scroll-mt-6">
-                <!-- Grafico Donut -->
-                <div class="glass-panel p-6 space-y-6">
-                    <div>
-                        <h3 class="font-bold text-lg text-white">📊 Spese per Categoria</h3>
-                        <p class="text-sm text-ios-gray">Riepilogo del mese corrente</p>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
-                        <div class="relative flex justify-center items-center py-2">
-                            <svg class="w-48 h-48" viewBox="0 0 100 100" id="donutChartSvg"></svg>
-                            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center">
-                                <span class="text-xs text-ios-gray font-medium">Uscite</span>
-                                <span class="text-lg font-bold text-white mt-1" id="donutTotalText">€ 0</span>
-                            </div>
+            <section id="sec-analytics" class="glass-panel p-6 sm:p-8 space-y-6 scroll-mt-6 text-center">
+                <div>
+                    <h3 class="font-extrabold text-xl text-white tracking-tight">📊 Spese per Categoria</h3>
+                    <p class="text-xs sm:text-sm text-ios-gray mt-0.5">Riepilogo analitico del mese corrente</p>
+                </div>
+                <div class="flex flex-col items-center justify-center space-y-6">
+                    <div class="relative flex justify-center items-center py-2">
+                        <svg class="w-52 h-52" viewBox="0 0 100 100" id="donutChartSvg"></svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center">
+                            <span class="text-[11px] text-ios-gray font-bold uppercase tracking-wider">Uscite</span>
+                            <span class="text-lg font-extrabold text-white mt-0.5" id="donutTotalText">€ 0</span>
                         </div>
-                        <div class="space-y-2.5" id="donutLegendContainer"></div>
                     </div>
+                    <div class="w-full space-y-2.5" id="donutLegendContainer"></div>
                 </div>
             </section>
 
             <!-- TRANSAZIONI RECENTI -->
-            <section id="sec-tx" class="glass-panel p-6 space-y-5 scroll-mt-6">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                    <div>
-                        <h3 class="font-bold text-lg text-white">🕰️ Ultime Transazioni</h3>
-                    </div>
-                    <div class="flex bg-white/10 p-1 rounded-full w-full sm:w-auto">
-                        <button onclick="filterTransactions('all')" id="filterAll" class="flex-1 sm:flex-initial px-4 py-1.5 text-xs font-semibold rounded-full bg-white text-black shadow transition-all">Tutte</button>
-                        <button onclick="filterTransactions('in')" id="filterIn" class="flex-1 sm:flex-initial px-4 py-1.5 text-xs font-semibold rounded-full text-ios-lightgray hover:text-white transition-all">Entrate</button>
-                        <button onclick="filterTransactions('out')" id="filterOut" class="flex-1 sm:flex-initial px-4 py-1.5 text-xs font-semibold rounded-full text-ios-lightgray hover:text-white transition-all">Uscite</button>
+            <section id="sec-tx" class="glass-panel p-6 sm:p-8 space-y-6 scroll-mt-6">
+                <div class="flex flex-col items-center text-center space-y-3">
+                    <h3 class="font-extrabold text-xl text-white tracking-tight">🕰️ Ultime Transazioni</h3>
+                    <div class="flex bg-white/10 p-1 rounded-full w-full max-w-xs">
+                        <button onclick="filterTransactions('all')" id="filterAll" class="flex-1 py-2 text-xs font-bold rounded-full bg-white text-black shadow transition-all">Tutte</button>
+                        <button onclick="filterTransactions('in')" id="filterIn" class="flex-1 py-2 text-xs font-bold rounded-full text-ios-lightgray hover:text-white transition-all">Entrate</button>
+                        <button onclick="filterTransactions('out')" id="filterOut" class="flex-1 py-2 text-xs font-bold rounded-full text-ios-lightgray hover:text-white transition-all">Uscite</button>
                     </div>
                 </div>
-                <div class="space-y-3 pt-1" id="transactionsListContainer"></div>
+                <div class="space-y-3 pt-2" id="transactionsListContainer"></div>
             </section>
 
             <!-- BUDGET CATEGORIE -->
-            <section id="sec-bud" class="glass-panel p-6 space-y-5 scroll-mt-6">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h3 class="font-bold text-lg text-white">💳 Budget Mensili</h3>
-                        <p class="text-sm text-ios-gray">Monitora i tuoi limiti di spesa</p>
-                    </div>
+            <section id="sec-bud" class="glass-panel p-6 sm:p-8 space-y-6 scroll-mt-6">
+                <div class="text-center space-y-1">
+                    <h3 class="font-extrabold text-xl text-white tracking-tight">💳 Budget Mensili</h3>
+                    <p class="text-xs sm:text-sm text-ios-gray">Limiti di spesa pianificati</p>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1" id="budgetListContainer"></div>
             </section>
 
             <!-- GESTIONE CATEGORIE -->
-            <section id="sec-cats" class="glass-panel p-6 space-y-5 scroll-mt-6">
-                <div class="flex justify-between items-center">
+            <section id="sec-cats" class="glass-panel p-6 sm:p-8 space-y-6 scroll-mt-6">
+                <div class="flex flex-col items-center text-center space-y-3">
                     <div>
-                        <h3 class="font-bold text-lg text-white">🏷️ Categorie</h3>
-                        <p class="text-sm text-ios-gray">Gestisci, modifica ed elimina</p>
+                        <h3 class="font-extrabold text-xl text-white tracking-tight">🏷️ Gestione Categorie</h3>
+                        <p class="text-xs sm:text-sm text-ios-gray mt-0.5">Personalizza o elimina le voci</p>
                     </div>
-                    <button onclick="openAddCategoryModal()" class="bg-white/10 px-4 py-2 rounded-full text-xs font-bold text-white hover:bg-white/20 transition-all">
-                        Aggiungi
+                    <button onclick="openAddCategoryModal()" class="glass-pill px-5 py-2.5 rounded-full text-xs font-bold text-white hover:bg-white/20 transition-all shadow">
+                        + Nuova Categoria
                     </button>
                 </div>
-                <div class="space-y-3 pt-1" id="manageCatsListContainer"></div>
+                <div class="space-y-3 pt-2" id="manageCatsListContainer"></div>
             </section>
 
             <!-- OBIETTIVI -->
-            <section id="sec-goals" class="glass-panel p-6 space-y-5 scroll-mt-6">
-                <div class="flex justify-between items-center">
+            <section id="sec-goals" class="glass-panel p-6 sm:p-8 space-y-6 scroll-mt-6">
+                <div class="flex flex-col items-center text-center space-y-3">
                     <div>
-                        <h3 class="font-bold text-lg text-white">🎯 Obiettivi di Risparmio</h3>
+                        <h3 class="font-extrabold text-xl text-white tracking-tight">🎯 Obiettivi di Risparmio</h3>
+                        <p class="text-xs sm:text-sm text-ios-gray mt-0.5">Traguardi finanziari futuri</p>
                     </div>
-                    <button onclick="openPromptModal('Nuovo Obiettivo', 'Nome obiettivo', 'Importo da raggiungere', saveNewGoal)" class="bg-white/10 px-4 py-2 rounded-full text-xs font-bold text-white hover:bg-white/20 transition-all">
-                        Aggiungi
+                    <button onclick="openPromptModal('Nuovo Obiettivo', 'Nome obiettivo', 'Importo da raggiungere', saveNewGoal)" class="glass-pill px-5 py-2.5 rounded-full text-xs font-bold text-white hover:bg-white/20 transition-all shadow">
+                        + Nuovo Obiettivo
                     </button>
                 </div>
-                <div class="space-y-4 pt-1" id="goalsListContainer"></div>
+                <div class="space-y-4 pt-2" id="goalsListContainer"></div>
             </section>
 
             <!-- ABBONAMENTI -->
-            <section id="sec-subs" class="glass-panel p-6 space-y-5 scroll-mt-6">
-                <div class="flex justify-between items-center">
+            <section id="sec-subs" class="glass-panel p-6 sm:p-8 space-y-6 scroll-mt-6">
+                <div class="flex flex-col items-center text-center space-y-3">
                     <div>
-                        <h3 class="font-bold text-lg text-white">🔄 Abbonamenti</h3>
-                        <p class="text-sm text-ios-gray" id="subsTotalText">€ 0,00 / mese</p>
+                        <h3 class="font-extrabold text-xl text-white tracking-tight">🔄 Abbonamenti Fissi</h3>
+                        <p class="text-xs sm:text-sm text-ios-gray mt-0.5" id="subsTotalText">€ 0,00 / mese</p>
                     </div>
-                    <button onclick="openPromptModal('Nuovo Abbonamento', 'Nome servizio', 'Costo mensile', saveNewSub)" class="bg-white/10 px-4 py-2 rounded-full text-xs font-bold text-white hover:bg-white/20 transition-all">
-                        Aggiungi
+                    <button onclick="openPromptModal('Nuovo Abbonamento', 'Nome servizio', 'Costo mensile', saveNewSub)" class="glass-pill px-5 py-2.5 rounded-full text-xs font-bold text-white hover:bg-white/20 transition-all shadow">
+                        + Nuovo Abbonamento
                     </button>
                 </div>
-                <div class="space-y-3 pt-1" id="subsListContainer"></div>
+                <div class="space-y-3 pt-2" id="subsListContainer"></div>
             </section>
         </div>
     </main>
 
-    <!-- Navigazione "Dynamic Island" Mobile -->
-    <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 dynamic-island-nav z-50 px-6 py-3 flex gap-6 items-center shadow-2xl">
-        <a href="#sec-dash" class="flex flex-col items-center text-white hover:scale-110 transition-transform text-xl">
+    <!-- Navigazione "Dynamic Island" Mobile Centrata -->
+    <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 dynamic-island-nav z-50 px-6 py-3.5 flex gap-7 items-center shadow-2xl">
+        <a href="#sec-dash" class="flex flex-col items-center text-white hover:scale-110 transition-transform text-2xl">
             📊
         </a>
-        <a href="#sec-analytics" class="flex flex-col items-center opacity-70 hover:opacity-100 hover:scale-110 transition-all text-xl">
+        <a href="#sec-analytics" class="flex flex-col items-center opacity-70 hover:opacity-100 hover:scale-110 transition-all text-2xl">
             📈
         </a>
-        <a href="#sec-cats" class="flex flex-col items-center opacity-70 hover:opacity-100 hover:scale-110 transition-all text-xl">
+        <a href="#sec-cats" class="flex flex-col items-center opacity-70 hover:opacity-100 hover:scale-110 transition-all text-2xl">
             🏷️
         </a>
-        <a href="#sec-goals" class="flex flex-col items-center opacity-70 hover:opacity-100 hover:scale-110 transition-all text-xl">
+        <a href="#sec-goals" class="flex flex-col items-center opacity-70 hover:opacity-100 hover:scale-110 transition-all text-2xl">
             🎯
         </a>
-        <a href="#sec-tx" class="flex flex-col items-center opacity-70 hover:opacity-100 hover:scale-110 transition-all text-xl">
+        <a href="#sec-tx" class="flex flex-col items-center opacity-70 hover:opacity-100 hover:scale-110 transition-all text-2xl">
             🕰️
         </a>
     </nav>
 
-    <!-- MODALE: Nuova Transazione -->
-    <dialog id="modalNewTx" class="w-full max-w-sm p-4">
+    <!-- MODALE: Nuova Transazione (Stile iOS Nativo) -->
+    <dialog id="modalNewTx">
         <div class="glass-panel p-6 relative shadow-2xl space-y-5 rounded-3xl">
-            <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-white">Nuova Registrazione</h3>
-                <button onclick="closeModal('modalNewTx')" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-ios-gray hover:text-white"><i class="ph ph-x text-lg"></i></button>
+            <div class="flex justify-between items-center text-center mb-1">
+                <h3 class="text-lg font-bold text-white w-full">Nuova Registrazione</h3>
+                <button onclick="closeModal('modalNewTx')" class="absolute right-5 top-5 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-ios-gray hover:text-white"><i class="ph ph-x text-base"></i></button>
             </div>
 
-            <div class="flex bg-black/50 p-1 rounded-xl">
-                <button type="button" id="tabOut" class="flex-1 py-2.5 text-sm font-bold rounded-lg bg-ios-red text-white transition-all shadow" onclick="setTxModalType('out')">Uscita</button>
-                <button type="button" id="tabIn" class="flex-1 py-2.5 text-sm font-bold rounded-lg text-ios-gray hover:text-white transition-all" onclick="setTxModalType('in')">Entrata</button>
+            <div class="flex bg-black/60 p-1 rounded-xl">
+                <button type="button" id="tabOut" class="flex-1 py-3 text-sm font-bold rounded-lg bg-ios-red text-white transition-all shadow" onclick="setTxModalType('out')">Uscita</button>
+                <button type="button" id="tabIn" class="flex-1 py-3 text-sm font-bold rounded-lg text-ios-gray hover:text-white transition-all" onclick="setTxModalType('in')">Entrata</button>
             </div>
 
             <form id="formNewTx" class="space-y-4">
-                <div class="bg-[#1c1c1e] rounded-xl overflow-hidden border border-white/5">
-                    <div class="flex items-center px-4 py-3.5 border-b border-white/5">
-                        <span class="w-1/3 text-sm text-white font-medium">Titolo</span>
-                        <input type="text" id="txDesc" required placeholder="Es. Spesa..." class="w-2/3 bg-transparent text-right text-white placeholder-ios-gray focus:outline-none text-base">
+                <div class="bg-[#1c1c1e] rounded-2xl overflow-hidden border border-white/5 text-sm">
+                    <div class="flex items-center px-4 py-4 border-b border-white/5">
+                        <span class="w-1/3 text-white font-medium">Titolo</span>
+                        <input type="text" id="txDesc" required placeholder="Es. Spesa..." class="w-2/3 bg-transparent text-right text-white placeholder-ios-gray focus:outline-none text-sm font-semibold">
                     </div>
-                    <div class="flex items-center px-4 py-3.5 border-b border-white/5">
-                        <span class="w-1/3 text-sm text-white font-medium">Importo</span>
+                    <div class="flex items-center px-4 py-4 border-b border-white/5">
+                        <span class="w-1/3 text-white font-medium">Importo</span>
                         <div class="w-2/3 flex items-center justify-end">
                             <span class="text-ios-gray mr-1">€</span>
-                            <input type="number" id="txAmount" required min="0.01" step="0.01" placeholder="0.00" class="bg-transparent text-right text-white placeholder-ios-gray focus:outline-none text-base w-full">
+                            <input type="number" id="txAmount" required min="0.01" step="0.01" placeholder="0.00" class="bg-transparent text-right text-white placeholder-ios-gray focus:outline-none text-sm font-semibold w-full">
                         </div>
                     </div>
-                    <div class="flex items-center px-4 py-3.5 border-b border-white/5">
-                        <span class="w-1/3 text-sm text-white font-medium">Fonte</span>
-                        <select id="txAccount" class="w-2/3 bg-transparent text-right text-ios-blue focus:outline-none text-base appearance-none pr-2">
+                    <div class="flex items-center px-4 py-4 border-b border-white/5">
+                        <span class="w-1/3 text-white font-medium">Fonte</span>
+                        <select id="txAccount" class="w-2/3 bg-transparent text-right text-ios-blue focus:outline-none text-sm font-semibold appearance-none pr-2">
                             <option value="Revolut" style="background:#000">💳 Revolut</option>
                             <option value="Contanti" style="background:#000">💶 Contanti</option>
                         </select>
                     </div>
-                    <div class="flex items-center px-4 py-3.5 border-b border-white/5">
-                        <span class="w-1/3 text-sm text-white font-medium">Data</span>
-                        <input type="date" id="txDate" required class="w-2/3 bg-transparent text-right text-ios-blue focus:outline-none text-base appearance-none" style="color-scheme: dark;">
+                    <div class="flex items-center px-4 py-4 border-b border-white/5">
+                        <span class="w-1/3 text-white font-medium">Data</span>
+                        <input type="date" id="txDate" required class="w-2/3 bg-transparent text-right text-ios-blue focus:outline-none text-sm font-semibold appearance-none" style="color-scheme: dark;">
                     </div>
-                    <div class="flex items-center px-4 py-3.5 relative">
-                        <span class="w-1/3 text-sm text-white font-medium">Categoria</span>
-                        <select id="txCat" class="w-2/3 bg-transparent text-right text-ios-blue focus:outline-none text-base appearance-none pl-4 pr-5"></select>
-                        <i class="ph ph-caret-up-down text-ios-gray absolute right-4 pointer-events-none text-xs"></i>
+                    <div class="flex items-center px-4 py-4 relative">
+                        <span class="w-1/3 text-white font-medium">Categoria</span>
+                        <select id="txCat" class="w-2/3 bg-transparent text-right text-ios-blue focus:outline-none text-sm font-semibold appearance-none pr-2"></select>
                     </div>
                 </div>
-                <button type="submit" class="w-full bg-ios-blue text-white font-bold py-3.5 rounded-xl transition-all hover:bg-blue-600 text-base shadow-lg">Salva Transazione</button>
+                <button type="submit" class="w-full bg-ios-blue text-white font-bold py-4 rounded-2xl transition-all hover:bg-blue-600 text-base shadow-lg">Salva Transazione</button>
             </form>
         </div>
     </dialog>
 
     <!-- MODALE: Gestione Categoria -->
-    <dialog id="modalCategoryManage" class="w-full max-w-sm p-4">
+    <dialog id="modalCategoryManage">
         <div class="glass-panel p-6 relative shadow-2xl space-y-5 rounded-3xl">
-            <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-white" id="catModalTitle">Nuova Categoria</h3>
-                <button type="button" onclick="closeModal('modalCategoryManage')" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-ios-gray hover:text-white"><i class="ph ph-x text-lg"></i></button>
+            <div class="flex justify-between items-center text-center mb-1">
+                <h3 class="text-lg font-bold text-white w-full" id="catModalTitle">Nuova Categoria</h3>
+                <button type="button" onclick="closeModal('modalCategoryManage')" class="absolute right-5 top-5 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-ios-gray hover:text-white"><i class="ph ph-x text-base"></i></button>
             </div>
             <form id="formCategoryManage" class="space-y-4">
                 <input type="hidden" id="catOldName" value="">
-                <div class="bg-[#1c1c1e] rounded-xl overflow-hidden border border-white/5">
-                    <div class="flex items-center px-4 py-3.5">
-                        <span class="w-1/3 text-sm text-white font-medium">Nome</span>
-                        <input type="text" id="catNewName" required placeholder="Es. Viaggi" class="w-2/3 bg-transparent text-right text-white placeholder-ios-gray focus:outline-none text-base">
+                <div class="bg-[#1c1c1e] rounded-2xl overflow-hidden border border-white/5">
+                    <div class="flex items-center px-4 py-4">
+                        <span class="w-1/3 text-white font-medium text-sm">Nome</span>
+                        <input type="text" id="catNewName" required placeholder="Es. Viaggi" class="w-2/3 bg-transparent text-right text-white placeholder-ios-gray focus:outline-none text-sm font-semibold">
                     </div>
                 </div>
-                <button type="submit" class="w-full bg-ios-blue text-white font-bold py-3.5 rounded-xl transition-all hover:bg-blue-600 text-base shadow-lg">Salva Categoria</button>
+                <button type="submit" class="w-full bg-ios-blue text-white font-bold py-4 rounded-2xl transition-all hover:bg-blue-600 text-base shadow-lg">Salva Categoria</button>
             </form>
         </div>
     </dialog>
 
     <!-- MODALE: Prompt generico -->
-    <dialog id="modalPrompt" class="w-full max-w-sm p-4">
+    <dialog id="modalPrompt">
         <div class="glass-panel p-6 relative shadow-2xl space-y-5 rounded-3xl">
-            <div class="flex justify-between items-center">
-                <h3 class="text-lg font-bold text-white" id="promptTitle">Titolo</h3>
-                <button onclick="closeModal('modalPrompt')" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-ios-gray hover:text-white"><i class="ph ph-x text-lg"></i></button>
+            <div class="flex justify-between items-center text-center mb-1">
+                <h3 class="text-lg font-bold text-white w-full" id="promptTitle">Titolo</h3>
+                <button onclick="closeModal('modalPrompt')" class="absolute right-5 top-5 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-ios-gray hover:text-white"><i class="ph ph-x text-base"></i></button>
             </div>
-            <form id="formPrompt" class="space-y-4">
+            <form id="formPrompt" class="space-y-4 text-left">
                 <div>
-                    <label class="block text-xs font-semibold text-ios-gray mb-1.5" id="promptLabelName">Nome</label>
-                    <input type="text" id="promptName" required class="w-full bg-black/40 rounded-xl px-4 py-3.5 text-base text-white focus:outline-none focus:ring-2 focus:ring-ios-blue border border-white/5">
+                    <label class="block text-xs font-semibold text-ios-gray mb-1.5 ml-1" id="promptLabelName">Nome</label>
+                    <input type="text" id="promptName" required class="w-full bg-[#1c1c1e] rounded-2xl px-4 py-3.5 text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-ios-blue border border-white/5">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-ios-gray mb-1.5" id="promptLabelAmount">Importo</label>
-                    <input type="number" id="promptAmount" required min="0.01" step="0.01" class="w-full bg-black/40 rounded-xl px-4 py-3.5 text-base text-white focus:outline-none focus:ring-2 focus:ring-ios-blue border border-white/5">
+                    <label class="block text-xs font-semibold text-ios-gray mb-1.5 ml-1" id="promptLabelAmount">Importo</label>
+                    <input type="number" id="promptAmount" required min="0.01" step="0.01" class="w-full bg-[#1c1c1e] rounded-2xl px-4 py-3.5 text-sm font-semibold text-white focus:outline-none focus:ring-2 focus:ring-ios-blue border border-white/5">
                 </div>
-                <button type="submit" class="w-full bg-white text-black font-bold py-4 rounded-xl transition-all hover:bg-gray-200 text-base mt-2">Conferma</button>
+                <button type="submit" class="w-full bg-white text-black font-bold py-4 rounded-2xl transition-all hover:bg-gray-200 text-base mt-2 shadow-lg">Conferma</button>
             </form>
         </div>
     </dialog>
@@ -418,7 +417,6 @@
 
         const appId = 'finanze-ios-pro';
         
-        // Uso la config Firebase passata dall'utente (Assicurati che il databaseURL sia esatto)
         const firebaseConfig = {
             apiKey: "AIzaSyBXRuAqeTHsDWvJXkRwJE8OHm1-OKPKXMQ",
             authDomain: "portfolio-2711.firebaseapp.com",
@@ -432,7 +430,7 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getDatabase(app); // Usa Realtime Database
+        const db = getDatabase(app);
 
         const CATS = {
             "Casa": { icon: "ph-house", color: "text-ios-blue", bg: "bg-ios-blue", hex: "#0A84FF" },
@@ -485,10 +483,8 @@
                 console.error("Auth error:", err);
             }
 
-            // Imposta userId
             userId = auth.currentUser?.uid || "user_local_fallback";
             
-            // UI setup
             const h = new Date().getHours();
             document.getElementById('welcomeText').textContent = h < 12 ? "Buongiorno ☀️" : h < 18 ? "Buon pomeriggio ☕" : "Buonasera 🌙";
             document.getElementById('dateText').textContent = new Date().toLocaleDateString('it-IT', { weekday: 'long', day: 'numeric', month: 'long' });
@@ -503,7 +499,6 @@
         function setupDatabaseListeners() {
             if (!userId) return;
 
-            // Ascolta Transazioni in Realtime
             const txRef = ref(db, `artifacts/${appId}/users/${userId}/transactions`);
             onValue(txRef, (snapshot) => {
                 transactions = [];
@@ -520,7 +515,6 @@
                 document.getElementById('syncIndicator').className = "w-2 h-2 rounded-full bg-ios-red inline-block";
             });
 
-            // Ascolta Stato App in Realtime
             const stateRef = ref(db, `artifacts/${appId}/users/${userId}/settings/appState`);
             onValue(stateRef, (snapshot) => {
                 if (snapshot.exists()) {
@@ -531,7 +525,7 @@
                     if (!appState.customOutCats) appState.customOutCats = [...OUT_CATS];
                 } else {
                     appState.customOutCats = [...OUT_CATS];
-                    saveStateStore(); // Inizializza se non esiste
+                    saveStateStore();
                 }
                 renderEverything();
             });
@@ -540,18 +534,15 @@
         async function saveTxStore(t) {
             if (!userId) return;
             try {
-                // Utilizza 'set' su un ref specifico del database realtime
                 await set(ref(db, `artifacts/${appId}/users/${userId}/transactions/${t.id}`), t);
             } catch (err) {
                 console.error("Save tx error:", err);
-                alert("Errore salvataggio. Controlla le regole Firebase Realtime Database.");
             }
         }
 
         async function deleteTxStore(id) {
             if (!userId) return;
             try {
-                // Rimuovi dal realtime db
                 await remove(ref(db, `artifacts/${appId}/users/${userId}/transactions/${id}`));
             } catch (err) {
                 console.error("Delete tx error:", err);
@@ -624,7 +615,7 @@
 
             if (totalOut === 0) {
                 svg.innerHTML = `<circle cx="50" cy="50" r="38" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="14"/>`;
-                legend.innerHTML = `<p class="text-sm text-ios-gray py-4">Nessuna uscita questo mese.</p>`;
+                legend.innerHTML = `<p class="text-xs text-ios-gray py-2">Nessuna uscita questo mese.</p>`;
                 return;
             }
 
@@ -647,13 +638,13 @@
                 `;
 
                 legendHTML += `
-                    <div class="flex items-center justify-between text-sm p-3 rounded-xl bg-white/5 border border-white/5">
-                        <div class="flex items-center gap-2.5 font-semibold text-white">
+                    <div class="flex items-center justify-between text-xs sm:text-sm p-3 rounded-2xl bg-white/5 border border-white/5">
+                        <div class="flex items-center gap-2.5 font-bold text-white">
                             <span class="w-3 h-3 rounded-full shadow-sm" style="background-color: ${colorHex}"></span>
                             ${cat}
                         </div>
                         <div class="text-right flex items-center gap-2">
-                            <span class="font-bold text-white">${formatEur(amount)}</span>
+                            <span class="font-extrabold text-white">${formatEur(amount)}</span>
                             <span class="text-ios-gray text-xs w-10 text-right">${pct.toFixed(0)}%</span>
                         </div>
                     </div>
@@ -672,9 +663,9 @@
                 const btn = document.getElementById(`filter${f.charAt(0).toUpperCase() + f.slice(1)}`);
                 if (btn) {
                     if (f === filter) {
-                        btn.className = "flex-1 sm:flex-initial px-4 py-1.5 text-xs font-semibold rounded-full bg-white text-black shadow transition-all";
+                        btn.className = "flex-1 py-2 text-xs font-bold rounded-full bg-white text-black shadow transition-all";
                     } else {
-                        btn.className = "flex-1 sm:flex-initial px-4 py-1.5 text-xs font-semibold rounded-full text-ios-lightgray hover:text-white transition-all";
+                        btn.className = "flex-1 py-2 text-xs font-bold rounded-full text-ios-lightgray hover:text-white transition-all";
                     }
                 }
             });
@@ -689,7 +680,7 @@
             if (currentFilter === 'out') list = transactions.filter(t => t.amount < 0);
 
             if (list.length === 0) {
-                container.innerHTML = `<div class="text-center py-6 text-ios-gray text-sm font-medium">Nessuna transazione trovata.</div>`;
+                container.innerHTML = `<div class="text-center py-6 text-ios-gray text-xs font-medium">Nessuna transazione trovata.</div>`;
                 return;
             }
 
@@ -699,21 +690,21 @@
                 const accountName = t.account || "Revolut";
                 const accountBadge = accountName === "Contanti" ? "💶 Contanti" : "💳 Revolut";
                 return `
-                    <div class="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
-                        <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 rounded-full glass-pill flex items-center justify-center ${cInfo.color}">
-                                <i class="ph ${cInfo.icon} text-xl"></i>
+                    <div class="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5">
+                        <div class="flex items-center gap-3.5">
+                            <div class="w-11 h-11 rounded-2xl glass-pill flex items-center justify-center ${cInfo.color} shrink-0">
+                                <i class="ph ${cInfo.icon} text-lg"></i>
                             </div>
-                            <div>
+                            <div class="text-left">
                                 <p class="font-bold text-sm text-white">${escapeHtml(t.desc)}</p>
-                                <p class="text-xs text-ios-gray font-medium mt-0.5">${t.cat} &bull; ${accountBadge} &bull; ${new Date(t.date).toLocaleDateString('it-IT', { day: '2-digit', month: 'short' })}</p>
+                                <p class="text-[11px] text-ios-gray font-medium mt-0.5">${t.cat} &bull; ${accountBadge} &bull; ${new Date(t.date).toLocaleDateString('it-IT', { day: '2-digit', month: 'short' })}</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-3">
-                            <div class="font-bold text-base ${isPos ? 'text-ios-green' : 'text-white'} text-right">
+                            <div class="font-black text-sm sm:text-base ${isPos ? 'text-ios-green' : 'text-white'} text-right">
                                 ${isPos ? '+' : ''}${formatEur(t.amount)}
                             </div>
-                            <button onclick="deleteTx('${t.id}')" class="w-8 h-8 rounded-full bg-white/5 flex justify-center items-center text-ios-gray hover:text-ios-red hover:bg-ios-red/20 transition-colors"><i class="ph ph-trash text-sm"></i></button>
+                            <button onclick="deleteTx('${t.id}')" class="w-8 h-8 rounded-full bg-white/5 flex justify-center items-center text-ios-gray hover:text-ios-red hover:bg-ios-red/20 transition-colors shrink-0"><i class="ph ph-trash text-sm"></i></button>
                         </div>
                     </div>
                 `;
@@ -742,14 +733,14 @@
                 const cInfo = getCatInfo(cat);
 
                 return `
-                    <div class="p-5 rounded-2xl bg-white/5 border border-white/5">
-                        <div class="flex justify-between items-center mb-3">
+                    <div class="p-5 rounded-2xl bg-white/5 border border-white/5 space-y-3">
+                        <div class="flex justify-between items-center">
                             <div class="flex items-center gap-2.5 font-bold text-sm text-white">
                                 <i class="ph ${cInfo.icon} ${cInfo.color} text-lg"></i> ${cat}
                             </div>
-                            <div class="text-sm font-bold ${isOver ? 'text-ios-red' : 'text-ios-lightgray'}">
-                                ${formatEur(spent)} <span class="text-ios-gray font-normal mx-1">/</span>
-                                <input type="number" min="0" value="${limit}" onchange="updateBudgetLimit('${cat}', this.value)" class="w-16 bg-transparent border-b border-white/20 text-right text-white focus:outline-none focus:border-ios-blue text-sm">
+                            <div class="text-xs sm:text-sm font-bold ${isOver ? 'text-ios-red' : 'text-ios-lightgray'}">
+                                ${formatEur(spent)} <span class="text-ios-gray font-normal mx-0.5">/</span>
+                                <input type="number" min="0" value="${limit}" onchange="updateBudgetLimit('${cat}', this.value)" class="w-16 bg-transparent border-b border-white/20 text-right text-white focus:outline-none focus:border-ios-blue text-xs sm:text-sm font-bold">
                             </div>
                         </div>
                         <div class="h-2.5 rounded-full bg-black/50 overflow-hidden shadow-inner">
@@ -773,9 +764,9 @@
             container.innerHTML = cats.map(cat => {
                 const cInfo = getCatInfo(cat);
                 return `
-                    <div class="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                    <div class="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full glass-pill flex items-center justify-center ${cInfo.color}">
+                            <div class="w-10 h-10 rounded-2xl glass-pill flex items-center justify-center ${cInfo.color}">
                                 <i class="ph ${cInfo.icon} text-lg"></i>
                             </div>
                             <span class="font-bold text-sm text-white">${escapeHtml(cat)}</span>
@@ -812,7 +803,6 @@
             if(!appState.customOutCats) appState.customOutCats = [...OUT_CATS];
 
             if (oldName) {
-                // Modifica
                 const idx = appState.customOutCats.indexOf(oldName);
                 if(idx > -1) {
                     appState.customOutCats[idx] = newName;
@@ -821,7 +811,6 @@
                         delete appState.budgets[oldName];
                     }
                     
-                    // Aggiorna le transazioni esistenti nel DB Realtime
                     let updates = {};
                     transactions.forEach(t => {
                         if (t.cat === oldName) {
@@ -833,7 +822,6 @@
                     }
                 }
             } else {
-                // Aggiunta
                 if(!appState.customOutCats.includes(newName)) {
                     appState.customOutCats.push(newName);
                     appState.budgets[newName] = 0;
@@ -844,7 +832,6 @@
         });
 
         window.deleteCategory = async function(catName) {
-            // Elimina categoria
             if(!appState.customOutCats) return;
             appState.customOutCats = appState.customOutCats.filter(c => c !== catName);
             if (appState.budgets[catName] !== undefined) {
@@ -857,7 +844,7 @@
             const container = document.getElementById('goalsListContainer');
             if (!container) return;
             if (!appState.goals || appState.goals.length === 0) {
-                container.innerHTML = `<div class="text-center py-4 text-ios-gray text-sm">Nessun obiettivo. Premi Aggiungi.</div>`;
+                container.innerHTML = `<div class="text-center py-4 text-ios-gray text-xs">Nessun obiettivo impostato.</div>`;
                 return;
             }
 
@@ -866,10 +853,10 @@
                 return `
                     <div class="p-5 rounded-2xl bg-white/5 border border-white/5 space-y-4">
                         <div class="flex justify-between items-start">
-                            <div>
-                                <h4 class="font-bold text-base text-white">${escapeHtml(g.n)}</h4>
-                                <div class="flex items-center gap-2 mt-1.5">
-                                    <input type="number" min="0" max="${g.t}" value="${g.s}" onchange="updateGoalSaved('${g.id}', this.value)" class="w-24 bg-black/60 border border-white/10 rounded-lg px-3 py-1.5 text-sm text-white font-bold focus:outline-none focus:ring-1 focus:ring-ios-blue">
+                            <div class="text-left">
+                                <h4 class="font-bold text-sm sm:text-base text-white">${escapeHtml(g.n)}</h4>
+                                <div class="flex items-center gap-2 mt-2">
+                                    <input type="number" min="0" max="${g.t}" value="${g.s}" onchange="updateGoalSaved('${g.id}', this.value)" class="w-24 bg-black/60 border border-white/10 rounded-xl px-3 py-2 text-xs text-white font-bold focus:outline-none focus:ring-1 focus:ring-ios-blue">
                                     <span class="text-xs text-ios-gray font-medium">su ${formatEur(g.t)}</span>
                                 </div>
                             </div>
@@ -877,7 +864,7 @@
                         </div>
                         <div class="h-3 rounded-full bg-black/50 overflow-hidden shadow-inner relative">
                             <div class="h-full rounded-full bg-ios-blue transition-all duration-700" style="width: ${pct}%"></div>
-                            <span class="absolute right-2 top-0 text-[9px] font-bold text-white/50 leading-3">${pct.toFixed(0)}%</span>
+                            <span class="absolute right-2 top-0 text-[9px] font-bold text-white/60 leading-3">${pct.toFixed(0)}%</span>
                         </div>
                     </div>
                 `;
@@ -905,14 +892,14 @@
             if (container) {
                 let subTotal = 0;
                 const subs = appState.subs || [];
-                container.innerHTML = subs.length === 0 ? `<p class="text-sm text-ios-gray py-2 text-center">Nessun abbonamento.</p>` : subs.map(s => {
+                container.innerHTML = subs.length === 0 ? `<p class="text-xs text-ios-gray py-2 text-center">Nessun abbonamento attivo.</p>` : subs.map(s => {
                     subTotal += s.a;
                     return `
-                        <div class="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                        <div class="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5">
                             <span class="font-bold text-sm text-white">${escapeHtml(s.n)}</span>
-                            <div class="flex items-center gap-4">
-                                <span class="font-bold text-white">${formatEur(s.a)}</span>
-                                <button onclick="deleteSub('${s.id}')" class="text-ios-gray hover:text-ios-red"><i class="ph ph-trash text-lg"></i></button>
+                            <div class="flex items-center gap-3">
+                                <span class="font-extrabold text-sm text-white">${formatEur(s.a)}</span>
+                                <button onclick="deleteSub('${s.id}')" class="w-8 h-8 rounded-full bg-white/5 flex justify-center items-center text-ios-gray hover:text-ios-red hover:bg-ios-red/20 transition-colors"><i class="ph ph-trash text-sm"></i></button>
                             </div>
                         </div>
                     `;
@@ -946,12 +933,12 @@
             const catsToRender = appState.customOutCats || OUT_CATS;
 
             if (type === 'out') {
-                tabOut.className = "flex-1 py-2.5 text-sm font-bold rounded-lg bg-white text-black transition-all shadow";
-                tabIn.className = "flex-1 py-2.5 text-sm font-bold rounded-lg text-ios-gray hover:text-white transition-all";
+                tabOut.className = "flex-1 py-3 text-xs sm:text-sm font-bold rounded-lg bg-white text-black transition-all shadow";
+                tabIn.className = "flex-1 py-3 text-xs sm:text-sm font-bold rounded-lg text-ios-gray hover:text-white transition-all";
                 selectCat.innerHTML = catsToRender.map(c => `<option value="${c}" style="background:#000">${c}</option>`).join('');
             } else {
-                tabIn.className = "flex-1 py-2.5 text-sm font-bold rounded-lg bg-white text-black transition-all shadow";
-                tabOut.className = "flex-1 py-2.5 text-sm font-bold rounded-lg text-ios-gray hover:text-white transition-all";
+                tabIn.className = "flex-1 py-3 text-xs sm:text-sm font-bold rounded-lg bg-white text-black transition-all shadow";
+                tabOut.className = "flex-1 py-3 text-xs sm:text-sm font-bold rounded-lg text-ios-gray hover:text-white transition-all";
                 selectCat.innerHTML = IN_CATS.map(c => `<option value="${c}" style="background:#000">${c}</option>`).join('');
             }
         }

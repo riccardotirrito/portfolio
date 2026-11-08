@@ -157,6 +157,9 @@
             <a href="#sec-bud" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-ios-gray hover:text-white hover:bg-white/5 transition-all">
                 <i class="ph ph-wallet text-xl"></i> Budget Categorie
             </a>
+            <a href="#sec-cats" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-ios-gray hover:text-white hover:bg-white/5 transition-all">
+                <i class="ph ph-tag text-xl"></i> Categorie Personalizzate
+            </a>
             <a href="#sec-goals" class="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-ios-gray hover:text-white hover:bg-white/5 transition-all">
                 <i class="ph ph-target text-xl"></i> Obiettivi
             </a>
@@ -248,6 +251,20 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1" id="budgetListContainer"></div>
             </section>
 
+            <!-- GESTIONE CATEGORIE -->
+            <section id="sec-cats" class="glass-panel p-6 space-y-5 scroll-mt-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="font-bold text-lg text-white">Categorie</h3>
+                        <p class="text-sm text-ios-gray">Gestisci, modifica ed elimina</p>
+                    </div>
+                    <button onclick="openAddCategoryModal()" class="bg-white/10 px-4 py-2 rounded-full text-xs font-bold text-white hover:bg-white/20 transition-all">
+                        Aggiungi
+                    </button>
+                </div>
+                <div class="space-y-3 pt-1" id="manageCatsListContainer"></div>
+            </section>
+
             <!-- OBIETTIVI -->
             <section id="sec-goals" class="glass-panel p-6 space-y-5 scroll-mt-6">
                 <div class="flex justify-between items-center">
@@ -285,6 +302,9 @@
         <a href="#sec-analytics" class="flex flex-col items-center text-ios-gray hover:text-white hover:scale-110 transition-transform">
             <i class="ph-fill ph-chart-pie-slice text-2xl"></i>
         </a>
+        <a href="#sec-cats" class="flex flex-col items-center text-ios-gray hover:text-white hover:scale-110 transition-transform">
+            <i class="ph-fill ph-tag text-2xl"></i>
+        </a>
         <a href="#sec-goals" class="flex flex-col items-center text-ios-gray hover:text-white hover:scale-110 transition-transform">
             <i class="ph-fill ph-target text-2xl"></i>
         </a>
@@ -307,21 +327,49 @@
             </div>
 
             <form id="formNewTx" class="space-y-4">
-                <div>
-                    <input type="text" id="txDesc" required placeholder="Titolo (Es. Spesa Conad...)" class="w-full bg-black/40 rounded-xl px-4 py-3.5 text-base text-white placeholder-ios-gray focus:outline-none focus:ring-2 focus:ring-ios-blue border border-white/5 transition-all">
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <input type="number" id="txAmount" required min="0.01" step="0.01" placeholder="Importo €" class="w-full bg-black/40 rounded-xl px-4 py-3.5 text-base text-white placeholder-ios-gray focus:outline-none focus:ring-2 focus:ring-ios-blue border border-white/5 transition-all">
+                <div class="bg-[#1c1c1e] rounded-xl overflow-hidden border border-white/5">
+                    <div class="flex items-center px-4 py-3.5 border-b border-white/5">
+                        <span class="w-1/3 text-sm text-white font-medium">Titolo</span>
+                        <input type="text" id="txDesc" required placeholder="Es. Spesa..." class="w-2/3 bg-transparent text-right text-white placeholder-ios-gray focus:outline-none text-base">
                     </div>
-                    <div>
-                        <input type="date" id="txDate" required class="w-full bg-black/40 rounded-xl px-4 py-3.5 text-base text-white focus:outline-none focus:ring-2 focus:ring-ios-blue border border-white/5 transition-all" style="color-scheme: dark;">
+                    <div class="flex items-center px-4 py-3.5 border-b border-white/5">
+                        <span class="w-1/3 text-sm text-white font-medium">Importo</span>
+                        <div class="w-2/3 flex items-center justify-end">
+                            <span class="text-ios-gray mr-1">€</span>
+                            <input type="number" id="txAmount" required min="0.01" step="0.01" placeholder="0.00" class="bg-transparent text-right text-white placeholder-ios-gray focus:outline-none text-base w-full">
+                        </div>
+                    </div>
+                    <div class="flex items-center px-4 py-3.5 border-b border-white/5">
+                        <span class="w-1/3 text-sm text-white font-medium">Data</span>
+                        <input type="date" id="txDate" required class="w-2/3 bg-transparent text-right text-ios-blue focus:outline-none text-base appearance-none" style="color-scheme: dark;">
+                    </div>
+                    <div class="flex items-center px-4 py-3.5 relative">
+                        <span class="w-1/3 text-sm text-white font-medium">Categoria</span>
+                        <select id="txCat" class="w-2/3 bg-transparent text-right text-ios-blue focus:outline-none text-base appearance-none pl-4 pr-5"></select>
+                        <i class="ph ph-caret-up-down text-ios-gray absolute right-4 pointer-events-none text-xs"></i>
                     </div>
                 </div>
-                <div>
-                    <select id="txCat" class="w-full bg-black/40 rounded-xl px-4 py-3.5 text-base text-white focus:outline-none focus:ring-2 focus:ring-ios-blue border border-white/5 appearance-none"></select>
+                <button type="submit" class="w-full bg-ios-blue text-white font-bold py-3.5 rounded-xl transition-all hover:bg-blue-600 text-base shadow-lg">Salva Transazione</button>
+            </form>
+        </div>
+    </dialog>
+
+    <!-- MODALE: Gestione Categoria -->
+    <dialog id="modalCategoryManage" class="w-full max-w-sm p-4">
+        <div class="glass-panel p-6 relative shadow-2xl space-y-5 rounded-3xl">
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-bold text-white" id="catModalTitle">Nuova Categoria</h3>
+                <button type="button" onclick="closeModal('modalCategoryManage')" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-ios-gray hover:text-white"><i class="ph ph-x text-lg"></i></button>
+            </div>
+            <form id="formCategoryManage" class="space-y-4">
+                <input type="hidden" id="catOldName" value="">
+                <div class="bg-[#1c1c1e] rounded-xl overflow-hidden border border-white/5">
+                    <div class="flex items-center px-4 py-3.5">
+                        <span class="w-1/3 text-sm text-white font-medium">Nome</span>
+                        <input type="text" id="catNewName" required placeholder="Es. Viaggi" class="w-2/3 bg-transparent text-right text-white placeholder-ios-gray focus:outline-none text-base">
+                    </div>
                 </div>
-                <button type="submit" class="w-full bg-white text-black font-bold py-4 rounded-xl transition-all hover:bg-gray-200 text-base shadow-[0_4px_20px_rgba(255,255,255,0.2)] mt-2">Salva Transazione</button>
+                <button type="submit" class="w-full bg-ios-blue text-white font-bold py-3.5 rounded-xl transition-all hover:bg-blue-600 text-base shadow-lg">Salva Categoria</button>
             </form>
         </div>
     </dialog>
@@ -351,7 +399,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getDatabase, ref, set, remove, onValue } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
+        import { getDatabase, ref, set, remove, onValue, update } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
         const appId = 'finanze-ios-pro';
         
@@ -382,6 +430,21 @@
         };
         const OUT_CATS = ["Casa", "Spesa", "Trasporti", "Svago", "Salute", "Altro"];
         const IN_CATS = ["Stipendio", "Altro"];
+        
+        function getCatInfo(name) {
+            if (CATS[name]) return CATS[name];
+            const colors = ["ios-blue", "ios-green", "ios-orange", "ios-purple", "ios-red", "ios-teal"];
+            const hexes = ["#0A84FF", "#30D158", "#FF9F0A", "#BF5AF2", "#FF453A", "#64D2FF"];
+            let hash = 0;
+            for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+            const idx = Math.abs(hash) % colors.length;
+            return {
+                icon: "ph-tag",
+                color: `text-${colors[idx]}`,
+                bg: `bg-${colors[idx]}`,
+                hex: hexes[idx]
+            };
+        }
 
         let transactions = [];
         let appState = {
@@ -450,7 +513,9 @@
                     if (!appState.budgets) appState.budgets = { Casa: 700, Spesa: 400, Trasporti: 200, Svago: 150, Salute: 100, Altro: 50 };
                     if (!appState.subs) appState.subs = [];
                     if (!appState.goals) appState.goals = [];
+                    if (!appState.customOutCats) appState.customOutCats = [...OUT_CATS];
                 } else {
+                    appState.customOutCats = [...OUT_CATS];
                     saveStateStore(); // Inizializza se non esiste
                 }
                 renderEverything();
@@ -492,6 +557,7 @@
             renderDonutChart();
             renderTransactions();
             renderBudgets();
+            renderManageCats();
             renderGoals();
             renderSubs();
         }
@@ -546,7 +612,8 @@
                 const pct = (amount / totalOut) * 100;
                 const strokeDasharray = `${pct} ${100 - pct}`;
                 const strokeDashoffset = -cumulativePercent;
-                const colorHex = CATS[cat]?.hex || "#8E8E93";
+                const catInfo = getCatInfo(cat);
+                const colorHex = catInfo.hex;
 
                 svgHTML += `
                     <circle cx="50" cy="50" r="38" fill="none" stroke="${colorHex}" stroke-width="14"
@@ -603,7 +670,7 @@
             }
 
             container.innerHTML = list.slice(0, 15).map(t => {
-                const cInfo = CATS[t.cat] || CATS["Altro"];
+                const cInfo = getCatInfo(t.cat);
                 const isPos = t.amount > 0;
                 return `
                     <div class="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
@@ -639,12 +706,14 @@
                 }
             });
 
-            container.innerHTML = OUT_CATS.map(cat => {
+            const catsToRender = appState.customOutCats || OUT_CATS;
+
+            container.innerHTML = catsToRender.map(cat => {
                 const limit = appState.budgets?.[cat] || 0;
                 const spent = spendMap[cat] || 0;
                 const pct = limit > 0 ? Math.min(100, (spent / limit) * 100) : (spent > 0 ? 100 : 0);
                 const isOver = spent > limit && limit > 0;
-                const cInfo = CATS[cat] || { icon: "ph-tag", color: "text-ios-blue", bg: "bg-ios-blue" };
+                const cInfo = getCatInfo(cat);
 
                 return `
                     <div class="p-5 rounded-2xl bg-white/5 border border-white/5">
@@ -668,6 +737,94 @@
         window.updateBudgetLimit = function(cat, val) {
             appState.budgets[cat] = Math.max(0, parseFloat(val) || 0);
             saveStateStore();
+        }
+
+        function renderManageCats() {
+            const container = document.getElementById('manageCatsListContainer');
+            if (!container) return;
+            const cats = appState.customOutCats || OUT_CATS;
+            
+            container.innerHTML = cats.map(cat => {
+                const cInfo = getCatInfo(cat);
+                return `
+                    <div class="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full glass-pill flex items-center justify-center ${cInfo.color}">
+                                <i class="ph ${cInfo.icon} text-lg"></i>
+                            </div>
+                            <span class="font-bold text-sm text-white">${escapeHtml(cat)}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="openEditCategoryModal('${escapeHtml(cat)}')" class="w-8 h-8 rounded-full bg-white/5 flex justify-center items-center text-ios-gray hover:text-white transition-colors"><i class="ph ph-pencil-simple text-sm"></i></button>
+                            <button onclick="deleteCategory('${escapeHtml(cat)}')" class="w-8 h-8 rounded-full bg-white/5 flex justify-center items-center text-ios-gray hover:text-ios-red hover:bg-ios-red/20 transition-colors"><i class="ph ph-trash text-sm"></i></button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        window.openAddCategoryModal = function() {
+            document.getElementById('catModalTitle').textContent = "Nuova Categoria";
+            document.getElementById('catOldName').value = "";
+            document.getElementById('catNewName').value = "";
+            document.getElementById('modalCategoryManage').showModal();
+        }
+
+        window.openEditCategoryModal = function(catName) {
+            document.getElementById('catModalTitle').textContent = "Modifica Categoria";
+            document.getElementById('catOldName').value = catName;
+            document.getElementById('catNewName').value = catName;
+            document.getElementById('modalCategoryManage').showModal();
+        }
+
+        document.getElementById('formCategoryManage').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const oldName = document.getElementById('catOldName').value;
+            const newName = document.getElementById('catNewName').value.trim();
+            if(!newName) return;
+
+            if(!appState.customOutCats) appState.customOutCats = [...OUT_CATS];
+
+            if (oldName) {
+                // Modifica
+                const idx = appState.customOutCats.indexOf(oldName);
+                if(idx > -1) {
+                    appState.customOutCats[idx] = newName;
+                    if(appState.budgets[oldName] !== undefined) {
+                        appState.budgets[newName] = appState.budgets[oldName];
+                        delete appState.budgets[oldName];
+                    }
+                    
+                    // Aggiorna le transazioni esistenti nel DB Realtime
+                    let updates = {};
+                    transactions.forEach(t => {
+                        if (t.cat === oldName) {
+                            updates[`artifacts/${appId}/users/${userId}/transactions/${t.id}/cat`] = newName;
+                        }
+                    });
+                    if (Object.keys(updates).length > 0) {
+                        await update(ref(db), updates);
+                    }
+                }
+            } else {
+                // Aggiunta
+                if(!appState.customOutCats.includes(newName)) {
+                    appState.customOutCats.push(newName);
+                    appState.budgets[newName] = 0;
+                }
+            }
+            closeModal('modalCategoryManage');
+            await saveStateStore();
+        });
+
+        window.deleteCategory = async function(catName) {
+            // Elimina categoria
+            if(!appState.customOutCats) return;
+            appState.customOutCats = appState.customOutCats.filter(c => c !== catName);
+            if (appState.budgets[catName] !== undefined) {
+                delete appState.budgets[catName];
+            }
+            await saveStateStore();
         }
 
         function renderGoals() {
@@ -759,11 +916,12 @@
             const tabOut = document.getElementById('tabOut');
             const tabIn = document.getElementById('tabIn');
             const selectCat = document.getElementById('txCat');
+            const catsToRender = appState.customOutCats || OUT_CATS;
 
             if (type === 'out') {
                 tabOut.className = "flex-1 py-2.5 text-sm font-bold rounded-lg bg-white text-black transition-all shadow";
                 tabIn.className = "flex-1 py-2.5 text-sm font-bold rounded-lg text-ios-gray hover:text-white transition-all";
-                selectCat.innerHTML = OUT_CATS.map(c => `<option value="${c}" style="background:#000">${c}</option>`).join('');
+                selectCat.innerHTML = catsToRender.map(c => `<option value="${c}" style="background:#000">${c}</option>`).join('');
             } else {
                 tabIn.className = "flex-1 py-2.5 text-sm font-bold rounded-lg bg-white text-black transition-all shadow";
                 tabOut.className = "flex-1 py-2.5 text-sm font-bold rounded-lg text-ios-gray hover:text-white transition-all";

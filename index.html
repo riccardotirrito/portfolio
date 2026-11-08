@@ -1,36 +1,35 @@
-<!-- ... --><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="it" class="dark">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Finanze Personali – Enterprise Edition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+    <title>Finanze Personali – iOS Edition</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <!-- Google Fonts: Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    fontFamily: { 
+                        sans: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Text"', '"Segoe UI"', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'] 
+                    },
                     colors: {
-                        glass: {
-                            base: 'rgba(18, 18, 24, 0.75)',
-                            border: 'rgba(255, 255, 255, 0.08)',
-                            card: 'rgba(255, 255, 255, 0.04)'
-                        },
-                        apple: {
+                        ios: {
+                            bg: '#000000',
+                            card: 'rgba(28, 28, 30, 0.6)',
+                            cardBorder: 'rgba(255, 255, 255, 0.1)',
                             blue: '#0A84FF',
                             green: '#30D158',
                             red: '#FF453A',
                             orange: '#FF9F0A',
                             purple: '#BF5AF2',
                             teal: '#64D2FF',
-                            indigo: '#5E5CE6'
+                            gray: '#8E8E93',
+                            lightGray: '#E5E5EA'
                         }
                     }
                 }
@@ -39,479 +38,309 @@
     </script>
     <style>
         body {
-            background-color: #030305;
+            background-color: #000000;
             color: #F5F5F7;
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
-            font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
         }
 
+        /* Effetto Apple Intelligence / Siri Glow */
         .ambient-glow {
             position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
+            top: 50%; left: 50%;
+            width: 150vw; height: 150vh;
+            transform: translate(-50%, -50%);
             z-index: -1;
-            overflow: hidden;
             pointer-events: none;
-            background: #030305;
-        }
-        .glow-orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(120px);
-            opacity: 0.35;
-            animation: pulseGlow 18s infinite alternate ease-in-out;
-        }
-        .orb-1 { width: 65vw; height: 65vw; top: -20%; left: -20%; background: radial-gradient(circle, rgba(10,132,255,0.4) 0%, transparent 70%); }
-        .orb-2 { width: 60vw; height: 60vw; bottom: -20%; right: -20%; background: radial-gradient(circle, rgba(191,90,242,0.3) 0%, transparent 70%); animation-delay: -6s; }
-
-        @keyframes pulseGlow {
-            0% { transform: scale(1) translate(0, 0); }
-            100% { transform: scale(1.1) translate(20px, 25px); }
+            background: radial-gradient(circle at 30% 30%, rgba(94, 92, 230, 0.15), transparent 40%),
+                        radial-gradient(circle at 70% 70%, rgba(10, 132, 255, 0.15), transparent 40%),
+                        radial-gradient(circle at 50% 50%, rgba(191, 90, 242, 0.1), transparent 50%);
+            filter: blur(80px);
+            animation: rotateGlow 20s linear infinite;
         }
 
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.035);
-            backdrop-filter: blur(32px);
-            -webkit-backdrop-filter: blur(32px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+        @keyframes rotateGlow {
+            0% { transform: translate(-50%, -50%) rotate(0deg) scale(1); }
+            50% { transform: translate(-50%, -50%) rotate(180deg) scale(1.1); }
+            100% { transform: translate(-50%, -50%) rotate(360deg) scale(1); }
         }
 
-        .glass-pill {
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+        /* Materiale Glass stile iOS */
+        .ios-glass {
+            background: rgba(28, 28, 30, 0.65);
+            backdrop-filter: blur(40px) saturate(200%);
+            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            border: 0.5px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .ios-glass-pill {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            opacity: 0.5;
+        }
 
-        ::-webkit-scrollbar { width: 4px; height: 4px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 10px; }
+        ::-webkit-scrollbar { width: 0px; height: 0px; } /* Nascosta per stile iOS nativo */
 
+        /* Dialog iOS Style */
         dialog { background: transparent; margin: auto; }
         dialog::backdrop {
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
-        .donut-segment {
-            transition: transform 0.2s ease, opacity 0.2s ease;
-            cursor: pointer;
-        }
-        .donut-segment:hover {
-            opacity: 0.9;
-            transform: scale(1.02);
-            transform-origin: center;
+        .dynamic-island {
+            background: #000;
+            border-radius: 999px;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 10px 30px rgba(0,0,0,0.8);
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
     </style>
 </head>
-<body class="flex flex-col md:flex-row min-h-screen selection:bg-apple-blue selection:text-white pb-32 md:pb-8">
+<body class="flex flex-col md:flex-row min-h-screen selection:bg-ios-blue selection:text-white pb-28 md:pb-8">
 
-    <!-- Sfondo luminoso dinamico -->
-    <div class="ambient-glow">
-        <div class="glow-orb orb-1"></div>
-        <div class="glow-orb orb-2"></div>
-    </div>
+    <!-- Sfondo animato -->
+    <div class="ambient-glow"></div>
 
-    <!-- Barra laterale Enterprise (Desktop) -->
-    <aside class="hidden md:flex flex-col w-68 h-screen sticky top-0 glass-panel border-r border-white/5 z-20 p-6">
-        <div class="flex items-center gap-3.5 mb-8">
-            <div class="w-11 h-11 rounded-2xl glass-pill flex items-center justify-center text-apple-blue shadow-[0_0_25px_rgba(10,132,255,0.45)]">
-                <i class="ph ph-shield-check text-2xl"></i>
+    <!-- Barra laterale (Desktop) -->
+    <aside class="hidden md:flex flex-col w-72 h-screen sticky top-0 ios-glass border-r-0 border-white/10 z-20 p-6">
+        <div class="flex items-center gap-4 mb-10">
+            <div class="w-12 h-12 rounded-[1.25rem] bg-gradient-to-br from-ios-blue to-ios-purple flex items-center justify-center text-white shadow-lg shadow-ios-blue/30">
+                <i class="ph ph-wallet text-2xl font-bold"></i>
             </div>
             <div>
-                <h1 class="text-base font-extrabold tracking-tight">Finanze Enterprise</h1>
-                <p class="text-[11px] text-emerald-400 font-semibold flex items-center gap-1.5 mt-0.5">
-                    <span id="syncIndicator" class="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse"></span> Cloud Protetto
+                <h1 class="text-[17px] font-bold tracking-tight">Apple Finance</h1>
+                <p class="text-xs text-ios-gray font-medium flex items-center gap-1.5 mt-0.5">
+                    <span id="syncIndicator" class="w-2 h-2 rounded-full bg-ios-green inline-block shadow-[0_0_8px_#30D158]"></span> iCloud Sync
                 </p>
             </div>
         </div>
 
-        <nav class="space-y-1.5 flex-1">
-            <p class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 px-3">Navigazione</p>
-            <a href="#sec-dash" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-white bg-apple-blue/15 text-apple-blue transition-all">
-                <i class="ph ph-squares-four text-lg"></i> Dashboard
+        <nav class="space-y-1 flex-1">
+            <p class="text-[11px] font-bold text-ios-gray uppercase tracking-widest mb-3 px-3">Menu Principale</p>
+            <a href="#sec-dash" class="flex items-center gap-3.5 px-4 py-3 rounded-2xl text-[15px] font-semibold text-white bg-white/10 transition-all">
+                <i class="ph ph-squares-four text-xl text-ios-blue"></i> Dashboard
             </a>
-            <a href="#sec-ai" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
-                <i class="ph ph-cpu text-lg"></i> AI Insights & Notifiche
+            <a href="#sec-ai" class="flex items-center gap-3.5 px-4 py-3 rounded-2xl text-[15px] font-semibold text-ios-gray hover:text-white hover:bg-white/5 transition-all">
+                <i class="ph ph-sparkle text-xl text-ios-purple"></i> AI Insights
             </a>
-            <a href="#sec-analytics" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
-                <i class="ph ph-chart-donut text-lg"></i> Analisi & Grafici
+            <a href="#sec-analytics" class="flex items-center gap-3.5 px-4 py-3 rounded-2xl text-[15px] font-semibold text-ios-gray hover:text-white hover:bg-white/5 transition-all">
+                <i class="ph ph-chart-pie-slice text-xl text-ios-orange"></i> Analisi
             </a>
-            <a href="#sec-tx" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
-                <i class="ph ph-arrows-left-right text-lg"></i> Transazioni
+            <a href="#sec-tx" class="flex items-center gap-3.5 px-4 py-3 rounded-2xl text-[15px] font-semibold text-ios-gray hover:text-white hover:bg-white/5 transition-all">
+                <i class="ph ph-list-dashes text-xl text-ios-green"></i> Transazioni
             </a>
-            <a href="#sec-bud" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
-                <i class="ph ph-chart-pie-slice text-lg"></i> Budget Categorie
-            </a>
-            <a href="#sec-goals" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
-                <i class="ph ph-target text-lg"></i> Obiettivi & Simulatori
-            </a>
-            <a href="#sec-subs" class="flex items-center gap-3 px-3.5 py-3 rounded-2xl text-sm font-semibold text-gray-400 hover:text-white hover:bg-white/5 transition-all">
-                <i class="ph ph-users text-lg"></i> Abbonamenti & Prestiti
+            <a href="#sec-goals" class="flex items-center gap-3.5 px-4 py-3 rounded-2xl text-[15px] font-semibold text-ios-gray hover:text-white hover:bg-white/5 transition-all">
+                <i class="ph ph-target text-xl text-ios-red"></i> Obiettivi
             </a>
         </nav>
 
-        <div class="pt-4 border-t border-white/5 space-y-2">
-            <button onclick="openCustomizerModal()" class="w-full flex items-center justify-center gap-2 glass-pill hover:bg-white/10 text-white py-2.5 rounded-xl text-xs font-bold transition-all">
-                <i class="ph ph-sliders text-base text-apple-blue"></i> Personalizza Dashboard
+        <div class="pt-4 border-t border-white/10 space-y-3">
+            <button onclick="openCustomizerModal()" class="w-full flex items-center justify-center gap-2 ios-glass-pill hover:bg-white/10 text-white py-3 rounded-2xl text-[13px] font-semibold transition-all">
+                <i class="ph ph-faders text-lg text-ios-gray"></i> Personalizza
             </button>
-            <div class="flex justify-between items-center text-[11px] text-gray-500 pt-1">
-                <span>Versione 4.3 Pro</span>
-                <span class="text-apple-blue font-bold">SSL 256-bit</span>
-            </div>
         </div>
     </aside>
 
-    <!-- Contenuto principale scorrevole -->
-    <main class="flex-1 max-w-3xl w-full mx-auto p-4 sm:p-6 space-y-6">
+    <!-- Contenuto principale -->
+    <main class="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-8 space-y-8">
         
-        <!-- Header principale -->
-        <header class="glass-panel p-5 sm:p-6 rounded-3xl flex justify-between items-center shadow-xl">
+        <!-- Header -->
+        <header class="flex justify-between items-end mt-4 sm:mt-0">
             <div>
-                <h2 class="text-xl sm:text-2xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-400" id="welcomeText">Bentornato</h2>
-                <p class="text-xs text-gray-400 mt-0.5 capitalize font-medium" id="dateText"></p>
+                <p class="text-[13px] text-ios-gray font-semibold uppercase tracking-wider mb-1" id="dateText"></p>
+                <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-white" id="welcomeText">Bentornato</h2>
             </div>
-            <div class="flex items-center gap-2">
-                <button onclick="openCustomizerModal()" class="md:hidden glass-pill w-11 h-11 rounded-2xl flex items-center justify-center text-apple-blue">
-                    <i class="ph ph-sliders text-lg"></i>
-                </button>
-                <button onclick="openNewTxModal()" class="flex items-center gap-2 bg-apple-blue hover:bg-blue-600 text-white px-5 py-3 rounded-2xl font-bold transition-all shadow-[0_6px_25px_rgba(10,132,255,0.45)] active:scale-95 text-xs sm:text-sm">
-                    <i class="ph ph-plus text-base font-extrabold"></i> <span class="hidden sm:inline">Nuova Transazione</span>
-                </button>
-            </div>
+            <button onclick="openNewTxModal()" class="hidden md:flex items-center gap-2 bg-ios-blue hover:bg-blue-500 text-white px-5 py-3 rounded-full font-semibold transition-all shadow-[0_4px_20px_rgba(10,132,255,0.4)] text-[15px]">
+                <i class="ph ph-plus-circle text-xl"></i> Nuova Transazione
+            </button>
         </header>
 
-        <!-- CONTAINER DINAMICO ORDINABILE E FILTRABILE -->
-        <div id="dynamicDashboardContainer" class="space-y-6">
-            <!-- SEZIONE AI INSIGHTS & NOTIFICHE INTELLIGENTI -->
-            <section id="sec-ai" data-section-key="ai" class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4 scroll-mt-6 border border-apple-blue/20">
-<!-- ... --><div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-8 h-8 rounded-xl bg-apple-blue/15 text-apple-blue flex items-center justify-center font-bold">
-                            <i class="ph ph-cpu text-lg animate-spin" style="animation-duration: 8s;"></i>
+        <!-- CONTAINER DINAMICO ORDINABILE -->
+        <div id="dynamicDashboardContainer" class="space-y-8">
+            
+            <!-- SEZIONE DASHBOARD: SALDO -->
+            <section id="sec-dash" data-section-key="dash" class="space-y-4 scroll-mt-6">
+                <div class="ios-glass p-6 sm:p-8 rounded-[2rem] space-y-4">
+                    <div>
+                        <span class="text-[13px] text-ios-gray font-semibold">Saldo Attuale</span>
+                        <div class="text-4xl sm:text-5xl font-bold tracking-tight text-white mt-1" id="statBalance">€ 0,00</div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/10">
+                        <div>
+                            <span class="text-[11px] text-ios-gray font-semibold uppercase">Entrate Mese</span>
+                            <div class="text-xl font-bold text-ios-green mt-0.5" id="statIncome">€ 0,00</div>
                         </div>
                         <div>
-                            <h3 class="font-bold text-sm sm:text-base">Assistente Finanziario AI & Gemini</h3>
-                            <p class="text-[11px] text-gray-400">Analisi predittiva e chat intelligente integrata</p>
+                            <span class="text-[11px] text-ios-gray font-semibold uppercase">Uscite Mese</span>
+                            <div class="text-xl font-bold text-ios-red mt-0.5" id="statExpense">€ 0,00</div>
                         </div>
                     </div>
-                    <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-apple-blue/20 text-apple-blue uppercase tracking-wider">Online</span>
+                </div>
+            </section>
+
+            <!-- SEZIONE AI INSIGHTS -->
+            <section id="sec-ai" data-section-key="ai" class="ios-glass p-6 sm:p-8 rounded-[2rem] space-y-5 scroll-mt-6 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-ios-purple/20 blur-3xl rounded-full -mr-10 -mt-10 pointer-events-none"></div>
+                <div class="flex items-center gap-3">
+                    <i class="ph-fill ph-sparkle text-2xl text-ios-purple"></i>
+                    <h3 class="font-bold text-xl text-white">Apple Intelligence</h3>
                 </div>
                 
-                <!-- Notifiche automatiche AI -->
-                <div class="space-y-2.5 pt-1" id="aiInsightsContainer"></div>
+                <div class="space-y-3" id="aiInsightsContainer"></div>
 
-                <!-- Chat interattiva con Gemini AI -->
-                <div class="mt-4 pt-4 border-t border-white/10 space-y-3">
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-semibold text-gray-300 flex items-center gap-1.5"><i class="ph ph-chat-centered-text text-apple-blue"></i> Chiedi a Gemini sulle tue finanze</span>
-                        <span class="text-[10px] text-gray-500">Analisi in tempo reale</span>
+                <div class="pt-4 border-t border-white/10">
+                    <div class="relative">
+                        <input type="text" id="aiChatInput" placeholder="Chiedi a Siri sulle tue finanze..." class="w-full bg-white/5 border border-white/10 rounded-2xl pl-12 pr-4 py-3.5 text-[15px] text-white placeholder-ios-gray focus:outline-none focus:bg-white/10 transition-all backdrop-blur-md">
+                        <i class="ph ph-chat-circle text-xl text-ios-gray absolute left-4 top-3.5"></i>
+                        <button onclick="askGeminiFinancialAdvice()" id="aiSendBtn" class="absolute right-2 top-2 bg-ios-blue text-white px-4 py-1.5 rounded-xl text-[13px] font-semibold hover:bg-blue-500 transition-all">Chiedi</button>
                     </div>
-                    <div class="flex gap-2">
-                        <input type="text" id="aiChatInput" placeholder="Es. Come posso tagliare le spese questo mese?" class="flex-1 glass-pill rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-apple-blue border border-white/10">
-                        <button onclick="askGeminiFinancialAdvice()" id="aiSendBtn" class="bg-apple-blue hover:bg-blue-600 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-all shadow shrink-0">Chiedi</button>
-                    </div>
-                    <div id="aiChatResponse" class="hidden p-3 rounded-xl bg-white/5 border border-white/10 text-xs text-gray-200 leading-relaxed"></div>
+                    <div id="aiChatResponse" class="hidden mt-4 p-4 rounded-2xl bg-white/5 border border-white/10 text-[14px] text-ios-lightGray leading-relaxed backdrop-blur-xl"></div>
                 </div>
             </section>
 
-            <!-- SEZIONE DASH: SALDO & BUDGET ODIERNO -->
-            <section id="sec-dash" data-section-key="dash" class="space-y-4 scroll-mt-6">
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div class="glass-panel p-5 rounded-3xl space-y-1">
-                        <span class="text-xs text-gray-400 font-bold uppercase tracking-wider">Saldo Totale</span>
-                        <div class="text-xl sm:text-2xl font-black tracking-tight" id="statBalance">€ 0,00</div>
-                    </div>
-                    <div class="glass-panel p-5 rounded-3xl space-y-1">
-                        <span class="text-xs text-gray-400 font-bold uppercase tracking-wider">Entrate Mese</span>
-                        <div class="text-xl sm:text-2xl font-black tracking-tight text-apple-green" id="statIncome">€ 0,00</div>
-                    </div>
-                    <div class="glass-panel p-5 rounded-3xl space-y-1">
-                        <span class="text-xs text-gray-400 font-bold uppercase tracking-wider">Uscite Mese</span>
-                        <div class="text-xl sm:text-2xl font-black tracking-tight text-apple-red" id="statExpense">€ 0,00</div>
-                    </div>
+            <!-- SEZIONE ANALISI (DONUT) -->
+            <section id="sec-analytics" data-section-key="analytics" class="ios-glass p-6 sm:p-8 rounded-[2rem] space-y-6 scroll-mt-6">
+                <div>
+                    <h3 class="font-bold text-xl text-white">Analisi Spese</h3>
+                    <p class="text-[13px] text-ios-gray mt-1">Distribuzione del mese corrente</p>
                 </div>
-
-                <div class="glass-panel p-5 sm:p-6 rounded-3xl space-y-3">
-                    <div class="flex justify-between items-center">
-                        <span class="text-xs text-gray-400 font-bold uppercase tracking-wider">Disponibile da spendere oggi</span>
-                        <span class="text-[10px] text-apple-teal font-medium" id="statDailyNote">Calcolo in corso...</span>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 items-center">
+                    <div class="relative flex justify-center items-center">
+                        <svg class="w-48 h-48 drop-shadow-2xl" viewBox="0 0 100 100" id="donutChartSvg"></svg>
+                        <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center">
+                            <span class="text-[11px] text-ios-gray font-semibold uppercase">Uscite</span>
+                            <span class="text-xl font-bold text-white mt-0.5" id="donutTotalText">€ 0</span>
+                        </div>
                     </div>
-                    <div class="text-2xl sm:text-3xl font-black tracking-tight" id="statDailyBudget">€ 0,00</div>
+                    <div class="space-y-2.5" id="donutLegendContainer"></div>
                 </div>
             </section>
 
-            <!-- SEZIONE ANALISI E GRAFICI (DONUT CHART & CONFRONTO MESE SU MESE) -->
-            <section id="sec-analytics" data-section-key="analytics" class="space-y-4 scroll-mt-6">
-                <!-- Grafico Andamento Saldo -->
-                <div class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4">
-                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                        <div>
-                            <h3 class="font-bold text-base">Andamento del Saldo</h3>
-                            <p class="text-xs text-gray-400" id="chartSubLabel">Ultimi 6 mesi</p>
-                        </div>
-                        <div class="flex glass-pill p-1 rounded-full w-full sm:w-auto">
-                            <button onclick="setChartInterval('1w')" id="btn1w" class="flex-1 sm:flex-initial px-3 py-1.5 text-xs font-semibold rounded-full text-gray-400 hover:text-white transition-all">1 Sett</button>
-                            <button onclick="setChartInterval('1m')" id="btn1m" class="flex-1 sm:flex-initial px-3 py-1.5 text-xs font-semibold rounded-full text-gray-400 hover:text-white transition-all">1 Mese</button>
-                            <button onclick="setChartInterval('6m')" id="btn6m" class="flex-1 sm:flex-initial px-3 py-1.5 text-xs font-semibold rounded-full bg-apple-blue text-white shadow transition-all">6 Mesi</button>
-                        </div>
-                    </div>
-                    <div class="pt-2">
-                        <svg id="balanceChartSvg" viewBox="0 0 600 150" class="w-full h-auto overflow-visible"></svg>
+            <!-- TRANSAZIONI -->
+            <section id="sec-tx" data-section-key="tx" class="ios-glass p-6 sm:p-8 rounded-[2rem] space-y-5 scroll-mt-6">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <h3 class="font-bold text-xl text-white">Transazioni Recenti</h3>
+                    <div class="flex bg-white/5 p-1 rounded-xl w-full sm:w-auto border border-white/10">
+                        <button onclick="filterTransactions('all')" id="filterAll" class="flex-1 sm:flex-initial px-4 py-1.5 text-[13px] font-semibold rounded-lg bg-white/20 text-white shadow-sm transition-all">Tutte</button>
+                        <button onclick="filterTransactions('in')" id="filterIn" class="flex-1 sm:flex-initial px-4 py-1.5 text-[13px] font-semibold rounded-lg text-ios-gray hover:text-white transition-all">Entrate</button>
+                        <button onclick="filterTransactions('out')" id="filterOut" class="flex-1 sm:flex-initial px-4 py-1.5 text-[13px] font-semibold rounded-lg text-ios-gray hover:text-white transition-all">Uscite</button>
                     </div>
                 </div>
-
-                <div class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4">
-                    <div>
-                        <h3 class="font-bold text-base">Distribuzione Uscite per Categoria</h3>
-                        <p class="text-xs text-gray-400">Analisi percentuale del mese corrente</p>
-                    </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
-                        <div class="relative flex justify-center items-center py-2">
-                            <svg class="w-44 h-44" viewBox="0 0 100 100" id="donutChartSvg"></svg>
-                            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center">
-                                <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Totale Uscite</span>
-                                <span class="text-sm font-black text-white" id="donutTotalText">€ 0</span>
-                            </div>
-                        </div>
-                        <div class="space-y-2" id="donutLegendContainer"></div>
-                    </div>
-                </div>
-
-                <div class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <h3 class="font-bold text-base">Confronto Mensile (Mese su Mese)</h3>
-                            <p class="text-xs text-gray-400">Spese mese corrente vs mese precedente per categoria</p>
-                        </div>
-                    </div>
-                    <div class="space-y-3 pt-2" id="momComparisonContainer"></div>
-                </div>
+                <div class="space-y-2" id="transactionsListContainer"></div>
             </section>
 
-            <!-- TRANSAZIONI RECENTI -->
-            <section id="sec-tx" data-section-key="tx" class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4 scroll-mt-6">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                    <div>
-                        <h3 class="font-bold text-base">Transazioni</h3>
-                        <p class="text-xs text-gray-400">Categorizzazione automatica intelligente attiva</p>
-                    </div>
-                    <div class="flex glass-pill p-1 rounded-full w-full sm:w-auto">
-                        <button onclick="filterTransactions('all')" id="filterAll" class="flex-1 sm:flex-initial px-3.5 py-1.5 text-xs font-semibold rounded-full bg-apple-blue text-white shadow">Tutte</button>
-                        <button onclick="filterTransactions('in')" id="filterIn" class="flex-1 sm:flex-initial px-3.5 py-1.5 text-xs font-semibold rounded-full text-gray-400 hover:text-white">Entrate</button>
-                        <button onclick="filterTransactions('out')" id="filterOut" class="flex-1 sm:flex-initial px-3.5 py-1.5 text-xs font-semibold rounded-full text-gray-400 hover:text-white">Uscite</button>
-                    </div>
-                </div>
-                <div class="space-y-2.5 pt-1" id="transactionsListContainer"></div>
-            </section>
-
-            <!-- BUDGET CATEGORIE -->
-            <section id="sec-bud" data-section-key="bud" class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4 scroll-mt-6">
+            <!-- OBIETTIVI -->
+            <section id="sec-goals" data-section-key="goals" class="ios-glass p-6 sm:p-8 rounded-[2rem] space-y-5 scroll-mt-6">
                 <div class="flex justify-between items-center">
-                    <div>
-                        <h3 class="font-bold text-base">Budget Categorie</h3>
-                        <p class="text-xs text-gray-400">Personalizza i nomi e imposta i tetti di spesa mensili</p>
-                    </div>
-                    <button onclick="openCategoryRenameModal()" class="glass-pill px-3 py-1.5 rounded-xl text-xs font-semibold text-white hover:bg-white/10 transition-all">
-                        + Rinomina / Aggiungi
-                    </button>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1" id="budgetListContainer"></div>
-            </section>
-
-            <!-- OBIETTIVI E SIMULATORE DI ACCANTONAMENTO -->
-            <section id="sec-goals" data-section-key="goals" class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4 scroll-mt-6">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h3 class="font-bold text-base">Obiettivi & Simulatore Interattivo</h3>
-                        <p class="text-xs text-gray-400">Modifica il cursore per calcolare i tempi di raggiungimento</p>
-                    </div>
-                    <button onclick="openPromptModal('Nuovo Obiettivo', 'Nome obiettivo', 'Importo da raggiungere', saveNewGoal)" class="glass-pill px-3.5 py-2 rounded-xl text-xs font-semibold text-white hover:bg-white/10 transition-all">
+                    <h3 class="font-bold text-xl text-white">Obiettivi di Risparmio</h3>
+                    <button onclick="openPromptModal('Nuovo Obiettivo', 'Nome obiettivo', 'Importo da raggiungere', saveNewGoal)" class="bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-full text-[13px] font-semibold text-white transition-all">
                         + Nuovo
                     </button>
                 </div>
-                <div class="space-y-4 pt-1" id="goalsListContainer"></div>
-            </section>
-
-            <!-- ABBONAMENTI E PRESTITI -->
-            <section id="sec-subs" data-section-key="subs" class="grid grid-cols-1 md:grid-cols-2 gap-4 scroll-mt-6">
-                <div class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <h3 class="font-bold text-base">Abbonamenti</h3>
-                            <p class="text-xs text-gray-400" id="subsTotalText">€ 0,00 / mese</p>
-                        </div>
-                        <button onclick="openPromptModal('Nuovo Abbonamento', 'Nome servizio', 'Costo mensile', saveNewSub)" class="glass-pill px-3 py-1.5 rounded-xl text-xs font-semibold text-white hover:bg-white/10 transition-all">
-                            + Aggiungi
-                        </button>
-                    </div>
-                    <div class="space-y-2.5 pt-1" id="subsListContainer"></div>
-                </div>
-
-                <div class="glass-panel p-5 sm:p-6 rounded-3xl space-y-4">
-                    <div class="flex justify-between items-center">
-                        <div>
-                            <h3 class="font-bold text-base">Prestiti & Amici</h3>
-                            <p class="text-xs text-gray-400" id="debtsTotalText">Siamo pari</p>
-                        </div>
-                        <button onclick="openDebtModal()" class="glass-pill px-3 py-1.5 rounded-xl text-xs font-semibold text-white hover:bg-white/10 transition-all">
-                            + Aggiungi
-                        </button>
-                    </div>
-                    <div class="space-y-2.5 pt-1" id="debtsListContainer"></div>
-                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" id="goalsListContainer"></div>
             </section>
         </div>
     </main>
 
-    <!-- Barra di navigazione mobile inferiore (iOS style) -->
-    <nav class="md:hidden fixed bottom-3 left-4 right-4 glass-panel rounded-2xl z-50 px-5 py-2.5 flex justify-around items-center shadow-2xl bg-[#0a0a0e]/90 backdrop-blur-3xl border border-white/10">
-        <a href="#sec-dash" class="flex flex-col items-center text-apple-blue p-1">
-            <i class="ph-fill ph-squares-four text-xl"></i>
-        </a>
-        <a href="#sec-ai" class="flex flex-col items-center text-gray-400 hover:text-white p-1">
-            <i class="ph ph-cpu text-xl"></i>
-        </a>
-        <button onclick="openNewTxModal()" class="w-12 h-12 bg-apple-blue rounded-full flex items-center justify-center text-white shadow-[0_4px_20px_rgba(10,132,255,0.65)] active:scale-95 -mt-3">
-            <i class="ph ph-plus text-xl font-black"></i>
+    <!-- Barra navigazione mobile (Floating Island Style) -->
+    <nav class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 dynamic-island z-50 px-6 py-3 flex justify-between items-center gap-6 w-[90%] max-w-sm backdrop-blur-2xl bg-black/80 border border-white/20">
+        <a href="#sec-dash" class="text-ios-blue p-2"><i class="ph-fill ph-squares-four text-[22px]"></i></a>
+        <a href="#sec-ai" class="text-ios-gray hover:text-white p-2 transition-colors"><i class="ph-fill ph-sparkle text-[22px]"></i></a>
+        <button onclick="openNewTxModal()" class="w-12 h-12 bg-ios-blue rounded-full flex items-center justify-center text-white shadow-[0_4px_15px_rgba(10,132,255,0.6)] active:scale-95 transform -translate-y-4 border-[3px] border-black">
+            <i class="ph ph-plus text-xl font-bold"></i>
         </button>
-        <a href="#sec-analytics" class="flex flex-col items-center text-gray-400 hover:text-white p-1">
-            <i class="ph ph-chart-donut text-xl"></i>
-        </a>
-        <a href="#sec-goals" class="flex flex-col items-center text-gray-400 hover:text-white p-1">
-            <i class="ph ph-target text-xl"></i>
-        </a>
+        <a href="#sec-analytics" class="text-ios-gray hover:text-white p-2 transition-colors"><i class="ph-fill ph-chart-pie-slice text-[22px]"></i></a>
+        <button onclick="openCustomizerModal()" class="text-ios-gray hover:text-white p-2 transition-colors"><i class="ph-fill ph-faders text-[22px]"></i></button>
     </nav>
 
-    <!-- MODALE: Personalizzazione Dashboard (Ordine & Visibilità) -->
-    <dialog id="modalCustomizer" class="w-full max-w-md p-4">
-        <div class="glass-panel p-6 rounded-3xl relative shadow-2xl space-y-5">
-            <button onclick="closeModal('modalCustomizer')" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="ph ph-x text-lg"></i></button>
+    <!-- MODALE: Personalizzazione -->
+    <dialog id="modalCustomizer" class="w-full max-w-sm p-4">
+        <div class="ios-glass p-6 rounded-[2rem] relative shadow-2xl space-y-5">
+            <button onclick="closeModal('modalCustomizer')" class="absolute top-5 right-5 text-ios-gray hover:text-white"><i class="ph ph-x-circle-fill text-2xl"></i></button>
             <div>
-                <h3 class="text-base font-bold">Personalizza Dashboard</h3>
-                <p class="text-xs text-gray-400">Attiva/disattiva le sezioni e trascina o sposta l'ordine di visualizzazione</p>
+                <h3 class="text-lg font-bold text-white">Layout</h3>
+                <p class="text-[13px] text-ios-gray mt-0.5">Scegli cosa mostrare</p>
             </div>
-            <div class="space-y-2.5 max-h-[60vh] overflow-y-auto pr-1" id="customizerSectionsList"></div>
-            <button onclick="saveDashboardCustomization()" class="w-full bg-apple-blue hover:bg-blue-600 text-white font-bold py-3.5 rounded-xl transition-all shadow text-sm">Salva Configurazione</button>
+            <div class="space-y-2 max-h-[50vh] overflow-y-auto" id="customizerSectionsList"></div>
+            <button onclick="saveDashboardCustomization()" class="w-full bg-white text-black hover:bg-gray-200 font-bold py-3.5 rounded-2xl transition-all text-[15px]">Fine</button>
         </div>
     </dialog>
 
-    <!-- MODALE: Nuova Transazione con Smart Tagging -->
+    <!-- MODALE: Nuova Transazione -->
     <dialog id="modalNewTx" class="w-full max-w-sm p-4">
-        <div class="glass-panel p-6 rounded-3xl relative shadow-2xl space-y-4">
-            <button onclick="closeModal('modalNewTx')" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="ph ph-x text-lg"></i></button>
-            <h3 class="text-base font-bold">Nuova Transazione</h3>
+        <div class="ios-glass p-6 rounded-[2.5rem] relative shadow-2xl space-y-5">
+            <button onclick="closeModal('modalNewTx')" class="absolute top-5 right-5 text-ios-gray hover:text-white bg-white/10 rounded-full p-1"><i class="ph ph-x text-lg"></i></button>
+            <h3 class="text-xl font-bold text-white text-center pt-2">Aggiungi</h3>
 
-            <div class="flex glass-pill p-1 rounded-xl">
-                <button type="button" id="tabOut" class="flex-1 py-2 text-xs font-bold rounded-lg bg-apple-red text-white transition-all shadow" onclick="setTxModalType('out')">Uscita</button>
-                <button type="button" id="tabIn" class="flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition-all" onclick="setTxModalType('in')">Entrata</button>
+            <div class="flex bg-white/5 p-1 rounded-xl border border-white/10">
+                <button type="button" id="tabOut" class="flex-1 py-2 text-[13px] font-semibold rounded-lg bg-white text-black shadow-sm transition-all" onclick="setTxModalType('out')">Uscita</button>
+                <button type="button" id="tabIn" class="flex-1 py-2 text-[13px] font-semibold rounded-lg text-ios-gray hover:text-white transition-all" onclick="setTxModalType('in')">Entrata</button>
             </div>
 
-            <form id="formNewTx" class="space-y-3.5">
+            <form id="formNewTx" class="space-y-4">
                 <div>
-                    <label class="block text-[11px] font-semibold text-gray-400 mb-1">Descrizione (Riconoscimento AI)</label>
-                    <input type="text" id="txDesc" required placeholder="Es. Supermercato Conad, Benzina Eni..." oninput="handleSmartCategoryPredict(this.value)" class="w-full glass-pill rounded-xl px-3.5 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-apple-blue border border-white/10">
+                    <input type="text" id="txDesc" required placeholder="Cosa hai pagato?" oninput="handleSmartCategoryPredict(this.value)" class="w-full bg-transparent border-b border-white/20 px-2 py-3 text-lg text-white placeholder-ios-gray focus:outline-none focus:border-ios-blue transition-colors font-semibold">
                 </div>
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-[11px] font-semibold text-gray-400 mb-1">Importo (€)</label>
-                        <input type="number" id="txAmount" required min="0.01" step="0.01" placeholder="0.00" class="w-full glass-pill rounded-xl px-3.5 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-apple-blue border border-white/10">
+                        <input type="number" id="txAmount" required min="0.01" step="0.01" placeholder="€ 0,00" class="w-full bg-transparent border-b border-white/20 px-2 py-3 text-lg text-white placeholder-ios-gray focus:outline-none focus:border-ios-blue transition-colors font-bold">
                     </div>
                     <div>
-                        <label class="block text-[11px] font-semibold text-gray-400 mb-1">Data</label>
-                        <input type="date" id="txDate" required class="w-full glass-pill rounded-xl px-3.5 py-3 text-sm text-white focus:outline-none focus:border-apple-blue border border-white/10" style="color-scheme: dark;">
+                        <input type="date" id="txDate" required class="w-full bg-transparent border-b border-white/20 px-2 py-3 text-[15px] text-white focus:outline-none focus:border-ios-blue transition-colors" style="color-scheme: dark;">
                     </div>
                 </div>
-                <div>
-                    <div class="flex justify-between items-center mb-1">
-                        <label class="block text-[11px] font-semibold text-gray-400">Categoria</label>
-                        <span id="aiCategoryBadge" class="text-[10px] text-apple-teal font-bold hidden"><i class="ph ph-sparkle"></i> Rilevata da AI</span>
+                <div class="pt-2">
+                    <div class="flex justify-between items-center mb-2 px-1">
+                        <span class="text-[13px] text-ios-gray font-semibold">Categoria</span>
+                        <span id="aiCategoryBadge" class="text-[11px] text-ios-purple font-bold hidden"><i class="ph-fill ph-sparkle"></i> Auto-rilevata</span>
                     </div>
-                    <select id="txCat" class="w-full glass-pill rounded-xl px-3.5 py-3 text-sm text-white focus:outline-none focus:border-apple-blue border border-white/10 appearance-none bg-[#0a0a0e]"></select>
+                    <select id="txCat" class="w-full bg-white/10 rounded-xl px-4 py-3 text-[15px] font-medium text-white focus:outline-none border border-white/10 appearance-none"></select>
                 </div>
-                <button type="submit" class="w-full mt-2 bg-apple-blue hover:bg-blue-600 text-white font-bold py-3.5 rounded-xl transition-all shadow-[0_4px_20px_rgba(10,132,255,0.45)] text-sm">Registra Movimento</button>
+                <button type="submit" class="w-full mt-4 bg-ios-blue hover:bg-blue-500 text-white font-bold py-3.5 rounded-2xl transition-all shadow-[0_4px_15px_rgba(10,132,255,0.4)] text-[15px]">Salva</button>
             </form>
         </div>
     </dialog>
 
-    <!-- MODALE: Prompt generico -->
+    <!-- MODALE: Prompt -->
     <dialog id="modalPrompt" class="w-full max-w-sm p-4">
-        <div class="glass-panel p-6 rounded-3xl relative shadow-2xl space-y-4">
-            <button onclick="closeModal('modalPrompt')" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="ph ph-x text-lg"></i></button>
-            <h3 class="text-base font-bold" id="promptTitle">Titolo</h3>
-            <form id="formPrompt" class="space-y-3.5">
+        <div class="ios-glass p-6 rounded-[2rem] relative shadow-2xl space-y-4">
+            <button onclick="closeModal('modalPrompt')" class="absolute top-5 right-5 text-ios-gray hover:text-white"><i class="ph ph-x-circle-fill text-2xl"></i></button>
+            <h3 class="text-lg font-bold text-white" id="promptTitle">Titolo</h3>
+            <form id="formPrompt" class="space-y-4">
                 <div>
-                    <label class="block text-[11px] font-semibold text-gray-400 mb-1" id="promptLabelName">Nome</label>
-                    <input type="text" id="promptName" required class="w-full glass-pill rounded-xl px-3.5 py-3 text-sm text-white focus:outline-none focus:border-apple-blue border border-white/10">
+                    <label class="block text-[13px] font-semibold text-ios-gray mb-1" id="promptLabelName">Nome</label>
+                    <input type="text" id="promptName" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-[15px] text-white focus:outline-none focus:bg-white/10">
                 </div>
                 <div>
-                    <label class="block text-[11px] font-semibold text-gray-400 mb-1" id="promptLabelAmount">Importo</label>
-                    <input type="number" id="promptAmount" required min="0.01" step="0.01" class="w-full glass-pill rounded-xl px-3.5 py-3 text-sm text-white focus:outline-none focus:border-apple-blue border border-white/10">
+                    <label class="block text-[13px] font-semibold text-ios-gray mb-1" id="promptLabelAmount">Importo</label>
+                    <input type="number" id="promptAmount" required min="0.01" step="0.01" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-[15px] text-white focus:outline-none focus:bg-white/10">
                 </div>
-                <button type="submit" class="w-full mt-2 glass-pill hover:bg-white/20 text-white font-bold py-3.5 rounded-xl transition-all text-sm">Conferma</button>
+                <button type="submit" class="w-full bg-white text-black hover:bg-gray-200 font-bold py-3.5 rounded-xl transition-all text-[15px]">Conferma</button>
             </form>
         </div>
     </dialog>
 
-    <!-- MODALE: Nuovo Prestito -->
-    <dialog id="modalDebt" class="w-full max-w-sm p-4">
-        <div class="glass-panel p-6 rounded-3xl relative shadow-2xl space-y-4">
-            <button onclick="closeModal('modalDebt')" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="ph ph-x text-lg"></i></button>
-            <h3 class="text-base font-bold">Nuovo Prestito / Amico</h3>
-            <form id="formDebt" class="space-y-3.5">
-                <div>
-                    <label class="block text-[11px] font-semibold text-gray-400 mb-1">Nome persona</label>
-                    <input type="text" id="debtName" required class="w-full glass-pill rounded-xl px-3.5 py-3 text-sm text-white focus:outline-none focus:border-apple-blue border border-white/10">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-semibold text-gray-400 mb-1">Importo (€)</label>
-                    <input type="number" id="debtAmount" required min="0.01" step="0.01" class="w-full glass-pill rounded-xl px-3.5 py-3 text-sm text-white focus:outline-none focus:border-apple-blue border border-white/10">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-semibold text-gray-400 mb-1">Tipo prestito</label>
-                    <select id="debtType" class="w-full glass-pill rounded-xl px-3.5 py-3 text-sm text-white focus:outline-none focus:border-apple-blue border border-white/10 bg-[#0a0a0e]">
-                        <option value="1">Ti deve dare</option>
-                        <option value="0">Devi dare tu</option>
-                    </select>
-                </div>
-                <button type="submit" class="w-full mt-2 glass-pill hover:bg-white/20 text-white font-bold py-3.5 rounded-xl transition-all text-sm">Salva Prestito</button>
-            </form>
-        </div>
-    </dialog>
-
-    <!-- MODALE: Rinomina Categoria Budget -->
-    <dialog id="modalCategoryRename" class="w-full max-w-sm p-4">
-        <div class="glass-panel p-6 rounded-3xl relative shadow-2xl space-y-4">
-            <button onclick="closeModal('modalCategoryRename')" class="absolute top-4 right-4 text-gray-400 hover:text-white"><i class="ph ph-x text-lg"></i></button>
-            <h3 class="text-base font-bold">Modifica / Rinomina Categoria</h3>
-            <form id="formCategoryRename" class="space-y-3.5">
-                <div>
-                    <label class="block text-[11px] font-semibold text-gray-400 mb-1">Categoria esistente da modificare</label>
-                    <select id="renameOldCat" class="w-full glass-pill rounded-xl px-3.5 py-3 text-sm text-white focus:outline-none focus:border-apple-blue border border-white/10 bg-[#0a0a0e]"></select>
-                </div>
-                <div>
-                    <label class="block text-[11px] font-semibold text-gray-400 mb-1">Nuovo nome categoria</label>
-                    <input type="text" id="renameNewCat" required placeholder="Es. Mutuo, Hobby, Viaggi..." class="w-full glass-pill rounded-xl px-3.5 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-apple-blue border border-white/10">
-                </div>
-                <button type="submit" class="w-full mt-2 bg-apple-blue hover:bg-blue-600 text-white font-bold py-3.5 rounded-xl transition-all text-sm">Aggiorna Categoria</button>
-            </form>
-        </div>
-    </dialog>
-
-    <!-- Firebase SDKs & Enterprise App Logic -->
+    <!-- LOGICA E FIREBASE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Configurazione robusta con fallback per GitHub Pages e hosting statico
+        // Fallback robusto rispettando i path di sistema richiesti
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'finanze-enterprise-github';
+        
+        // Uso la config Firebase passata dall'utente nel prompt
         const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
             apiKey: "AIzaSyBXRuAqeTHsDWvJXkRwJE8OHm1-OKPKXMQ",
             authDomain: "portfolio-2711.firebaseapp.com",
@@ -527,54 +356,46 @@
         const db = getFirestore(app);
 
         const CATS = {
-            "Casa": { icon: "ph-house", color: "text-apple-blue", bg: "bg-apple-blue", hex: "#0A84FF" },
-            "Spesa": { icon: "ph-shopping-cart", color: "text-apple-green", bg: "bg-apple-green", hex: "#30D158" },
-            "Trasporti": { icon: "ph-car", color: "text-apple-orange", bg: "bg-apple-orange", hex: "#FF9F0A" },
-            "Svago": { icon: "ph-popcorn", color: "text-apple-purple", bg: "bg-apple-purple", hex: "#BF5AF2" },
-            "Salute": { icon: "ph-heartbeat", color: "text-apple-red", bg: "bg-apple-red", hex: "#FF453A" },
-            "Stipendio": { icon: "ph-money", color: "text-apple-teal", bg: "bg-apple-teal", hex: "#64D2FF" },
-            "Altro": { icon: "ph-sparkle", color: "text-gray-400", bg: "bg-gray-400", hex: "#8E8E93" }
+            "Casa": { icon: "ph-house", color: "text-ios-blue", hex: "#0A84FF" },
+            "Spesa": { icon: "ph-shopping-cart", color: "text-ios-green", hex: "#30D158" },
+            "Trasporti": { icon: "ph-car", color: "text-ios-orange", hex: "#FF9F0A" },
+            "Svago": { icon: "ph-popcorn", color: "text-ios-purple", hex: "#BF5AF2" },
+            "Salute": { icon: "ph-heartbeat", color: "text-ios-red", hex: "#FF453A" },
+            "Stipendio": { icon: "ph-money", color: "text-ios-teal", hex: "#64D2FF" },
+            "Altro": { icon: "ph-tag", color: "text-ios-gray", hex: "#8E8E93" }
         };
         const OUT_CATS = ["Casa", "Spesa", "Trasporti", "Svago", "Salute", "Altro"];
         const IN_CATS = ["Stipendio", "Altro"];
 
         const AI_KEYWORDS = {
-            "Spesa": ["conad", "esselunga", "coop", "lidl", "carrefour", "supermercato", "spesa", "pam", "md", "eurospin", "despar", "alimentari"],
-            "Trasporti": ["benzina", "eni", "q8", "shell", "autostrada", "telepass", "trenitalia", "italo", "metro", "bus", "parcheggio", "taxi", "uber"],
-            "Casa": ["affitto", "mutuo", "enel", "luce", "gas", "acqua", "condominio", "ikea", "leroy", "bolletta", "cedrata"],
-            "Svago": ["netflix", "spotify", "cinema", "ristorante", "pizzeria", "pub", "bar", "amazon", "apple", "playstation", "steam", "game"],
-            "Salute": ["farmacia", "medico", "visita", "ospedale", "ticket", "dentista", "parafarmacia"],
-            "Stipendio": ["stipendio", "bonifico", "storno", "rimborso", "stip", "accredito", "lavoro"]
+            "Spesa": ["conad", "esselunga", "coop", "lidl", "carrefour", "supermercato", "spesa", "pam", "md", "eurospin", "despar", "alimentari", "spesa"],
+            "Trasporti": ["benzina", "eni", "q8", "shell", "autostrada", "telepass", "trenitalia", "italo", "metro", "bus", "parcheggio", "taxi", "uber", "treno", "volo", "ryanair"],
+            "Casa": ["affitto", "mutuo", "enel", "luce", "gas", "acqua", "condominio", "ikea", "leroy", "bolletta", "internet", "fibra"],
+            "Svago": ["netflix", "spotify", "cinema", "ristorante", "pizzeria", "pub", "bar", "amazon", "apple", "playstation", "steam", "game", "cena", "pranzo", "drink"],
+            "Salute": ["farmacia", "medico", "visita", "ospedale", "ticket", "dentista", "parafarmacia"]
         };
 
         const SECTION_NAMES = {
-            ai: "Assistente Finanziario AI",
-            dash: "Panoramica Saldo & Budget Odierno",
-            analytics: "Analisi, Donut Chart & Mese su Mese",
+            dash: "Dashboard Principale",
+            ai: "Apple Intelligence Insights",
+            analytics: "Analisi e Grafici",
             tx: "Transazioni Recenti",
-            bud: "Budget Categorie",
-            goals: "Obiettivi & Simulatori",
-            subs: "Abbonamenti & Prestiti"
+            goals: "Obiettivi Risparmio"
         };
 
         let transactions = [];
         let appState = {
-            budgets: { Casa: 700, Spesa: 350, Trasporti: 150, Svago: 180, Salute: 70, Altro: 50 },
-            subs: [{ id: "s1", n: "Spotify", a: 10.99 }, { id: "s2", n: "Netflix", a: 13.99 }, { id: "s3", n: "Palestra", a: 35.00 }],
-            goals: [{ id: "g1", n: "Vacanza Estiva", t: 2500, s: 1200, monthlySaving: 200 }, { id: "g2", n: "Nuovo Smartphone", t: 900, s: 450, monthlySaving: 150 }],
-            debts: [{ id: "d1", n: "Marco Rossi", a: 45, type: 1 }],
-            customOutCats: ["Casa", "Spesa", "Trasporti", "Svago", "Salute", "Altro"],
-            sectionOrder: ['ai', 'dash', 'analytics', 'tx', 'bud', 'goals', 'subs'],
+            goals: [{ id: "g1", n: "Vacanza", t: 1500, s: 300 }],
+            sectionOrder: ['dash', 'ai', 'analytics', 'tx', 'goals'],
             sectionHidden: []
         };
 
         let currentTxType = 'out';
         let currentFilter = 'all';
-        let currentChartInterval = '6m';
         let activePromptCb = null;
         let userId = null;
 
-        const uid = () => Math.random().toString(36).substring(2, 9);
+        const uid = () => crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substring(2, 9);
         const formatEur = n => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(n);
         const isoDate = d => d.toISOString().split('T')[0];
         const escapeHtml = str => String(str).replace(/[&<>'"]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' })[m]);
@@ -588,11 +409,14 @@
                 }
             } catch (err) {
                 console.error("Auth error:", err);
-                await signInAnonymously(auth);
+                alert("Errore di connessione al database. Riprova.");
+                return;
             }
 
-            userId = auth.currentUser?.uid || crypto.randomUUID();
-            document.getElementById('syncIndicator').className = "w-2 h-2 rounded-full bg-emerald-400 inline-block";
+            userId = auth.currentUser?.uid;
+            if (!userId) return;
+
+            document.getElementById('syncIndicator').classList.add('shadow-[0_0_8px_#30D158]');
 
             const h = new Date().getHours();
             document.getElementById('welcomeText').textContent = h < 12 ? "Buongiorno" : h < 18 ? "Buon pomeriggio" : "Buonasera";
@@ -601,8 +425,6 @@
 
             document.getElementById('formNewTx').addEventListener('submit', handleTxSubmit);
             document.getElementById('formPrompt').addEventListener('submit', handlePromptSubmit);
-            document.getElementById('formDebt').addEventListener('submit', handleDebtSubmit);
-            document.getElementById('formCategoryRename').addEventListener('submit', handleCategoryRenameSubmit);
 
             setupFirestoreListeners();
         }
@@ -614,59 +436,48 @@
             onSnapshot(query(txCol), (snapshot) => {
                 transactions = [];
                 snapshot.forEach(docSnap => {
-                    const data = docSnap.data();
-                    transactions.push({ id: docSnap.id, ...data });
+                    transactions.push({ id: docSnap.id, ...docSnap.data() });
                 });
                 transactions.sort((a,b) => b.date.localeCompare(a.date));
                 renderEverything();
-            }, (err) => {
-                console.error("Error fetching transactions:", err);
-                renderEverything();
-            });
+            }, (err) => console.error("Error fetching transactions:", err));
 
             const stateDocRef = doc(db, 'artifacts', appId, 'users', userId, 'settings', 'appState');
             onSnapshot(stateDocRef, (docSnap) => {
                 if (docSnap.exists()) {
-                    appState = docSnap.data();
-                    if (!appState.sectionOrder) appState.sectionOrder = ['ai', 'dash', 'analytics', 'tx', 'bud', 'goals', 'subs'];
-                    if (!appState.sectionHidden) appState.sectionHidden = [];
-                    if (!appState.customOutCats) appState.customOutCats = ["Casa", "Spesa", "Trasporti", "Svago", "Salute", "Altro"];
+                    appState = { ...appState, ...docSnap.data() };
                 } else {
                     saveStateStore();
                 }
                 renderEverything();
-            }, (err) => {
-                console.error("Error fetching state:", err);
-                renderEverything();
-            });
+            }, (err) => console.error("Error fetching state:", err));
         }
 
         async function saveTxStore(t) {
             if (!userId) return;
+            // Optimistic Update
+            transactions.unshift(t);
+            transactions.sort((a,b) => b.date.localeCompare(a.date));
+            renderEverything();
+
             try {
                 await setDoc(doc(db, 'artifacts', appId, 'users', userId, 'transactions', t.id), t);
             } catch (err) {
-                console.error("Save tx offline fallback:", err);
+                console.error("Save tx error:", err);
+                // Rollback if needed
             }
-            const existingIdx = transactions.findIndex(x => x.id === t.id);
-            if (existingIdx >= 0) {
-                transactions[existingIdx] = t;
-            } else {
-                transactions.unshift(t);
-            }
-            transactions.sort((a,b) => b.date.localeCompare(a.date));
-            renderEverything();
         }
 
         async function deleteTxStore(id) {
             if (!userId) return;
+            transactions = transactions.filter(t => t.id !== id);
+            renderEverything();
+
             try {
                 await deleteDoc(doc(db, 'artifacts', appId, 'users', userId, 'transactions', id));
             } catch (err) {
                 console.error("Delete tx error:", err);
             }
-            transactions = transactions.filter(t => t.id !== id);
-            renderEverything();
         }
 
         async function saveStateStore() {
@@ -682,18 +493,14 @@
             applyDashboardLayout();
             renderStats();
             renderAiInsights();
-            renderChart();
             renderDonutChart();
-            renderMomComparison();
             renderTransactions();
-            renderBudgets();
             renderGoals();
-            renderNetwork();
         }
 
         function applyDashboardLayout() {
             const container = document.getElementById('dynamicDashboardContainer');
-            const order = appState.sectionOrder || ['ai', 'dash', 'analytics', 'tx', 'bud', 'goals', 'subs'];
+            const order = appState.sectionOrder || Object.keys(SECTION_NAMES);
             const hidden = appState.sectionHidden || [];
 
             order.forEach(key => {
@@ -711,27 +518,24 @@
 
         window.openCustomizerModal = function() {
             const list = document.getElementById('customizerSectionsList');
-            const order = appState.sectionOrder || ['ai', 'dash', 'analytics', 'tx', 'bud', 'goals', 'subs'];
+            const order = appState.sectionOrder || Object.keys(SECTION_NAMES);
             const hidden = appState.sectionHidden || [];
 
             list.innerHTML = order.map((key, idx) => {
                 const name = SECTION_NAMES[key] || key;
                 const isHidden = hidden.includes(key);
                 return `
-                    <div class="flex items-center justify-between p-3.5 rounded-2xl bg-white/5 border border-white/5" data-sec-key="${key}">
-                        <div class="flex items-center gap-3">
-                            <div class="flex flex-col gap-0.5">
-                                <button type="button" onclick="moveSectionIndex('${key}', -1)" class="text-gray-400 hover:text-white p-0.5"><i class="ph ph-caret-up text-xs"></i></button>
-                                <button type="button" onclick="moveSectionIndex('${key}', 1)" class="text-gray-400 hover:text-white p-0.5"><i class="ph ph-caret-down text-xs"></i></button>
+                    <div class="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5">
+                        <div class="flex items-center gap-4">
+                            <div class="flex flex-col gap-1">
+                                <button type="button" onclick="moveSectionIndex('${key}', -1)" class="text-ios-gray hover:text-white"><i class="ph-fill ph-caret-up"></i></button>
+                                <button type="button" onclick="moveSectionIndex('${key}', 1)" class="text-ios-gray hover:text-white"><i class="ph-fill ph-caret-down"></i></button>
                             </div>
-                            <span class="font-bold text-xs sm:text-sm text-white">${escapeHtml(name)}</span>
+                            <span class="font-semibold text-[15px] text-white">${escapeHtml(name)}</span>
                         </div>
-                        <div class="flex items-center gap-3">
-                            <span class="text-[10px] text-gray-400 font-semibold">${isHidden ? 'Nascosta' : 'Visibile'}</span>
-                            <button type="button" onclick="toggleSectionHidden('${key}')" class="w-10 h-6 rounded-full transition-colors relative ${isHidden ? 'bg-gray-600' : 'bg-apple-green'}">
-                                <span class="absolute top-1 w-4 h-4 rounded-full bg-white transition-all ${isHidden ? 'left-1' : 'right-1'}"></span>
-                            </button>
-                        </div>
+                        <button type="button" onclick="toggleSectionHidden('${key}')" class="w-12 h-7 rounded-full transition-colors relative ${isHidden ? 'bg-white/20' : 'bg-ios-green'}">
+                            <span class="absolute top-1 w-5 h-5 rounded-full bg-white transition-all shadow-sm ${isHidden ? 'left-1' : 'left-6'}"></span>
+                        </button>
                     </div>
                 `;
             }).join('');
@@ -740,7 +544,7 @@
         }
 
         window.moveSectionIndex = function(key, dir) {
-            let order = [...(appState.sectionOrder || ['ai', 'dash', 'analytics', 'tx', 'bud', 'goals', 'subs'])];
+            let order = [...(appState.sectionOrder || Object.keys(SECTION_NAMES))];
             let idx = order.indexOf(key);
             if (idx < 0) return;
             let targetIdx = idx + dir;
@@ -796,76 +600,79 @@
         function renderAiInsights() {
             const container = document.getElementById('aiInsightsContainer');
             if (!container) return;
-            const now = new Date();
-            const currentMonthStr = isoDate(now).substring(0, 7);
-            
-            const prevDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-            const prevMonthStr = isoDate(prevDate).substring(0, 7);
+            const currentMonthStr = isoDate(new Date()).substring(0, 7);
 
+            let mOut = 0;
             let currentSpendByCat = {};
-            let prevSpendByCat = {};
 
             transactions.forEach(t => {
-                if (t.amount < 0) {
-                    const m = t.date.substring(0, 7);
-                    if (m === currentMonthStr) {
-                        currentSpendByCat[t.cat] = (currentSpendByCat[t.cat] || 0) + Math.abs(t.amount);
-                    } else if (m === prevMonthStr) {
-                        prevSpendByCat[t.cat] = (prevSpendByCat[t.cat] || 0) + Math.abs(t.amount);
-                    }
+                if (t.amount < 0 && t.date.substring(0, 7) === currentMonthStr) {
+                    mOut += Math.abs(t.amount);
+                    currentSpendByCat[t.cat] = (currentSpendByCat[t.cat] || 0) + Math.abs(t.amount);
                 }
             });
 
             let insights = [];
-
-            for (const cat of OUT_CATS) {
-                const cur = currentSpendByCat[cat] || 0;
-                const prv = prevSpendByCat[cat] || 0;
-                if (prv > 0 && cur > prv) {
-                    const diffPct = Math.round(((cur - prv) / prv) * 100);
-                    if (diffPct >= 20) {
-                        insights.push({
-                            type: 'warning',
-                            title: `Attenzione spesa in ${cat}`,
-                            desc: `Hai speso il ${diffPct}% in più in ${cat} rispetto al mese scorso (${formatEur(cur)} contro ${formatEur(prv)}).`
-                        });
-                    }
-                }
+            
+            // Insight base generato localmente per efficienza
+            if (mOut > 0) {
+                let maxCat = Object.keys(currentSpendByCat).reduce((a, b) => currentSpendByCat[a] > currentSpendByCat[b] ? a : b);
+                insights.push(`La tua spesa maggiore questo mese è in <strong class="text-white">${maxCat}</strong> con ${formatEur(currentSpendByCat[maxCat])}.`);
+            } else {
+                insights.push(`Non hai ancora registrato uscite in questo mese. Ottimo inizio!`);
             }
 
-            for (const cat of OUT_CATS) {
-                const cur = currentSpendByCat[cat] || 0;
-                const limit = appState.budgets?.[cat] || 0;
-                if (limit > 0 && cur > limit) {
-                    insights.push({
-                        type: 'danger',
-                        title: `Budget Superato: ${cat}`,
-                        desc: `Hai superato il tetto massimo stabilito di ${formatEur(limit)}. Spesa attuale: ${formatEur(cur)}.`
-                    });
-                }
-            }
+            container.innerHTML = insights.map(txt => `
+                <div class="p-4 rounded-2xl bg-ios-purple/10 border border-ios-purple/20 text-[14px] text-ios-lightGray flex items-start gap-3">
+                    <i class="ph-fill ph-magic-wand text-lg text-ios-purple shrink-0 mt-0.5"></i>
+                    <span>${txt}</span>
+                </div>
+            `).join('');
+        }
 
-            if (insights.length === 0) {
-                insights.push({
-                    type: 'success',
-                    title: 'Situazione Finanziaria Ottimale',
-                    desc: 'Tutte le categorie sono sotto controllo e in linea con la media degli ultimi mesi. Ottimo lavoro!'
+        window.askGeminiFinancialAdvice = async function() {
+            const inputEl = document.getElementById('aiChatInput');
+            const respEl = document.getElementById('aiChatResponse');
+            const btnEl = document.getElementById('aiSendBtn');
+            const query = inputEl.value.trim();
+
+            if (!query) return;
+
+            btnEl.disabled = true;
+            btnEl.innerHTML = '<i class="ph ph-spinner animate-spin"></i>';
+            respEl.classList.remove('hidden');
+            respEl.innerHTML = '<span class="animate-pulse">Siri sta analizzando...</span>';
+
+            let totalBal = transactions.reduce((s, t) => s + t.amount, 0);
+            let totalOut = transactions.filter(t => t.amount < 0).reduce((s, t) => s + Math.abs(t.amount), 0);
+
+            const systemPrompt = "Sei Apple Intelligence, integrato nell'app Finanze. Rispondi in modo conciso, elegante e utile in italiano. Agisci come un assistente finanziario esperto iOS.";
+            const userContext = `Dati utente: Saldo ${totalBal}€, Uscite tot ${totalOut}€. Domanda: ${query}`;
+
+            try {
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: userContext }] }],
+                        systemInstruction: { parts: [{ text: systemPrompt }] }
+                    })
                 });
-            }
 
-            container.innerHTML = insights.map(ins => {
-                let borderCol = ins.type === 'danger' ? 'border-apple-red/30 bg-apple-red/5 text-apple-red' : (ins.type === 'warning' ? 'border-apple-orange/30 bg-apple-orange/5 text-apple-orange' : 'border-emerald-500/30 bg-emerald-500/5 text-emerald-400');
-                let icon = ins.type === 'danger' ? 'ph-warning-octagon' : (ins.type === 'warning' ? 'ph-warning' : 'ph-check-circle');
-                return `
-                    <div class="p-3.5 rounded-2xl border ${borderCol} flex items-start gap-3">
-                        <i class="ph ${icon} text-xl mt-0.5 shrink-0"></i>
-                        <div>
-                            <h4 class="font-bold text-xs sm:text-sm text-white">${escapeHtml(ins.title)}</h4>
-                            <p class="text-xs text-gray-300 mt-0.5">${escapeHtml(ins.desc)}</p>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+                const result = await response.json();
+                const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                respEl.innerHTML = text ? text.replace(/\n/g, '<br>') : "Spiacente, non ho potuto elaborare la richiesta.";
+            } catch (err) {
+                console.error("AI Error:", err);
+                respEl.textContent = "Errore di connessione ai servizi cloud.";
+            } finally {
+                btnEl.disabled = false;
+                btnEl.textContent = 'Chiedi';
+                inputEl.value = '';
+            }
         }
 
         function renderStats() {
@@ -880,127 +687,9 @@
                 }
             });
 
-            const elBalance = document.getElementById('statBalance');
-            const elIncome = document.getElementById('statIncome');
-            const elExpense = document.getElementById('statExpense');
-            if (elBalance) elBalance.textContent = formatEur(totalBal);
-            if (elIncome) elIncome.textContent = formatEur(mIn);
-            if (elExpense) elExpense.textContent = formatEur(mOut);
-
-            const now = new Date();
-            const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-            const daysLeft = daysInMonth - now.getDate() + 1;
-            const totalBudget = OUT_CATS.reduce((acc, c) => acc + (appState.budgets?.[c] || 0), 0);
-            const remainingBudget = totalBudget - mOut;
-
-            const dailyEl = document.getElementById('statDailyBudget');
-            const dailyNote = document.getElementById('statDailyNote');
-
-            if (dailyEl && dailyNote) {
-                if (remainingBudget >= 0) {
-                    dailyEl.textContent = formatEur(remainingBudget / daysLeft);
-                    dailyEl.className = "text-2xl sm:text-3xl font-black tracking-tight text-white";
-                    dailyNote.textContent = `${formatEur(remainingBudget)} rimasti per ${daysLeft} giorni`;
-                } else {
-                    dailyEl.textContent = formatEur(0);
-                    dailyEl.className = "text-2xl sm:text-3xl font-black tracking-tight text-apple-red";
-                    dailyNote.textContent = `Sforato di ${formatEur(Math.abs(remainingBudget))}`;
-                }
-            }
-        }
-
-        window.setChartInterval = function(interval) {
-            currentChartInterval = interval;
-            ['1w', '1m', '6m'].forEach(i => {
-                const b = document.getElementById(`btn${i}`);
-                if (b) {
-                    if (i === interval) {
-                        b.className = "flex-1 sm:flex-initial px-3 py-1.5 text-xs font-semibold rounded-full bg-apple-blue text-white shadow transition-all";
-                    } else {
-                        b.className = "flex-1 sm:flex-initial px-3 py-1.5 text-xs font-semibold rounded-full text-gray-400 hover:text-white transition-all";
-                    }
-                }
-            });
-            renderChart();
-        }
-
-        function renderChart() {
-            const svg = document.getElementById('balanceChartSvg');
-            const sub = document.getElementById('chartSubLabel');
-            if (!svg) return;
-
-            let pts = [];
-            let now = new Date();
-
-            if (currentChartInterval === '1w') {
-                sub.textContent = "Ultimi 7 giorni";
-                for (let i = 6; i >= 0; i--) {
-                    let d = new Date(); d.setDate(now.getDate() - i);
-                    let dStr = isoDate(d);
-                    let bal = transactions.filter(t => t.date <= dStr).reduce((s, t) => s + t.amount, 0);
-                    pts.push({ label: d.toLocaleDateString('it-IT', { weekday: 'short' }), val: bal });
-                }
-            } else if (currentChartInterval === '1m') {
-                sub.textContent = "Ultime 4 settimane";
-                for (let i = 3; i >= 0; i--) {
-                    let d = new Date(); d.setDate(now.getDate() - (i * 7));
-                    let dStr = isoDate(d);
-                    let bal = transactions.filter(t => t.date <= dStr).reduce((s, t) => s + t.amount, 0);
-                    pts.push({ label: `Sett. ${4-i}`, val: bal });
-                }
-            } else {
-                sub.textContent = "Ultimi 6 mesi";
-                for (let i = 5; i >= 0; i--) {
-                    let d = new Date(now.getFullYear(), now.getMonth() - i + 1, 0);
-                    let mStr = isoDate(d).substring(0, 7);
-                    let bal = transactions.filter(t => t.date.substring(0, 7) <= mStr).reduce((s, t) => s + t.amount, 0);
-                    pts.push({ label: d.toLocaleDateString('it-IT', { month: 'short' }), val: bal });
-                }
-            }
-
-            const vals = pts.map(p => p.val);
-            const min = Math.min(...vals, 0);
-            let max = Math.max(...vals, 100);
-            if (max === min) max += 100;
-
-            const W = 600, H = 150;
-            const padX = 10, padY = 15;
-            const getX = idx => padX + idx * ((W - padX * 2) / Math.max(1, pts.length - 1));
-            const getY = val => H - padY - ((val - min) / (max - min)) * (H - padY * 2);
-
-            let pathD = `M ${getX(0)} ${getY(pts[0].val)}`;
-            for (let i = 1; i < pts.length; i++) {
-                let px = getX(i-1), py = getY(pts[i-1].val);
-                let cx = getX(i), cy = getY(pts[i].val);
-                let cpx = px + (cx - px) / 2;
-                pathD += ` C ${cpx} ${py}, ${cpx} ${cy}, ${cx} ${cy}`;
-            }
-            let fillD = `${pathD} L ${getX(pts.length - 1)} ${H} L ${padX} ${H} Z`;
-
-            let svgHTML = `
-                <defs>
-                    <linearGradient id="svgGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#0A84FF" stop-opacity="0.45"/>
-                        <stop offset="100%" stop-color="#0A84FF" stop-opacity="0.0"/>
-                    </linearGradient>
-                </defs>
-            `;
-
-            [0, 0.5, 1].forEach(p => {
-                let y = getY(min + (max - min) * p);
-                let vTxt = formatEur(min + (max - min) * p).replace(',00','');
-                svgHTML += `<line x1="${padX}" y1="${y}" x2="${W-padX}" y2="${y}" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
-                            <text x="${padX}" y="${y - 4}" fill="#6b7280" font-size="9" font-family="Inter">${vTxt}</text>`;
-            });
-
-            svgHTML += `<path d="${fillD}" fill="url(#svgGrad)"/><path d="${pathD}" fill="none" stroke="#0A84FF" stroke-width="2.5"/>`;
-            pts.forEach((pt, i) => {
-                let x = getX(i), y = getY(pt.val);
-                svgHTML += `<circle cx="${x}" cy="${y}" r="3.5" fill="#000" stroke="#0A84FF" stroke-width="2"/>
-                            <text x="${x}" y="${H + 12}" fill="#9ca3af" font-size="9" font-family="Inter" text-anchor="middle">${pt.label}</text>`;
-            });
-
-            svg.innerHTML = svgHTML;
+            document.getElementById('statBalance').textContent = formatEur(totalBal);
+            document.getElementById('statIncome').textContent = formatEur(mIn);
+            document.getElementById('statExpense').textContent = formatEur(mOut);
         }
 
         function renderDonutChart() {
@@ -1015,8 +704,7 @@
 
             transactions.forEach(t => {
                 if (t.amount < 0 && t.date.substring(0, 7) === currentMonthStr) {
-                    const c = t.cat;
-                    spendMap[c] = (spendMap[c] || 0) + Math.abs(t.amount);
+                    spendMap[t.cat] = (spendMap[t.cat] || 0) + Math.abs(t.amount);
                     totalOut += Math.abs(t.amount);
                 }
             });
@@ -1024,8 +712,8 @@
             totalText.textContent = formatEur(totalOut).replace(',00','');
 
             if (totalOut === 0) {
-                svg.innerHTML = `<circle cx="50" cy="50" r="38" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="14"/>`;
-                legend.innerHTML = `<p class="text-xs text-gray-500 text-center py-4">Nessuna uscita registrata questo mese.</p>`;
+                svg.innerHTML = `<circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="12"/>`;
+                legend.innerHTML = `<p class="text-[13px] text-ios-gray py-4">Nessuna spesa da analizzare.</p>`;
                 return;
             }
 
@@ -1035,30 +723,26 @@
 
             for (const [cat, amount] of Object.entries(spendMap)) {
                 const pct = (amount / totalOut) * 100;
+                const colorHex = CATS[cat]?.hex || "#8E8E93";
                 const strokeDasharray = `${pct} ${100 - pct}`;
                 const strokeDashoffset = -cumulativePercent;
-                const activeCats = appState.customOutCats || OUT_CATS;
-                const colorIndex = activeCats.indexOf(cat) % 6;
-                const fallbackColors = ["#0A84FF", "#30D158", "#FF9F0A", "#BF5AF2", "#FF453A", "#64D2FF"];
-                const colorHex = CATS[cat]?.hex || fallbackColors[colorIndex >= 0 ? colorIndex : 0];
 
                 svgHTML += `
-                    <circle cx="50" cy="50" r="38" fill="none" stroke="${colorHex}" stroke-width="14"
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="${colorHex}" stroke-width="14"
                         stroke-dasharray="${strokeDasharray}" stroke-dashoffset="${strokeDashoffset}"
-                        class="donut-segment" pathLength="100">
-                        <title>${cat}: ${formatEur(amount)} (${pct.toFixed(1)}%)</title>
+                        class="transition-all duration-1000 ease-out" pathLength="100" stroke-linecap="round">
                     </circle>
                 `;
 
                 legendHTML += `
-                    <div class="flex items-center justify-between text-xs p-2 rounded-xl bg-white/5 border border-white/5">
-                        <div class="flex items-center gap-2 font-medium">
-                            <span class="w-2.5 h-2.5 rounded-full" style="background-color: ${colorHex}"></span>
+                    <div class="flex items-center justify-between text-[14px] p-3 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-md">
+                        <div class="flex items-center gap-3 font-semibold text-white">
+                            <span class="w-3 h-3 rounded-full shadow-sm" style="background-color: ${colorHex}"></span>
                             <span>${cat}</span>
                         </div>
                         <div class="text-right">
                             <span class="font-bold text-white">${formatEur(amount)}</span>
-                            <span class="text-gray-400 ml-1">(${pct.toFixed(1)}%)</span>
+                            <span class="text-ios-gray ml-1 text-[12px]">${pct.toFixed(0)}%</span>
                         </div>
                     </div>
                 `;
@@ -1066,60 +750,8 @@
                 cumulativePercent += pct;
             }
 
-            svg.innerHTML = svgHTML;
+            svg.innerHTML = `<g transform="rotate(-90 50 50)">${svgHTML}</g>`;
             legend.innerHTML = legendHTML;
-        }
-
-        function renderMomComparison() {
-            const container = document.getElementById('momComparisonContainer');
-            if (!container) return;
-
-            const now = new Date();
-            const currentMonthStr = isoDate(now).substring(0, 7);
-            const prevDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-            const prevMonthStr = isoDate(prevDate).substring(0, 7);
-
-            let curMap = {}, prvMap = {};
-            transactions.forEach(t => {
-                if (t.amount < 0) {
-                    const m = t.date.substring(0, 7);
-                    if (m === currentMonthStr) curMap[t.cat] = (curMap[t.cat] || 0) + Math.abs(t.amount);
-                    if (m === prevMonthStr) prvMap[t.cat] = (prvMap[t.cat] || 0) + Math.abs(t.amount);
-                }
-            });
-
-            const activeOutCats = appState.customOutCats || OUT_CATS;
-
-            container.innerHTML = activeOutCats.map(cat => {
-                const cur = curMap[cat] || 0;
-                const prv = prvMap[cat] || 0;
-                const maxVal = Math.max(cur, prv, 1);
-                const curPct = Math.min(100, (cur / maxVal) * 100);
-                const prvPct = Math.min(100, (prv / maxVal) * 100);
-                const diff = cur - prv;
-                const diffColor = diff > 0 ? 'text-apple-red' : 'text-apple-green';
-
-                return `
-                    <div class="p-3.5 rounded-2xl bg-white/5 border border-white/5 space-y-2">
-                        <div class="flex justify-between items-center text-xs">
-                            <span class="font-bold text-white">${cat}</span>
-                            <span class="font-semibold ${diffColor}">${diff > 0 ? '+' : ''}${formatEur(diff)} vs scorso mese</span>
-                        </div>
-                        <div class="space-y-1">
-                            <div class="flex justify-between text-[10px] text-gray-400">
-                                <span>Mese Corrente: <strong class="text-white">${formatEur(cur)}</strong></span>
-                                <span>Mese Scorso: <strong class="text-white">${formatEur(prv)}</strong></span>
-                            </div>
-                            <div class="h-1.5 rounded-full bg-white/10 overflow-hidden flex gap-0.5">
-                                <div class="h-full bg-apple-blue rounded-full" style="width: ${curPct}%"></div>
-                            </div>
-                            <div class="h-1.5 rounded-full bg-white/5 overflow-hidden flex gap-0.5">
-                                <div class="h-full bg-gray-500 rounded-full" style="width: ${prvPct}%"></div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
         }
 
         window.filterTransactions = function(filter) {
@@ -1127,11 +759,9 @@
             ['all', 'in', 'out'].forEach(f => {
                 const btn = document.getElementById(`filter${f.charAt(0).toUpperCase() + f.slice(1)}`);
                 if (btn) {
-                    if (f === filter) {
-                        btn.className = "flex-1 sm:flex-initial px-3.5 py-1.5 text-xs font-semibold rounded-full bg-apple-blue text-white shadow";
-                    } else {
-                        btn.className = "flex-1 sm:flex-initial px-3.5 py-1.5 text-xs font-semibold rounded-full text-gray-400 hover:text-white";
-                    }
+                    btn.className = f === filter 
+                        ? "flex-1 sm:flex-initial px-4 py-1.5 text-[13px] font-semibold rounded-lg bg-white text-black shadow-sm transition-all"
+                        : "flex-1 sm:flex-initial px-4 py-1.5 text-[13px] font-semibold rounded-lg text-ios-gray hover:text-white transition-all";
                 }
             });
             renderTransactions();
@@ -1145,275 +775,70 @@
             if (currentFilter === 'out') list = transactions.filter(t => t.amount < 0);
 
             if (list.length === 0) {
-                container.innerHTML = `<div class="text-center py-6 text-gray-500 text-xs font-medium">Nessuna transazione trovata.</div>`;
+                container.innerHTML = `<div class="text-center py-8 text-ios-gray text-[14px] font-medium">Nessuna transazione trovata.</div>`;
                 return;
             }
 
-            container.innerHTML = list.slice(0, 12).map(t => {
+            container.innerHTML = list.slice(0, 15).map(t => {
                 const cInfo = CATS[t.cat] || CATS["Altro"];
                 const isPos = t.amount > 0;
                 return `
-                    <div class="flex items-center justify-between p-3.5 rounded-2xl bg-white/5 border border-white/5">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-2xl glass-pill flex items-center justify-center ${cInfo.color}">
-                                <i class="ph ${cInfo.icon} text-lg"></i>
+                    <div class="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 backdrop-blur-md">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-[1rem] flex items-center justify-center text-xl text-white shadow-md" style="background-color: ${cInfo.hex}">
+                                <i class="ph-fill ${cInfo.icon}"></i>
                             </div>
                             <div>
-                                <p class="font-bold text-xs sm:text-sm">${escapeHtml(t.desc)}</p>
-                                <p class="text-[10px] text-gray-400 font-medium">${t.cat} &bull; ${new Date(t.date).toLocaleDateString('it-IT', { day: '2-digit', month: 'short' })}</p>
+                                <p class="font-bold text-[15px] text-white">${escapeHtml(t.desc)}</p>
+                                <p class="text-[12px] text-ios-gray font-medium">${t.cat} &bull; ${new Date(t.date).toLocaleDateString('it-IT', { day: '2-digit', month: 'short' })}</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-3">
-                            <div class="font-extrabold text-xs sm:text-sm ${isPos ? 'text-apple-green' : 'text-white'} text-right">
+                            <div class="font-bold text-[16px] ${isPos ? 'text-ios-green' : 'text-white'} text-right tracking-tight">
                                 ${isPos ? '+' : ''}${formatEur(t.amount)}
                             </div>
-                            <button onclick="deleteTx('${t.id}')" class="text-gray-500 hover:text-apple-red p-1.5"><i class="ph ph-trash text-base"></i></button>
+                            <button onclick="deleteTx('${t.id}')" class="text-ios-gray hover:text-ios-red p-1.5 transition-colors"><i class="ph-fill ph-trash-simple text-xl"></i></button>
                         </div>
                     </div>
                 `;
             }).join('');
-        }
-
-        function renderBudgets() {
-            const container = document.getElementById('budgetListContainer');
-            if (!container) return;
-            const currentMonthStr = isoDate(new Date()).substring(0, 7);
-            let spendMap = {};
-
-            transactions.forEach(t => {
-                if (t.amount < 0 && t.date.substring(0, 7) === currentMonthStr) {
-                    spendMap[t.cat] = (spendMap[t.cat] || 0) + Math.abs(t.amount);
-                }
-            });
-
-            const activeOutCats = appState.customOutCats || OUT_CATS;
-
-            container.innerHTML = activeOutCats.map(cat => {
-                const limit = appState.budgets?.[cat] || 0;
-                const spent = spendMap[cat] || 0;
-                const pct = limit > 0 ? Math.min(100, (spent / limit) * 100) : (spent > 0 ? 100 : 0);
-                const isOver = spent > limit && limit > 0;
-                const cInfo = CATS[cat] || { icon: "ph-tag", color: "text-apple-blue", bg: "bg-apple-blue" };
-
-                return `
-                    <div class="p-4 rounded-2xl bg-white/5 border border-white/5">
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center gap-2 font-bold text-xs sm:text-sm">
-                                <i class="ph ${cInfo.icon} ${cInfo.color} text-base"></i> ${escapeHtml(cat)}
-                            </div>
-                            <div class="text-xs font-semibold ${isOver ? 'text-apple-red' : 'text-gray-300'}">
-                                ${formatEur(spent)} <span class="text-gray-500">/</span>
-                                <input type="number" min="0" value="${limit}" onchange="updateBudgetLimit('${cat}', this.value)" class="w-16 bg-transparent border-b border-white/20 text-right text-white focus:outline-none focus:border-apple-blue text-xs ml-1 font-bold">
-                            </div>
-                        </div>
-                        <div class="h-2 rounded-full bg-white/10 overflow-hidden">
-                            <div class="h-full rounded-full transition-all duration-500 ${isOver ? 'bg-apple-red' : cInfo.bg}" style="width: ${pct}%"></div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        window.updateBudgetLimit = function(cat, val) {
-            if (!appState.budgets) appState.budgets = {};
-            appState.budgets[cat] = Math.max(0, parseFloat(val) || 0);
-            saveStateStore();
-            renderStats();
-            renderBudgets();
-        }
-
-        window.openCategoryRenameModal = function() {
-            const select = document.getElementById('renameOldCat');
-            const activeOutCats = appState.customOutCats || OUT_CATS;
-            select.innerHTML = activeOutCats.map(c => `<option value="${c}" style="background:#0a0a0e">${c}</option>`).join('');
-            document.getElementById('renameNewCat').value = '';
-            document.getElementById('modalCategoryRename').showModal();
-        }
-
-        async function handleCategoryRenameSubmit(e) {
-            e.preventDefault();
-            const oldCat = document.getElementById('renameOldCat').value;
-            let newCat = document.getElementById('renameNewCat').value.trim();
-            if (!oldCat || !newCat) return;
-
-            if (!appState.customOutCats) appState.customOutCats = [...OUT_CATS];
-            const idx = appState.customOutCats.indexOf(oldCat);
-            if (idx >= 0) {
-                appState.customOutCats[idx] = newCat;
-            }
-
-            if (appState.budgets[oldCat] !== undefined) {
-                appState.budgets[newCat] = appState.budgets[oldCat];
-                delete appState.budgets[oldCat];
-            }
-
-            transactions.forEach(t => {
-                if (t.cat === oldCat) {
-                    t.cat = newCat;
-                }
-            });
-
-            closeModal('modalCategoryRename');
-            await saveStateStore();
-            renderEverything();
         }
 
         function renderGoals() {
             const container = document.getElementById('goalsListContainer');
             if (!container) return;
             if (!appState.goals || appState.goals.length === 0) {
-                container.innerHTML = `<div class="text-center py-4 text-gray-500 text-xs">Nessun obiettivo impostato.</div>`;
+                container.innerHTML = `<div class="col-span-2 text-center py-6 text-ios-gray text-[14px]">Nessun obiettivo. Tocca Nuovo per iniziare.</div>`;
                 return;
             }
 
             container.innerHTML = appState.goals.map(g => {
                 let pct = Math.min(100, (g.s / g.t) * 100);
-                let remaining = Math.max(0, g.t - g.s);
-                let monthly = g.monthlySaving || 150;
-                let monthsLeft = monthly > 0 ? Math.ceil(remaining / monthly) : 999;
-
                 return `
-                    <div class="p-4 rounded-2xl bg-white/5 border border-white/5 space-y-3.5">
+                    <div class="p-5 rounded-[1.5rem] bg-white/5 border border-white/5 space-y-4 backdrop-blur-md relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-ios-blue/10 blur-2xl rounded-full -mr-10 -mt-10 pointer-events-none"></div>
                         <div class="flex justify-between items-start">
                             <div>
-                                <h4 class="font-bold text-xs sm:text-sm text-white">${escapeHtml(g.n)}</h4>
-                                <div class="flex items-center gap-1.5 mt-1 flex-wrap">
-                                    <span class="text-[11px] text-gray-400">Accantonato:</span>
-                                    <input type="number" min="0" max="${g.t}" value="${g.s}" onchange="updateGoalSaved('${g.id}', this.value)" class="w-24 bg-black/40 border border-white/20 rounded-lg px-2 py-1 text-xs text-white font-bold text-right focus:outline-none focus:border-apple-blue">
-                                    <span class="text-[11px] text-gray-400">su ${formatEur(g.t)} (${pct.toFixed(0)}%)</span>
-                                </div>
+                                <h4 class="font-bold text-[16px] text-white">${escapeHtml(g.n)}</h4>
+                                <p class="text-[12px] text-ios-gray mt-0.5">Obiettivo: ${formatEur(g.t)}</p>
                             </div>
-                            <button onclick="deleteGoal('${g.id}')" class="text-gray-500 hover:text-apple-red p-1"><i class="ph ph-trash text-base"></i></button>
+                            <button onclick="deleteGoal('${g.id}')" class="text-ios-gray hover:text-ios-red p-1 z-10"><i class="ph-fill ph-trash-simple text-lg"></i></button>
                         </div>
                         <div>
-                            <div class="h-2 rounded-full bg-white/10 overflow-hidden mb-3">
-                                <div class="h-full rounded-full bg-apple-blue" style="width: ${pct}%"></div>
+                            <div class="flex justify-between text-[12px] font-semibold mb-2">
+                                <span class="text-white">Risparmiato: ${formatEur(g.s)}</span>
+                                <span class="text-ios-blue">${pct.toFixed(0)}%</span>
                             </div>
-                            <div class="p-3 rounded-xl bg-black/40 border border-white/5 space-y-2">
-                                <div class="flex justify-between text-xs font-semibold">
-                                    <span class="text-gray-400">Risparmio mensile stimato: <strong class="text-white">${formatEur(monthly)}</strong></span>
-                                    <span class="text-apple-teal font-bold">~${monthsLeft} mesi al traguardo</span>
-                                </div>
-                                <input type="range" min="20" max="1000" step="10" value="${monthly}" oninput="updateGoalMonthly('${g.id}', this.value)" class="w-full accent-apple-blue cursor-pointer">
+                            <div class="h-2.5 rounded-full bg-white/10 overflow-hidden shadow-inner">
+                                <div class="h-full rounded-full bg-ios-blue" style="width: ${pct}%"></div>
                             </div>
+                        </div>
+                        <div class="pt-1 z-10 relative">
+                             <input type="number" min="0" max="${g.t}" value="${g.s}" onchange="updateGoalSaved('${g.id}', this.value)" class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-[14px] text-white focus:outline-none focus:border-ios-blue transition-colors text-center" placeholder="Aggiorna salvataggio">
                         </div>
                     </div>
                 `;
             }).join('');
-        }
-
-        window.updateGoalSaved = async function(id, val) {
-            let g = appState.goals.find(x => x.id === id);
-            if (g) {
-                g.s = Math.max(0, parseFloat(val) || 0);
-                await saveStateStore();
-                renderGoals();
-            }
-        }
-
-        window.updateGoalMonthly = async function(id, val) {
-            let g = appState.goals.find(x => x.id === id);
-            if (g) {
-                g.monthlySaving = parseFloat(val) || 50;
-                await saveStateStore();
-                renderGoals();
-            }
-        }
-
-        window.askGeminiFinancialAdvice = async function() {
-            const inputEl = document.getElementById('aiChatInput');
-            const respEl = document.getElementById('aiChatResponse');
-            const btnEl = document.getElementById('aiSendBtn');
-            const query = inputEl.value.trim();
-
-            if (!query) return;
-
-            btnEl.disabled = true;
-            btnEl.textContent = 'Analisi...';
-            respEl.classList.remove('hidden');
-            respEl.textContent = 'Gemini sta esaminando i tuoi dati finanziari...';
-
-            let totalBal = transactions.reduce((s, t) => s + t.amount, 0);
-            let totalOut = transactions.filter(t => t.amount < 0).reduce((s, t) => s + Math.abs(t.amount), 0);
-            let totalIn = transactions.filter(t => t.amount > 0).reduce((s, t) => s + t.amount, 0);
-
-            const systemPrompt = "Sei un consulente finanziario personale di altissimo livello. Rispondi in italiano in modo chiaro, professionale, conciso e pratico basandoti sui dati dell'utente.";
-            const userContext = `Dati finanziari utente: Saldo totale ${totalBal}€, Entrate totali ${totalIn}€, Uscite totali ${totalOut}€. Domanda dell'utente: ${query}`;
-
-            try {
-                const apiKey = "";
-                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
-                
-                const payload = {
-                    contents: [{ parts: [{ text: userContext }] }],
-                    systemInstruction: { parts: [{ text: systemPrompt }] }
-                };
-
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-
-                const result = await response.json();
-                const candidate = result.candidates?.[0];
-
-                if (candidate && candidate.content?.parts?.[0]?.text) {
-                    respEl.textContent = candidate.content.parts[0].text;
-                } else {
-                    respEl.textContent = "Non è stato possibile elaborare la risposta in questo momento.";
-                }
-            } catch (err) {
-                console.error("Gemini API error:", err);
-                respEl.textContent = "Errore di connessione con il servizio Gemini AI.";
-            } finally {
-                btnEl.disabled = false;
-                btnEl.textContent = 'Chiedi';
-            }
-        }
-
-        function renderNetwork() {
-            const sContainer = document.getElementById('subsListContainer');
-            if (sContainer) {
-                let subTotal = 0;
-                const subs = appState.subs || [];
-                sContainer.innerHTML = subs.length === 0 ? `<p class="text-xs text-gray-500">Nessun abbonamento attivo.</p>` : subs.map(s => {
-                    subTotal += s.a;
-                    return `
-                        <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 text-xs">
-                            <span class="font-semibold">${escapeHtml(s.n)}</span>
-                            <div class="flex items-center gap-3">
-                                <span class="font-extrabold text-white">${formatEur(s.a)}</span>
-                                <button onclick="deleteSub('${s.id}')" class="text-gray-500 hover:text-apple-red"><i class="ph ph-trash"></i></button>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-                document.getElementById('subsTotalText').textContent = `${formatEur(subTotal)} / mese`;
-            }
-
-            const dContainer = document.getElementById('debtsListContainer');
-            if (dContainer) {
-                let netDebt = 0;
-                const debts = appState.debts || [];
-                dContainer.innerHTML = debts.length === 0 ? `<p class="text-xs text-gray-500">Nessun prestito aperto.</p>` : debts.map(d => {
-                    netDebt += (d.type === 1 ? d.a : -d.a);
-                    let isCredit = d.type === 1;
-                    return `
-                        <div class="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 text-xs">
-                            <div>
-                                <p class="font-semibold">${escapeHtml(d.n)}</p>
-                                <p class="text-[10px] text-gray-400 font-medium">${isCredit ? 'Ti deve dare' : 'Devi dare tu'}</p>
-                            </div>
-                            <div class="flex items-center gap-3">
-                                <span class="font-extrabold ${isCredit ? 'text-apple-green' : 'text-apple-red'}">${formatEur(d.a)}</span>
-                                <button onclick="resolveDebt('${d.id}')" class="glass-pill px-2.5 py-1.5 rounded-lg text-[10px] font-bold hover:bg-white/20">Saldato</button>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-                document.getElementById('debtsTotalText').textContent = netDebt === 0 ? "Siamo pari" : (netDebt > 0 ? `Ti devono ${formatEur(netDebt)}` : `Devi ${formatEur(Math.abs(netDebt))}`);
-            }
         }
 
         window.openNewTxModal = function() {
@@ -1430,16 +855,15 @@
             const tabOut = document.getElementById('tabOut');
             const tabIn = document.getElementById('tabIn');
             const selectCat = document.getElementById('txCat');
-            const activeOutCats = appState.customOutCats || OUT_CATS;
 
             if (type === 'out') {
-                tabOut.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-apple-red text-white transition-all shadow";
-                tabIn.className = "flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition-all";
-                selectCat.innerHTML = activeOutCats.map(c => `<option value="${c}" style="background:#0a0a0e">${c}</option>`).join('');
+                tabOut.className = "flex-1 py-2 text-[13px] font-bold rounded-lg bg-white text-black shadow-sm transition-all";
+                tabIn.className = "flex-1 py-2 text-[13px] font-semibold rounded-lg text-ios-gray hover:text-white transition-all bg-transparent";
+                selectCat.innerHTML = OUT_CATS.map(c => `<option value="${c}" style="background:#1c1c1e">${c}</option>`).join('');
             } else {
-                tabIn.className = "flex-1 py-2 text-xs font-bold rounded-lg bg-apple-green text-white transition-all shadow";
-                tabOut.className = "flex-1 py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition-all";
-                selectCat.innerHTML = IN_CATS.map(c => `<option value="${c}" style="background:#0a0a0e">${c}</option>`).join('');
+                tabIn.className = "flex-1 py-2 text-[13px] font-bold rounded-lg bg-white text-black shadow-sm transition-all";
+                tabOut.className = "flex-1 py-2 text-[13px] font-semibold rounded-lg text-ios-gray hover:text-white transition-all bg-transparent";
+                selectCat.innerHTML = IN_CATS.map(c => `<option value="${c}" style="background:#1c1c1e">${c}</option>`).join('');
             }
         }
 
@@ -1450,10 +874,10 @@
             let date = document.getElementById('txDate').value;
             let cat = document.getElementById('txCat').value;
 
-            if (desc && amount > 0 && date) {
+            if (desc && amount > 0 && date && userId) {
                 const newTx = { id: uid(), desc, amount: currentTxType === 'out' ? -amount : amount, cat, date };
                 closeModal('modalNewTx');
-                await saveTxStore(newTx);
+                await saveTxStore(newTx); // Salva su DB e aggiorna UI
             }
         }
 
@@ -1483,44 +907,21 @@
 
         window.saveNewGoal = function(n, a) {
             if (!appState.goals) appState.goals = [];
-            appState.goals.push({ id: uid(), n, t: a, s: 0, monthlySaving: 150 });
+            appState.goals.push({ id: uid(), n, t: a, s: 0 });
+            renderGoals(); // optimistic
         }
         window.deleteGoal = async function(id) {
-            appState.goals = appState.goals.goals.filter(g => g.id !== id);
+            appState.goals = appState.goals.filter(g => g.id !== id);
+            renderGoals(); // optimistic
             await saveStateStore();
         }
-
-        window.saveNewSub = function(n, a) {
-            if (!appState.subs) appState.subs = [];
-            appState.subs.push({ id: uid(), n, a });
-        }
-        window.deleteSub = async function(id) {
-            appState.subs = appState.subs.filter(s => s.id !== id);
-            await saveStateStore();
-        }
-
-        window.openDebtModal = function() {
-            document.getElementById('debtName').value = '';
-            document.getElementById('debtAmount').value = '';
-            document.getElementById('modalDebt').showModal();
-        }
-
-        async function handleDebtSubmit(e) {
-            e.preventDefault();
-            let n = document.getElementById('debtName').value.trim();
-            let a = parseFloat(document.getElementById('debtAmount').value);
-            let type = parseInt(document.getElementById('debtType').value);
-            if (n && a > 0) {
-                if (!appState.debts) appState.debts = [];
-                appState.debts.push({ id: uid(), n, a, type });
-                closeModal('modalDebt');
+        window.updateGoalSaved = async function(id, val) {
+            let g = appState.goals.find(x => x.id === id);
+            if (g) {
+                g.s = Math.max(0, parseFloat(val) || 0);
+                renderGoals(); // optimistic
                 await saveStateStore();
             }
-        }
-
-        window.resolveDebt = async function(id) {
-            appState.debts = appState.debts.filter(d => d.id !== id);
-            await saveStateStore();
         }
 
         window.addEventListener('DOMContentLoaded', initAuthAndData);
